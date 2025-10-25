@@ -26,3 +26,4 @@ addToPath $HOME/.cargo/bin
 export GOPATH="$HOME/go"
 export GOROOT=/usr/lib/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH="/home/nahuel/.bun/bin:$PATH"

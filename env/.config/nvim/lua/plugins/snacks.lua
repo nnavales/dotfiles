@@ -2,23 +2,47 @@ return {
 	"folke/snacks.nvim",
 	priority = 1000,
 	lazy = false,
-	---@type snacks.Config
 	opts = {
 		animate = { enabled = true },
 		bigfile = { enabled = true },
-		dashboard = { enabled = true },
+		image = { enabled = true },
+		toggle = { enabled = false },
+		-- que onda
+		dashboard = { enbaled = false },
+		notifier = { enabled = false },
+		explorer = { enabled = false },
+		statuscolumn = { enabled = false },
+		words = { enabled = false },
+		scroll = { enabled = false },
 		input = { enabled = true },
-		lazygit = { enabled = true },
+		lazygit = { enabled = false },
 		picker = {
-			enabled = true,
-			sources = {
-				files = { hidden = true },
+			previewers = {
+				diff = { builtin = false },
+				git = { builtin = false },
 			},
 			layout = { preset = "default" },
+			sources = {
+				files = {
+					hidden = true,
+				},
+				grep = {
+					hidden = true,
+				},
+				select = {
+					kinds = {
+						sidekick_cli = {
+							layout = { preset = "vscode" },
+						},
+						sidekick_prompt = {
+							layout = { preset = "vscode" },
+						},
+					},
+				},
+			},
 		},
 		quickfile = { enabled = true },
 		scope = { enabled = true },
-		scroll = { enabled = false },
 		gitbrowse = { enabled = true },
 	},
 
@@ -83,6 +107,13 @@ return {
 			desc = "Grep",
 		},
 
+		{
+			"<leader>ff",
+			function()
+				Snacks.picker.files()
+			end,
+			desc = "Find Files",
+		},
 		{
 			"<leader>ff",
 			function()
