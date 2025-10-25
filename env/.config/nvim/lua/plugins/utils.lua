@@ -10,6 +10,8 @@ return {
 
 	{
 		"L3MON4D3/LuaSnip",
+		version = "v2.*",
+		build = "make install_jsregexp",
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = { "rafamadriz/friendly-snippets" },
@@ -33,34 +35,6 @@ return {
 				},
 			})
 		end,
-	},
-
-	-- Which Key
-	{
-		"folke/which-key.nvim",
-		cmd = "WhichKey",
-		opts = {
-			win = {
-				border = "none",
-				padding = { 1, 1 },
-			},
-			layout = {
-				height = { min = 1 },
-				width = { min = 10 },
-				spacing = 1,
-				align = "left",
-			},
-			icons = {
-				breadcrumb = "»",
-				separator = "➜",
-				group = "",
-			},
-			plugins = {
-				marks = false,
-				registers = false,
-				spelling = { enabled = false },
-			},
-		},
 	},
 
 	-- Venv Selector

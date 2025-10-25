@@ -106,7 +106,7 @@ bindkey '^P' fpath_any
 
 bookie() {
     local file
-    file=$(fd . /home/nahuel/personal/hub/bookies --type f --hidden | fzf --multi --prompt="Select book > ")
+    file=$(fd . /home/nahuel/personal/hub/bookies -t f -e .pdf -e .epub  --hidden | fzf --multi --prompt="Select book > ")
     if [[ -n "$file" ]]; then
         echo "$file" | while IFS= read -r f; do
             okular "$f" & 
