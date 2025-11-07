@@ -1,6 +1,5 @@
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
 	event = "VeryLazy",
 	config = function()
 		require("mini.icons").setup()
@@ -65,7 +64,7 @@ return {
 				},
 				always_divide_middle = true,
 				refresh = {
-					statusline = 100,
+					statusline = 300,
 					tabline = 100,
 					winbar = 100,
 				},

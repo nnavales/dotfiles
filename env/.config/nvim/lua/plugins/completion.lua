@@ -1,16 +1,19 @@
 return {
 	"hrsh7th/nvim-cmp",
-	lazy = false,
-	priority = 100,
 	event = "InsertEnter",
 	dependencies = {
 		"onsails/lspkind.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
-		"L3MON4D3/LuaSnip",
+		{
+			"L3MON4D3/LuaSnip",
+			lazy = true,
+			version = "v2.*",
+			build = "make install_jsregexp",
+			dependencies = { "rafamadriz/friendly-snippets" },
+		},
 		"saadparwaiz1/cmp_luasnip",
-		"rafamadriz/friendly-snippets",
 	},
 	config = function()
 		local cmp = require("cmp")
@@ -18,8 +21,19 @@ return {
 		local lspkind = require("lspkind")
 		lspkind.init({})
 
-		-- Load snippets
-		require("luasnip.loaders.from_vscode").lazy_load()
+		require("luasnip.loaders.from_vscode").lazy_load({
+			include = {
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
+				"python",
+				"go",
+				"lua",
+				"html",
+				"css",
+			},
+		})
 
 		cmp.setup({
 			sources = cmp.config.sources({
@@ -53,13 +67,6 @@ return {
 			-- 	completion = cmp.config.window.bordered(),
 			-- 	documentation = cmp.config.window.bordered(),
 			-- },
-		})
-
-		cmp.setup.filetype({ "sql" }, {
-			sources = {
-				{ name = "vim-dadbod-completion" },
-				{ name = "buffer" },
-			},
 		})
 	end,
 }

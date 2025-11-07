@@ -27,3 +27,4 @@ export GOPATH="$HOME/go"
 export GOROOT=/usr/lib/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 export PATH="/home/nahuel/.bun/bin:$PATH"
+export PATH=/home/nahuel/.opencode/bin:$PATH
