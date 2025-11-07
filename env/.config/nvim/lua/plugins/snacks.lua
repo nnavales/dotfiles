@@ -1,21 +1,10 @@
 return {
 	"folke/snacks.nvim",
-	priority = 1000,
-	lazy = false,
 	opts = {
-		animate = { enabled = true },
-		bigfile = { enabled = true },
-		image = { enabled = true },
-		toggle = { enabled = false },
-		-- que onda
-		dashboard = { enbaled = false },
-		notifier = { enabled = false },
-		explorer = { enabled = false },
-		statuscolumn = { enabled = false },
-		words = { enabled = false },
-		scroll = { enabled = false },
+		-- animate = { enabled = true },
+		-- bigfile = { enabled = true },
+		-- image = { enabled = true },
 		input = { enabled = true },
-		lazygit = { enabled = false },
 		picker = {
 			previewers = {
 				diff = { builtin = false },
@@ -107,13 +96,6 @@ return {
 			desc = "Grep",
 		},
 
-		{
-			"<leader>ff",
-			function()
-				Snacks.picker.files()
-			end,
-			desc = "Find Files",
-		},
 		{
 			"<leader>ff",
 			function()

@@ -1,26 +1,77 @@
 return {
-	"mfussenegger/nvim-lint",
-	event = { "BufReadPre", "BufNewFile" },
-	config = function()
-		local lint = require("lint")
+	{
+		"mfussenegger/nvim-lint",
+		opts = {
+			events = { "BufWritePost", "InsertLeave" },
+			linters_by_ft = {
+				python = {},
+				javascript = { "eslint" },
+				typescript = { "eslint" },
+				go = { "golangci-lint" },
+				svelte = { "eslint" },
+			},
+			linters = {},
+		},
+		config = function(_, opts)
+			local M = {}
 
-		lint.linters_by_ft = {
-			fish = { "fish" },
-			python = { "ruff" },
-			javascript = { "eslint" },
-			typescript = { "eslint" },
-			javascriptreact = { "eslint" },
-			typescriptreact = { "eslint" },
-			go = { "golangcilint" },
-			svelte = { "eslint" },
-		}
+			local lint = require("lint")
+			for name, linter in pairs(opts.linters) do
+				if lint.linters[name] then
+					if type(linter) == "table" and type(lint.linters[name]) == "table" then
+						lint.linters[name] = vim.tbl_deep_extend("force", lint.linters[name], linter)
+						if type(linter.prepend_args) == "table" then
+							lint.linters[name].args = lint.linters[name].args or {}
+							vim.list_extend(lint.linters[name].args, linter.prepend_args)
+						end
+					else
+						lint.linters[name] = linter
+					end
+				else
+					print("linter not found: " .. name)
+				end
+			end
+			lint.linters_by_ft = opts.linters_by_ft
 
-		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-			group = lint_augroup,
-			callback = function()
-				lint.try_lint()
-			end,
-		})
-	end,
+			function M.debounce(ms, fn)
+				local timer = vim.uv.new_timer()
+				return function(...)
+					local argv = { ... }
+					timer:start(ms, 0, function()
+						timer:stop()
+						vim.schedule_wrap(fn)(unpack(argv))
+					end)
+				end
+			end
+
+			function M.lint()
+				local names = lint._resolve_linter_by_ft(vim.bo.filetype)
+
+				names = vim.list_extend({}, names)
+
+				if #names == 0 then
+					vim.list_extend(names, lint.linters_by_ft["_"] or {})
+				end
+
+				vim.list_extend(names, lint.linters_by_ft["*"] or {})
+
+				local ctx = { filename = vim.api.nvim_buf_get_name(0) }
+				ctx.dirname = vim.fn.fnamemodify(ctx.filename, ":h")
+				names = vim.tbl_filter(function(name)
+					local linter = lint.linters[name]
+					return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
+				end, names)
+
+				if #names > 0 then
+					lint.try_lint(names)
+				end
+			end
+
+			local augroup_id = vim.api.nvim_create_augroup("nvim-lint", { clear = true })
+			vim.api.nvim_create_autocmd(opts.events, {
+				group = augroup_id,
+				callback = M.debounce(100, M.lint),
+			})
+		end,
+	},
 }

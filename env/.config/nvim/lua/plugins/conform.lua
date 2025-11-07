@@ -4,7 +4,7 @@ return {
 		require("conform").setup({
 			format_on_save = {
 				lsp_format = "fallback",
-				timeout_ms = 1000,
+				timeout_ms = 5000,
 			},
 			formatters_by_ft = {
 				c = { "clang-format" },
@@ -21,7 +21,7 @@ return {
 				yaml = { "prettierd" },
 				html = { "prettierd" },
 				css = { "prettierd" },
-				python = { "isort", "black" },
+				python = { "ruff_organize_imports", "ruff_format" },
 			},
 			formatters = {
 				prettierd = {
