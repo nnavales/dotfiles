@@ -9,8 +9,6 @@ set("n", "Q", "<nop>")
 -- Remap < y > para mantener el modo visual
 set("v", "<", "<gv", { silent = true })
 set("v", ">", ">gv", { silent = true })
-set("v", "J", ":m '>+1<CR>gv=gv")
-set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Basic movement keybinds, these make navigating splits easy for me
 set("n", "<c-j>", "<c-w><c-j>")

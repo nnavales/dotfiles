@@ -28,6 +28,7 @@ return {
 
 			local servers = {
 				bashls = {},
+				protols = {},
 				pbls = {},
 				svelte = {},
 				cssls = {},
