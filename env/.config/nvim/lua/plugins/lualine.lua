@@ -74,11 +74,11 @@ return {
 				lualine_b = {
 					{
 						"filename",
-						path = 0,
-						shorting_target = 40,
+						path = 4,
+						shorting_target = 60,
 						symbols = {
 							modified = "[+]",
-							readonly = "[-]",
+							readonly = "",
 							unnamed = "No Name",
 							newfile = "New",
 							padding = { left = 1, right = 1 },
@@ -87,14 +87,19 @@ return {
 				},
 
 				lualine_x = {
-					{ "branch", icon = "", padding = { left = 1, right = 1 } },
+					{ "branch", icon = "", padding = { left = 0, right = 1 } },
 					{
 						"diff",
 						symbols = { added = "+", modified = "~", removed = "-" },
-						padding = { left = 1, right = 1 },
+						padding = { left = 0, right = 1 },
 					},
 				},
-				lualine_c = { { "diagnostics", padding = { left = 1, right = 1 } } },
+				lualine_c = {
+					{
+						"diagnostics",
+						padding = { left = 0, right = 1 },
+					},
+				},
 				lualine_y = { { "filetype", padding = 0 } },
 				lualine_z = {},
 			},
@@ -105,12 +110,5 @@ return {
 			winbar = {},
 			extensions = { "lazy" },
 		})
-
-		vim.cmd([[
-			hi StatusLine ctermbg=NONE guibg=NONE cterm=NONE gui=NONE
-			hi StatusLineNC ctermbg=NONE guibg=NONE cterm=NONE gui=NONE
-		]])
-
-		vim.opt.cmdheight = 0
 	end,
 }

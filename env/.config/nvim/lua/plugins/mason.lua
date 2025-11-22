@@ -35,6 +35,7 @@ return {
 						"html",
 						"cssls",
 						"tailwindcss",
+						"protols",
 						"gopls",
 						"svelte",
 						"bashls",
