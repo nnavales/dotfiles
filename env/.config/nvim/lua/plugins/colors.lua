@@ -13,7 +13,7 @@ function ColorMyPencils(color)
 	vim.api.nvim_set_hl(0, "SnacksPickerPreview", { bg = "#1a1d23" })
 	vim.api.nvim_set_hl(0, "SnacksPickerList", { bg = "#1a1d23" })
 
-	vim.api.nvim_set_hl(0, "SnacksDashboardHeader", { fg = "#eb6f92" })
+	vim.api.nvim_set_hl(0, "SnacksDashboardHeader", { fg = "#a6acb9" })
 	vim.api.nvim_set_hl(0, "SnacksDashboardKey", { fg = "#e0def4", bold = true })
 	vim.api.nvim_set_hl(0, "SnacksDashboardDesc", { fg = "#e0def4" })
 	vim.api.nvim_set_hl(0, "SnacksDashboardIcon", { fg = "#e0def4" })
