@@ -183,6 +183,24 @@ cleanup_dead_panes() {
 
 sanity_check
 
+export FZF_DEFAULT_OPTS="
+ --tmux=82% 
+ --ansi
+ --cycle
+ --no-mouse
+ --layout=reverse
+ --border=rounded
+ --info=inline
+ --prompt='▶ '
+ --pointer='◆'
+ --marker='*'
+ --separator='━'
+ --color=bg:#1a1d23,hl:#ea9a97
+ --color=fg+:#e0def4,bg+:#33364a,hl+:#ea9a97
+ --color=info:#f6c177,prompt:#9ccfd8,pointer:#f6c177
+ --color=marker:#f6c177,spinner:#9ccfd8,header:#9ccfd8,border:#33364a
+"
+
 # if TS_SEARCH_PATHS is not set use default
 [[ -n "$TS_SEARCH_PATHS" ]] || TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
 

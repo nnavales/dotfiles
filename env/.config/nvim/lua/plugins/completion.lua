@@ -62,11 +62,19 @@ return {
 					luasnip.lsp_expand(args.body)
 				end,
 			},
-
-			-- window = {
-			-- 	completion = cmp.config.window.bordered(),
-			-- 	documentation = cmp.config.window.bordered(),
-			-- },
+			window = {
+				completion = cmp.config.window.bordered({
+					border = "",
+					max_height = 8,
+					scrollbar = false,
+					winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:CmpCursorLine,Search:None",
+				}),
+				documentation = cmp.config.window.bordered({
+					border = "",
+					scrollbar = false,
+					winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+				}),
+			},
 		})
 	end,
 }

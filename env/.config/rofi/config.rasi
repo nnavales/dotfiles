@@ -2,44 +2,40 @@
  * Rofi theme minimalista - matching tmux aesthetic
  */
 
-* {
-  // Minimal palette (matching tmux)
-  bg:           #121212;  // Negro casi puro
-  fg:           #808080;  // Gris medio (texto normal)
-  fg-active:    #e0e0e0;  // Gris claro (seleccionado)
-  bg-selected:  #303030;  // Gris oscuro (selección)
-  border:       #404040;  // Gris medio oscuro (bordes)
 
-  // Apply to theme
+* {
+  bg:           #1e2126;
+  fg:           #e0def4; 
+  fg-active:    #e0def4;  
+  bg-selected:  #33364a; 
+  border:       #33364a;  
+
   background-color: transparent;
   text-color: @fg;
-  font: "Inter Medium 12";
+  font: "Lexend 13";
   spacing: 0;
 }
 
-// --- Window ---
 window {
   background-color: @bg;
-  border: 1px solid;
+  border: 0px solid;
   border-color: @border;
   border-radius: 0;
   padding: 0;
   width: 50%;
 }
 
-// --- Main container ---
 mainbox {
-  padding: 12px;
+  padding: 4px;
   spacing: 8px;
   border: 0;
 }
 
-// --- Input bar ---
 inputbar {
   padding: 8px 12px;
   spacing: 8px;
   background-color: @bg;
-  text-color: @fg-active;
+  text-color: @fg;
   border-radius: 0;
   children: [ entry ];
 }
@@ -70,7 +66,7 @@ listview {
 
 // --- Elements ---
 element {
-  padding: 8px 12px;
+  padding: 8px 8px;
   spacing: 8px;
   border: 0;
   border-radius: 0;
@@ -117,7 +113,6 @@ textbox {
   text-color: @fg;
 }
 
-// --- Disable unused elements ---
 scrollbar {
   enabled: false;
 }

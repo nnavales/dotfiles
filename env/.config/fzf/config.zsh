@@ -1,44 +1,40 @@
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# FZF appearance
 export FZF_DEFAULT_OPTS=" \
---tmux=82% \
---ansi \
---cycle \
---no-mouse \
---layout=reverse \
---border=rounded \
---info=inline \
---prompt='▶ ' \
---pointer='◆' \
---marker='*' \
---separator='━' \
---color=fg:#d8dee9,bg:#161616,hl:#81a1c1 \
---color=fg+:#e5e9f0,bg+:#2e3440,hl+:#88c0d0 \
---color=info:#ebcb8b,prompt:#81a1c1,pointer:#ebcb8b \
---color=marker:#ebcb8b,spinner:#81a1c1,header:#81a1c1,border:#4c566a"
+  --tmux=82% \
+  --ansi \
+  --cycle \
+  --no-mouse \
+  --layout=reverse \
+  --border=rounded \
+  --info=inline \
+  --prompt='▶ ' \
+  --pointer='◆' \
+  --marker='*' \
+  --separator='━' \
+  --color=bg:#1a1d23,hl:#ea9a97 \
+  --color=fg+:#e0def4,bg+:#33364a,hl+:#ea9a97 \
+  --color=info:#f6c177,prompt:#9ccfd8,pointer:#f6c177 \
+  --color=marker:#f6c177,spinner:#9ccfd8,header:#9ccfd8,border:#33364a \
+"
 
-# Use ~~ as the trigger sequence instead of the default **
-export FZF_COMPLETION_TRIGGER='~~'
-export FZF_COMPLETION_OPTS='--border --info=inline'
-export FZF_COMPLETION_PATH_OPTS='--walker file,dir,follow'
-export FZF_COMPLETION_DIR_OPTS='--walker dir,follow'
-export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --follow'
-
-# Directory navigation - with depth limit and cache
-dcd() {
-  local dir
-  dir=$(fd --type d  --strip-cwd-prefix --follow \
-    | command fzf --prompt="dir > ") && cd "$dir"
-  zle reset-prompt
+fzf-history() {
+  local selected
+  selected=$(fc -l 1 | sed 's/^ *[0-9]\+ *//' | fzf --tac +s --prompt="history > ")
+  
+  if [[ -n $selected ]]; then
+    BUFFER="$selected"
+    CURSOR=$#BUFFER
+  fi
 }
 
-zle -N dcd
-bindkey '^D' dcd
+zle -N fzf-history
+bindkey '^R' fzf-history
 
 cpf() {
   local files
   files=$(fd . --type f --hidden ~ | fzf --multi --prompt="files to copy (tab to select) > ")
+
   if [[ -n "$files" ]]; then
     echo "$files" | while IFS= read -r file; do
       cp -v "$file" "./$(basename "$file")"
@@ -61,22 +57,26 @@ cpd() {
   fi
 }
 
-# Process management - with optimized process listing and better formatting
+
 fkill() {
   local pid
+
   if [[ $EUID -ne 0 ]]; then
-    pid=$(ps -u "$UID" -o pid,ppid,comm,%cpu,%mem --sort=-%mem \
-      | fzf --multi \
-      | awk '{print $1}')
+    pid=$(
+      ps -u "$UID" -o pid,ppid,comm,%cpu,%mem --sort=-%mem \
+        | fzf --multi \
+        | awk '{print $1}'
+    )
   else
-    pid=$(ps -eo pid,ppid,comm,%cpu,%mem --sort=-%mem \
-      | fzf \
-      | awk '{print $1}')
+    pid=$(
+      ps -eo pid,ppid,comm,%cpu,%mem --sort=-%mem \
+        | fzf \
+        | awk '{print $1}'
+    )
   fi
 
   [[ -n "$pid" ]] && echo "$pid" | xargs kill -"${1:-9}"
 }
-
 
 zle -N fkill
 bindkey '^K' fkill
@@ -90,8 +90,12 @@ fpath_any() {
   local file
   file=$(fd --absolute-path . "$dir" --type f \
     | fzf --prompt="file > " \
-          --preview '[[ $(file --mime-type -b {}) == text/* ]] && batcat --color=always {} || ([[ $(file --mime-type -b {}) =~ ^image/ ]] && chafa {} || file --brief {})' \
-          --preview-window=right:50%)
+        --preview '([[ $(file --mime-type -b {}) == text/* ]] \
+          && bat --color=always {} \
+          || ([[ $(file --mime-type -b {}) =~ ^image/ ]] \
+          && chafa {} \
+                || file --brief {}))' \
+        --preview-window=right:50%)
 
   if [[ -n "$file" ]]; then
     LBUFFER="${LBUFFER%$last_arg*}$file "
@@ -100,18 +104,25 @@ fpath_any() {
   zle reset-prompt
 }
 
+
 zle -N fpath_any
 bindkey '^P' fpath_any
 
 
 bookie() {
     local file
-    file=$(fd . /home/nahuel/personal/hub/bookies -t f -e .pdf -e .epub  --hidden | fzf --multi --prompt="Select book > ")
+    file=$(
+        fd . /home/nahuel/personal/hub/bookies -t f -e pdf -e epub --hidden \
+        | awk '{bn=$0; sub(".*/","",bn); printf "%s\t%s\n", bn, $0}' \
+        | fzf --multi --prompt="Select book > " --with-nth=1 --delimiter="\t" \
+        | cut -f2
+    )
+
     if [[ -n "$file" ]]; then
         echo "$file" | while IFS= read -r f; do
-            okular "$f" & 
+            ebook-viewer "$f" &
         done
     else
-        echo "No book selected."
+        echo "no book selected."
     fi
 }

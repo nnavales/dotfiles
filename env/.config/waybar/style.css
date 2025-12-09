@@ -1,53 +1,78 @@
 * {
-    background-color: #121212;
-    color: #ffffff;
-
     border: none;
     border-radius: 0;
     min-height: 0;
-    font-family: CaskaydiaMono Nerd Font;
-    font-size: 14px;
 }
 
-.modules-left {
-    margin-left: 8px;
+window#waybar {
+    background-color: #1a1d23; /* 121212 */
+    color: #e0def4;
+    font-family: "Inter", "CaskaydiaMono Nerd Font", monospace;
+    font-size: 15px;
 }
 
-.modules-right {
-    margin-right: 8px;
+#workspaces {
+    background-color: transparent;
+    margin-left: 4px;
 }
 
 #workspaces button {
-    all: initial;
     padding: 0 6px;
-    margin: 0 1.5px;
-    min-width: 9px;
-    color: #ffffff;
+    color: #6e6a86;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-#workspaces button.empty {
-    opacity: 0.5;
+#workspaces button.active {
+    color: #e0def4;
+    font-size: 19px;
 }
 
-
-#cpu,
-#network,
-#pulseaudio {
-    padding: 2px;
-    color: #ffffff;
-}
-
-
-tooltip {
-    padding: 2px;
-    color: #ffffff;
+#workspaces button:hover {
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    color: #c4a7e7;
 }
 
 #clock {
-    margin-left: 8.75px;
-    color: #ffffff;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    color: #e0def4;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-.hidden {
-    opacity: 0;
+.modules-right {
+    margin-right: 4px;
+}
+
+#cpu,
+#memory,
+#network,
+#pulseaudio {
+    padding: 0 6px;
+    border-radius: 15px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 6px;
+}
+
+#pulseaudio.muted {
+    color: #908caa;
+}
+
+#network.disconnected {
+    color: #eb6f92;
+}
+
+tooltip {
+    background: #1f1d2e;
+    border: 1px solid #26233a;
+    border-radius: 4px;
+}
+
+tooltip label {
+    color: #e0def4;
 }

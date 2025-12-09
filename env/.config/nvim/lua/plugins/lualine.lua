@@ -7,15 +7,15 @@ return {
 
 		local custom_theme = function()
 			local colors = {
-				fg = "#c0c0c0", -- más claro
-				yellow = "#f1c04a", -- más vibrante
-				cyan = "#8bd5e0", -- más claro y saturado
-				green = "#b6e07d", -- más brillante
-				orange = "#f78c4b", -- más contrastado
-				violet = "#df77c6", -- más saturado y brillante
-				magenta = "#e84a5f", -- rojo magenta más fuerte
-				blue = "#85d3f2", -- azul cielo más saturado
-				red = "#f85c50", -- rojo más llamativo
+				fg = "#e0def4",
+				yellow = "#f6c177",
+				cyan = "#9ccfd8",
+				green = "#b6e07d",
+				orange = "#ea9a97",
+				violet = "#c4a7e7",
+				magenta = "#e84a5f",
+				blue = "#3e8fb0",
+				red = "#eb6f92",
 			}
 
 			return {
@@ -87,7 +87,7 @@ return {
 				},
 
 				lualine_x = {
-					{ "branch", icon = "", padding = { left = 0, right = 1 } },
+					{ "branch", icon = { "", color = { fg = "#eb6f92" } }, padding = { left = 0, right = 1 } },
 					{
 						"diff",
 						symbols = { added = "+", modified = "~", removed = "-" },
