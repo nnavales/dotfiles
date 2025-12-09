@@ -2,10 +2,6 @@ vim.g.mapleader = " "
 
 local set = vim.keymap.set
 
--- Remap q: to <NOP> to disable the command history buffer
-set("n", "q:", function() end, { noremap = true, silent = true })
-set("n", "Q", "<nop>")
-
 -- Remap < y > para mantener el modo visual
 set("v", "<", "<gv", { silent = true })
 set("v", ">", ">gv", { silent = true })

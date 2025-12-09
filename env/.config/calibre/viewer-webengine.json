@@ -13,19 +13,19 @@
       "x": 0,
       "y": 0
     },
-    "maximized": false,
+    "maximized": true,
     "normal_geometry": {
       "height": 1080,
-      "width": 1920,
+      "width": 960,
       "x": 0,
       "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAAAAAAAAAAB38AAAQ3AAAAAAAAAAAAAAd/AAAENwAAAAAAAAAAB4AAAAAAAAAAAAAAB38AAAQ3"
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAAB38AAAQ3AAAAAAAAAAAAAAO/AAAENwAAAAACAAAAB4AAAAAAAAAAAAAAB38AAAQ3"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 1080,
@@ -36,7 +36,7 @@
       "index_in_screens_list": 0,
       "manufacturer": "Samsung Electric Company",
       "model": "S23B350",
-      "name": "HDMI-1",
+      "name": "HDMI-A-2",
       "serial": "",
       "size_in_logical_pixels": {
         "height": 1080,
@@ -52,6 +52,8 @@
   },
   "local_storage": {
     "search-bar-history-search-for-sc": [
+      "table of ",
+      "table",
       "high",
       "color",
       "light",
@@ -64,11 +66,11 @@
   },
   "main_window_state": {
     "__class__": "bytearray",
-    "__value__": "AAAA/wAAAAH9AAAAAgAAAAAAAAEAAAAEOPwCAAAAAfsAAAAWAHMAZQBhAHIAYwBoAC0AZABvAGMAawAAAAAA/////wAAAJQA////AAAAAQAAAQ4AAAQ4/AIAAAAF+wAAABAAdABvAGMALQBkAG8AYwBrAQAAAAAAAAQ4AAAAhgD////7AAAAFgBsAG8AbwBrAHUAcAAtAGQAbwBjAGsAAAAAAP////8AAAB7AP////sAAAAcAGIAbwBvAGsAbQBhAHIAawBzAC0AZABvAGMAawAAAAAAAAAEOAAAAOYA////+wAAABwAaQBuAHMAcABlAGMAdABvAHIALQBkAG8AYwBrAAAAAAD/////AAAAEgD////7AAAAHgBoAGkAZwBoAGwAaQBnAGgAdABzAC0AZABvAGMAawAAAAAAAAAEOAAAAM8A////AAAGbAAABDgAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAAAAAAAAQAAAB4AYQBjAHQAaQBvAG4AcwBfAHQAbwBvAGwAYgBhAHICAAAAAP////8AAAAAAAAAAA=="
+    "__value__": "AAAA/wAAAAH9AAAAAgAAAAAAAAEAAAAEOPwCAAAAAfsAAAAWAHMAZQBhAHIAYwBoAC0AZABvAGMAawAAAAAA/////wAAAJQA////AAAAAQAAAQ4AAAQ4/AIAAAAF+wAAABAAdABvAGMALQBkAG8AYwBrAAAAAAAAAAQ4AAAAhgD////7AAAAFgBsAG8AbwBrAHUAcAAtAGQAbwBjAGsAAAAAAP////8AAAB7AP////sAAAAcAGIAbwBvAGsAbQBhAHIAawBzAC0AZABvAGMAawAAAAAAAAAEOAAAAOYA////+wAAABwAaQBuAHMAcABlAGMAdABvAHIALQBkAG8AYwBrAAAAAAD/////AAAAEgD////7AAAAHgBoAGkAZwBoAGwAaQBnAGgAdABzAC0AZABvAGMAawAAAAAAAAAEOAAAAM8A////AAAHgAAABDgAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAAAAAAAAQAAAB4AYQBjAHQAaQBvAG4AcwBfAHQAbwBvAGwAYgBhAHICAAAAAP////8AAAAAAAAAAA=="
   },
   "old_prefs_migrated": true,
   "session_data": {
-    "base_font_size": 19,
+    "base_font_size": 18,
     "book_scrollbar": false,
     "columns_per_screen": {
       "landscape": 1,
@@ -83,7 +85,7 @@
     "cover_preserve_aspect_ratio": false,
     "current_color_scheme": "white",
     "footer": {
-      "left": "pos-book",
+      "left": "pos-chapter",
       "middle": "pos-book",
       "right": "progress"
     },
@@ -102,7 +104,18 @@
       "type": "builtin",
       "which": "blue"
     },
-    "keyboard_shortcuts": {},
+    "keyboard_shortcuts": {
+      "metadata": [],
+      "toggle_toc": [
+        {
+          "altKey": false,
+          "ctrlKey": true,
+          "key": "e",
+          "metaKey": false,
+          "shiftKey": false
+        }
+      ]
+    },
     "left-margin": {
       "left": "empty",
       "middle": "empty",
@@ -112,8 +125,8 @@
     "margin_left": 20,
     "margin_right": 20,
     "margin_top": 20,
-    "max_text_width": 1280,
-    "override_book_colors": "never",
+    "max_text_width": 1024,
+    "override_book_colors": "dark",
     "paged_margin_clicks_scroll_by_screen": true,
     "paged_pixel_scroll_threshold": 60,
     "paged_wheel_scrolls_by_screen": false,
@@ -133,11 +146,25 @@
     ],
     "show_selection_bar": false,
     "skipped_dialogs": {},
-    "standalone_font_settings": {},
+    "standalone_font_settings": {
+      "minimum_font_size": 10,
+      "mono_family": "CaskaydiaMono Nerd Font",
+      "sans_family": "Lexend",
+      "serif_family": "Lexend"
+    },
     "standalone_misc_settings": {
       "remember_window_geometry": true
     },
     "standalone_recently_opened": [
+      {
+        "authors": [
+          "Teiva Harsanyi"
+        ],
+        "key": "/home/nahuel/personal/hub/books/Teiva Harsanyi/100 Go Mistakes and How to Avoid Them (83)/100 Go Mistakes and How to Avoid Them - Teiva Harsanyi.epub",
+        "pathtoebook": "/home/nahuel/personal/hub/books/Teiva Harsanyi/100 Go Mistakes and How to Avoid Them (83)/100 Go Mistakes and How to Avoid Them - Teiva Harsanyi.epub",
+        "timestamp": "2025-12-08T21:05:59.515Z",
+        "title": "100 Go Mistakes and How to Avoid Them"
+      },
       {
         "authors": [
           "Regina O. Obe"
@@ -286,7 +313,7 @@
     ],
     "user_color_schemes": {
       "*ppine": {
-        "background": "#18181a",
+        "background": "#16181b",
         "foreground": "#e2e2e2",
         "name": "ppine"
       }

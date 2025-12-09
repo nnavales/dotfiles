@@ -2,10 +2,10 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			"folke/neodev.nvim",
+			"folke/lazydev.nvim",
 		},
 		config = function()
-			require("neodev").setup({})
+			require("lazydev").setup({})
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -53,7 +53,7 @@ return {
 				pyright = {
 					settings = {
 						pyright = {
-							disableOrganizeImports = true, -- Using Ruff
+							disableOrganizeImports = true,
 						},
 						python = {
 							analysis = {
@@ -158,13 +158,14 @@ return {
 			end
 
 			vim.diagnostic.config({
-				virtual_text = { prefix = "" },
-				signs = false,
-				underline = false,
-				update_in_insert = false,
+				-- update_in_insert = true,
 				float = {
-					border = "single",
-					source = "if_many",
+					focusable = false,
+					style = "minimal",
+					border = "",
+					source = true,
+					header = "",
+					prefix = "",
 				},
 			})
 		end,

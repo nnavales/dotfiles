@@ -20,7 +20,7 @@
   "cover_flow_queue_length": 6,
   "default_send_to_device_action": "DeviceAction:main::False:False",
   "delete_news_from_library_on_upload": false,
-  "disable_animations": false,
+  "disable_animations": true,
   "disable_tray_notification": false,
   "enforce_cpu_limit": true,
   "get_social_metadata": true,

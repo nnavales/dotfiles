@@ -4,10 +4,8 @@ return {
 		opts = {
 			events = { "BufWritePost", "InsertLeave" },
 			linters_by_ft = {
-				python = {},
 				javascript = { "eslint" },
 				typescript = { "eslint" },
-				go = { "golangci-lint" },
 				svelte = { "eslint" },
 			},
 			linters = {},

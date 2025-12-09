@@ -143,37 +143,37 @@
       255
     ]
   ],
-  "dark_palette_name": "",
+  "dark_palette_name": "__current__",
   "dark_palettes": {
     "__current__": {
-      "AlternateBase": "#2d2d2d",
-      "Base": "#121212",
+      "AlternateBase": "#33364a",
+      "Base": "#1a1d23",
       "BrightText": "#ff0000",
       "BrightText-disabled": "#ff0000",
-      "Button": "#2d2d2d",
-      "ButtonText": "#dddddd",
+      "Button": "#33364a",
+      "ButtonText": "#e0def4",
       "ButtonText-disabled": "#7f7f7f",
-      "Highlight": "#0b45c4",
-      "HighlightedText": "#dddddd",
+      "Highlight": "#33364a",
+      "HighlightedText": "#e0def4",
       "HighlightedText-disabled": "#7f7f7f",
       "Link": "#6cb4ee",
       "LinkVisited": "#800080",
       "PlaceholderText": "#7f7f7f",
       "PlaceholderText-disabled": "#7f7f7f",
-      "Text": "#dddddd",
+      "Text": "#e0def4",
       "Text-disabled": "#7f7f7f",
-      "ToolTipBase": "#2d2d2d",
-      "ToolTipText": "#dddddd",
-      "ToolTipText-disabled": "#dddddd",
-      "Window": "#2d2d2d",
-      "WindowText": "#dddddd",
-      "WindowText-disabled": "#dddddd"
+      "ToolTipBase": "#33364a",
+      "ToolTipText": "#e0def4",
+      "ToolTipText-disabled": "#e0def4",
+      "Window": "#1a1d23",
+      "WindowText": "#e0def4",
+      "WindowText-disabled": "#e0def4"
     }
   },
   "default_author_link": null,
   "font": [
     "Inter",
-    10,
+    11,
     400,
     false
   ],
@@ -294,7 +294,7 @@
       "x": 0,
       "y": 0
     },
-    "maximized": false,
+    "maximized": true,
     "normal_geometry": {
       "height": 1080,
       "width": 1920,
@@ -303,10 +303,10 @@
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAAAAAAAAAAB38AAAQ3AAAAAAAAAAAAAAd/AAAENwAAAAAAAAAAB4AAAAAAAAAAAAAAB38AAAQ3"
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAAB38AAAQ3AAAAAAAAAAAAAAd/AAAENwAAAAACAAAAB4AAAAAAAAAAAAAAB38AAAQ3"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 1080,
@@ -317,7 +317,7 @@
       "index_in_screens_list": 0,
       "manufacturer": "Samsung Electric Company",
       "model": "S23B350",
-      "name": "HDMI-1",
+      "name": "HDMI-A-2",
       "serial": "",
       "size_in_logical_pixels": {
         "height": 1080,
@@ -335,29 +335,29 @@
     "frame_geometry": {
       "height": 1005,
       "width": 900,
-      "x": 516,
-      "y": 123
+      "x": 0,
+      "y": 0
     },
     "full_screened": false,
     "geometry": {
       "height": 1005,
       "width": 900,
-      "x": 516,
-      "y": 123
+      "x": 0,
+      "y": 0
     },
-    "maximized": false,
+    "maximized": true,
     "normal_geometry": {
       "height": 1005,
       "width": 900,
-      "x": 516,
-      "y": 123
+      "x": 0,
+      "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAIEAAAAewAABYcAAARnAAACBAAAAHsAAAWHAAAEZwAAAAAAAAAAB4AAAAIEAAAAewAABYcAAARn"
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAAA4MAAAPsAAAAAAAAAAAAAAODAAAD7AAAAAACAAAAB4AAAAAAAAAAAAAAA4MAAAPs"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 1080,
@@ -368,7 +368,7 @@
       "index_in_screens_list": 0,
       "manufacturer": "Samsung Electric Company",
       "model": "S23B350",
-      "name": "HDMI-1",
+      "name": "HDMI-A-2",
       "serial": "",
       "size_in_logical_pixels": {
         "height": 1080,
@@ -539,29 +539,29 @@
     "frame_geometry": {
       "height": 640,
       "width": 826,
-      "x": 551,
-      "y": 404
+      "x": 0,
+      "y": 0
     },
     "full_screened": false,
     "geometry": {
       "height": 640,
       "width": 826,
-      "x": 551,
-      "y": 404
+      "x": 0,
+      "y": 0
     },
-    "maximized": false,
+    "maximized": true,
     "normal_geometry": {
       "height": 640,
       "width": 826,
-      "x": 551,
-      "y": 404
+      "x": 0,
+      "y": 0
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAInAAABlAAABWAAAAQTAAACJwAAAZQAAAVgAAAEEwAAAAAAAAAAB4AAAAInAAABlAAABWAAAAQT"
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAAAzkAAAJ/AAAAAAAAAAAAAAM5AAACfwAAAAACAAAAB4AAAAAAAAAAAAAAAzkAAAJ/"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 1080,
@@ -572,7 +572,7 @@
       "index_in_screens_list": 0,
       "manufacturer": "Samsung Electric Company",
       "model": "S23B350",
-      "name": "HDMI-1",
+      "name": "HDMI-A-2",
       "serial": "",
       "size_in_logical_pixels": {
         "height": 1080,
@@ -753,7 +753,7 @@
       "x": 0,
       "y": 0
     },
-    "maximized": false,
+    "maximized": true,
     "normal_geometry": {
       "height": 1080,
       "width": 1920,
@@ -762,10 +762,10 @@
     },
     "qt": {
       "__class__": "bytearray",
-      "__value__": "AdnQywADAAAAAAAAAAAAAAAAB38AAAQ3AAAAAAAAAAAAAAd/AAAENwAAAAAABAAAB4AAAAAAAAAAAAAAB38AAAQ3"
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAAB38AAAQ3AAAAAAAAAAAAAAd/AAAENwAAAAACBAAAB4AAAAAAAAAAAAAAB38AAAQ3"
     },
     "screen": {
-      "depth": 24,
+      "depth": 32,
       "device_pixel_ratio": 1.0,
       "geometry_in_logical_pixels": {
         "height": 1080,
@@ -776,7 +776,7 @@
       "index_in_screens_list": 0,
       "manufacturer": "Samsung Electric Company",
       "model": "S23B350",
-      "name": "HDMI-1",
+      "name": "HDMI-A-2",
       "serial": "",
       "size_in_logical_pixels": {
         "height": 1080,
@@ -845,7 +845,7 @@
   "gpm_template_editor_word_wrap_mode": true,
   "grid view visible": false,
   "library_usage_stats": {
-    "/home/nahuel/personal/hub/books": 66
+    "/home/nahuel/personal/hub/books": 72
   },
   "light_palette_name": "",
   "light_palettes": {
@@ -911,9 +911,11 @@
   "quick_start_guide_added": true,
   "qv_open_at_shutdown": false,
   "recently_used_languages": [],
+  "row_numbers_in_book_list": false,
   "search bar visible": true,
   "server3_warning_done": true,
   "show_emblems": false,
+  "show_splash_screen": false,
   "tag browser search box visible": false,
   "tag_browser_rules_dialog_table_widths": [
     20,
@@ -940,5 +942,5 @@
   ],
   "template_functions_prefs_st_show_help": true,
   "template_functions_prefs_tf_show_help": true,
-  "toolbar_icon_size": "mid-small"
+  "toolbar_icon_size": "small"
 }

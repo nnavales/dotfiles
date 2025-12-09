@@ -6,10 +6,10 @@
   "notified-version-updates": {
     "__class__": "set",
     "__value__": [
-      "8.10",
+      "8.8",
       "8.7",
-      "8.9",
-      "8.8"
+      "8.10",
+      "8.9"
     ]
   },
   "recursive book import root dir dialog": "/home/nahuel/Dropbox/Apps/Books",
@@ -17,8 +17,16 @@
   "save to disk dialog": "/home/nahuel/Dropbox/eBooks",
   "sort_history": [
     [
-      "timestamp",
-      false
+      "title",
+      true
+    ],
+    [
+      "tags",
+      true
+    ],
+    [
+      "title",
+      true
     ],
     [
       "timestamp",
