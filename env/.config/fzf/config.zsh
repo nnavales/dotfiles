@@ -15,7 +15,7 @@ export FZF_DEFAULT_OPTS=" \
   --color=bg:#1a1d23,hl:#ea9a97 \
   --color=fg+:#e0def4,bg+:#33364a,hl+:#ea9a97 \
   --color=info:#f6c177,prompt:#9ccfd8,pointer:#f6c177 \
-  --color=marker:#f6c177,spinner:#9ccfd8,header:#9ccfd8,border:#33364a \
+  --color=marker:#f6c177,spinner:#9ccfd8,header:#9ccfd8,border:#1a1d23 \
 "
 
 fzf-history() {
