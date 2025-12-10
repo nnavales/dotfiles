@@ -13,10 +13,8 @@ macos-titlebar-proxy-icon = hidden
 macos-option-as-alt = true
 
 theme = rose-pine.conf
-font-family = "CaskaydiaMono Nerd Font"
-
-font-style = Medium
-font-size = 16
+font-family = "JetBrainsMono SemiBold"
+font-size = 14
 font-feature = calt, liga, ss04, ss05, ss06, ss07, ss08, ss09
 
 cursor-style = block
