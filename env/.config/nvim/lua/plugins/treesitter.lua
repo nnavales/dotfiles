@@ -15,6 +15,7 @@ return {
 					"typescript",
 					"tsx",
 					"go",
+					"regex",
 					"c",
 					"html",
 					"css",
