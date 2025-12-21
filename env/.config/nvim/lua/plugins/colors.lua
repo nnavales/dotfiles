@@ -1,5 +1,5 @@
 function ColorMyPencils(color)
-	color = color or "rose-pine-moon"
+	color = color or "rose-pine"
 	vim.cmd.colorscheme(color)
 
 	vim.api.nvim_set_hl(0, "CursorLine", { bg = "#1e2126" })
@@ -24,7 +24,6 @@ return {
 		"rose-pine/neovim",
 		lazy = false,
 		priority = 1000,
-		name = "rose-pine",
 		config = function()
 			require("rose-pine").setup({
 				variant = "moon", -- auto, main, moon, or dawn
@@ -41,64 +40,64 @@ return {
 			ColorMyPencils()
 		end,
 	},
-	{
-		"folke/tokyonight.nvim",
-		config = function()
-			require("tokyonight").setup({
-				style = "moon",
-				transparent = true,
-				styles = {
-					sidebars = "transparent",
-					floats = "transparent",
-				},
-				dim_inactive = true,
-				lualine_bold = true,
-			})
-		end,
-	},
-
-	{
-		"nyoom-engineering/oxocarbon.nvim",
-	},
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		config = function()
-			require("catppuccin").setup({
-				flavour = "mocha",
-				transparent_background = true,
-				term_colors = true,
-				integrations = {
-					cmp = true,
-					gitsigns = true,
-					nvimtree = true,
-					treesitter = true,
-					notify = false,
-					mini = { enabled = true },
-				},
-			})
-		end,
-	},
-
-	{
-		"sainnhe/everforest",
-		config = function()
-			vim.g.everforest_enable_italic = true
-			vim.g.everforest_background = "hard"
-			vim.g.everforest_transparent_background = 2
-			vim.g.everforest_better_performance = 1
-		end,
-	},
-
-	{
-		"olivercederborg/poimandres.nvim",
-		config = function()
-			require("poimandres").setup({
-				disable_background = true,
-				disable_float_background = true,
-				bold_vert_split = true,
-				dim_nc_background = false,
-			})
-		end,
-	},
+	-- {
+	-- 	"folke/tokyonight.nvim",
+	-- 	config = function()
+	-- 		require("tokyonight").setup({
+	-- 			style = "moon",
+	-- 			transparent = true,
+	-- 			styles = {
+	-- 				sidebars = "transparent",
+	-- 				floats = "transparent",
+	-- 			},
+	-- 			dim_inactive = true,
+	-- 			lualine_bold = true,
+	-- 		})
+	-- 	end,
+	-- },
+	--
+	-- {
+	-- 	"nyoom-engineering/oxocarbon.nvim",
+	-- },
+	-- {
+	-- 	"catppuccin/nvim",
+	-- 	name = "catppuccin",
+	-- 	config = function()
+	-- 		require("catppuccin").setup({
+	-- 			flavour = "mocha",
+	-- 			transparent_background = true,
+	-- 			term_colors = true,
+	-- 			integrations = {
+	-- 				cmp = true,
+	-- 				gitsigns = true,
+	-- 				nvimtree = true,
+	-- 				treesitter = true,
+	-- 				notify = false,
+	-- 				mini = { enabled = true },
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
+	--
+	-- {
+	-- 	"sainnhe/everforest",
+	-- 	config = function()
+	-- 		vim.g.everforest_enable_italic = true
+	-- 		vim.g.everforest_background = "hard"
+	-- 		vim.g.everforest_transparent_background = 2
+	-- 		vim.g.everforest_better_performance = 1
+	-- 	end,
+	-- },
+	--
+	-- {
+	-- 	"olivercederborg/poimandres.nvim",
+	-- 	config = function()
+	-- 		require("poimandres").setup({
+	-- 			disable_background = true,
+	-- 			disable_float_background = true,
+	-- 			bold_vert_split = true,
+	-- 			dim_nc_background = false,
+	-- 		})
+	-- 	end,
+	-- },
 }

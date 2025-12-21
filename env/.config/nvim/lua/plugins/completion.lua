@@ -2,7 +2,6 @@ return {
 	"hrsh7th/nvim-cmp",
 	event = "InsertEnter",
 	dependencies = {
-		"onsails/lspkind.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
@@ -14,6 +13,7 @@ return {
 			dependencies = { "rafamadriz/friendly-snippets" },
 		},
 		"saadparwaiz1/cmp_luasnip",
+		"onsails/lspkind.nvim",
 	},
 	config = function()
 		local cmp = require("cmp")
@@ -39,8 +39,9 @@ return {
 			sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
-				{ name = "path" },
+			}, {
 				{ name = "buffer" },
+				{ name = "path" },
 			}),
 
 			mapping = cmp.mapping.preset.insert({

@@ -8,6 +8,11 @@ return {
 			require("lazydev").setup({})
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			capabilities.textDocument.completion.completionItem.snippetSupport = true
+			capabilities.offsetEncoding = { "utf-16" }
+			capabilities.workspace = capabilities.workspace or {}
+			capabilities.workspace.didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			}
 
 			local function on_attach(_, bufnr)
 				vim.api.nvim_buf_set_keymap(
@@ -52,9 +57,7 @@ return {
 				},
 				pyright = {
 					settings = {
-						pyright = {
-							disableOrganizeImports = true,
-						},
+						pyright = {},
 						python = {
 							analysis = {
 								ignore = { "*" },
@@ -160,7 +163,7 @@ return {
 			vim.diagnostic.config({
 				-- update_in_insert = true,
 				float = {
-					focusable = false,
+					focusable = true,
 					style = "minimal",
 					border = "",
 					source = true,

@@ -41,6 +41,7 @@ return {
 					opts = { skip = true },
 				},
 			},
+
 			views = {
 				notify = {
 					replace = true,
