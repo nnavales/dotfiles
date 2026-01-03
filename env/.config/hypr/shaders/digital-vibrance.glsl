@@ -1,6 +1,5 @@
 #version 330 core
 
-// Compatible con versiones antiguas de Hyprshade
 in vec2 v_texcoord;
 out vec4 out_color;
 

@@ -8,9 +8,15 @@ return {
 			col = nil,
 			--
 			width = 50,
-			pane_gap = 4,
+			pane_gap = 0,
 			preset = {
 				keys = {
+					{
+						icon = " ",
+						key = "SPC e",
+						desc = "File Explorer",
+						action = "",
+					},
 					{
 						icon = " ",
 						key = "SPC f f",
@@ -23,16 +29,8 @@ return {
 						desc = "Find Text",
 						action = ":lua Snacks.dashboard.pick('live_grep')",
 					},
-					{
-						icon = " ",
-						key = "l",
-						desc = "Lazy",
-						action = ":Lazy",
-						enabled = package.loaded.lazy ~= nil,
-					},
 					{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 				},
-				-- Used by the `header` section
 				header = [[
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⡴⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣿⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -65,7 +63,6 @@ return {
 			sections = {
 				{ section = "header" },
 				{ section = "keys", gap = 1, padding = 1 },
-				-- { section = "startup" },
 			},
 		},
 		bigfile = { enable = true },
