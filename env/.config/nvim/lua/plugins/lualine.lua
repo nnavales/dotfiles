@@ -5,18 +5,10 @@ return {
 		require("mini.icons").setup()
 		MiniIcons.mock_nvim_web_devicons()
 
+		local theme_colors = require("config.colors")
+
 		local custom_theme = function()
-			local colors = {
-				fg = "#e0def4",
-				yellow = "#f6c177",
-				cyan = "#9ccfd8",
-				green = "#b6e07d",
-				orange = "#ea9a97",
-				violet = "#c4a7e7",
-				magenta = "#e84a5f",
-				blue = "#3e8fb0",
-				red = "#eb6f92",
-			}
+			local colors = theme_colors.default_theme == "light" and theme_colors.light or theme_colors.dark
 
 			return {
 				normal = {
@@ -85,7 +77,6 @@ return {
 						},
 					},
 				},
-
 				lualine_x = {
 					{ "branch", icon = { "", color = { fg = "#eb6f92" } }, padding = { left = 0, right = 1 } },
 					{
