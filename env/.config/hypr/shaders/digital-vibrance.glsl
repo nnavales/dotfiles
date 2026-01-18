@@ -4,7 +4,7 @@ in vec2 v_texcoord;
 out vec4 out_color;
 
 uniform sampler2D tex;
-uniform float vibrance =1.8;
+uniform float vibrance = 1.8;
 
 void main() {
     vec4 color = texture(tex, v_texcoord);

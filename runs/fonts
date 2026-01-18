@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e  
+set -e
 
 FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"

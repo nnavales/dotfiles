@@ -22,9 +22,12 @@ export BAT_PAGER="less -FR"
 
 HISTSIZE=5000
 SAVEHIST=10000
-HIST_IGNORE_DUPS=1
-HIST_IGNORE_ALL_DUPS=1
-HIST_FIND_NO_DUPS=1
+
+setopt HIST_IGNORE_DUPS        
+setopt HIST_IGNORE_ALL_DUPS   
+setopt HIST_FIND_NO_DUPS     
+setopt SHARE_HISTORY        
+setopt INC_APPEND_HISTORY  
 
 # alias
 alias pbcopy='xclip -selection clipboard'
