@@ -1,39 +1,60 @@
 return {
 	"nvim-treesitter/nvim-treesitter-textobjects",
-	dependencies = { "nvim-treesitter/nvim-treesitter" },
+	branch = "main",
 	config = function()
-		require("nvim-treesitter.configs").setup({
-			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["af"] = "@function.outer", -- around function
-						["if"] = "@function.inner", -- inside function
-					},
-
-					selection_modes = {
-						["@parameter.outer"] = "v",
-						["@function.outer"] = "V",
-						["@class.outer"] = "V",
-					},
+		require("nvim-treesitter-textobjects").setup({
+			select = {
+				enable = true,
+				lookahead = true,
+				selection_modes = {
+					["@parameter.outer"] = "v", -- charwise
+					["@function.outer"] = "V", -- linewise
+					["@class.outer"] = "V", -- linewise
 				},
-
-				move = {
-					enable = true,
-					set_jumps = true,
-
-					goto_next_start = {
-						["]f"] = "@function.outer",
-						["]c"] = "@class.outer",
-					},
-
-					goto_previous_start = {
-						["[f"] = "@function.outer",
-						["[c"] = "@class.outer",
-					},
-				},
+				include_surrounding_whitespace = false,
+			},
+			move = {
+				enable = true,
+				set_jumps = true,
+			},
+			swap = {
+				enable = true,
+			},
+			peek = {
+				enable = true,
 			},
 		})
+
+		local ts_select = require("nvim-treesitter-textobjects.select")
+		for _, mode in ipairs({ "x", "o" }) do
+			vim.keymap.set(mode, "af", function()
+				ts_select.select_textobject("@function.outer", "textobjects")
+			end)
+			vim.keymap.set(mode, "if", function()
+				ts_select.select_textobject("@function.inner", "textobjects")
+			end)
+			vim.keymap.set(mode, "ac", function()
+				ts_select.select_textobject("@class.outer", "textobjects")
+			end)
+			vim.keymap.set(mode, "ic", function()
+				ts_select.select_textobject("@class.inner", "textobjects")
+			end)
+		end
+
+		local ts_move = require("nvim-treesitter-textobjects.move")
+		for _, mode in ipairs({ "n", "x", "o" }) do
+			vim.keymap.set(mode, "]f", function()
+				ts_move.goto_next_start("@function.outer", "textobjects")
+			end)
+			vim.keymap.set(mode, "[f", function()
+				ts_move.goto_previous_start("@function.outer", "textobjects")
+			end)
+			vim.keymap.set(mode, "]c", function()
+				ts_move.goto_next_start("@class.outer", "textobjects")
+			end)
+			vim.keymap.set(mode, "[c", function()
+				ts_move.goto_previous_start("@class.outer", "textobjects")
+			end)
+		end
 	end,
 }

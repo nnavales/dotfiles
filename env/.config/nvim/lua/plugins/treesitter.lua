@@ -1,21 +1,51 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
+			-- Setup de nvim-treesitter (solo si necesitas configurar install_dir)
+			require("nvim-treesitter").setup({
+				install_dir = vim.fn.stdpath("data") .. "/site",
+			})
+
+			-- Instalar parsers
+			require("nvim-treesitter").install({
+				"lua",
+				"vim",
+				"vimdoc",
+				"query",
+				"svelte",
+				"python",
+				"javascript",
+				"typescript",
+				"tsx",
+				"go",
+				"regex",
+				"c",
+				"html",
+				"css",
+				"json",
+				"yaml",
+				"toml",
+				"markdown",
+				"markdown_inline",
+				"bash",
+				"dockerfile",
+			})
+
+			-- Habilitar treesitter features automáticamente
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = {
 					"lua",
 					"vim",
-					"vimdoc",
-					"query",
 					"svelte",
 					"python",
 					"javascript",
 					"typescript",
 					"tsx",
 					"go",
-					"regex",
 					"c",
 					"html",
 					"css",
@@ -23,18 +53,11 @@ return {
 					"yaml",
 					"toml",
 					"markdown",
-					"markdown_inline",
 					"bash",
-					"dockerfile",
 				},
-				modules = {},
-				ignore_install = {},
-				sync_install = false,
-				auto_install = true,
-				highlight = {
-					enable = true,
-					additional_vim_regex_highlighting = false,
-				},
+				callback = function()
+					vim.treesitter.start()
+				end,
 			})
 		end,
 	},
