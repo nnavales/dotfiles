@@ -79,5 +79,11 @@ return {
 				})
 			end,
 		},
+
+		{
+			"NLKNguyen/papercolor-theme",
+			lazy = false, -- cargar inmediatamente
+			priority = 1000, -- asegurar que se cargue antes que otros plugins
+		},
 	},
 }
