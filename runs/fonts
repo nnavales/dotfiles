@@ -2,20 +2,42 @@
 
 set -e
 
-FONT_DIR="$HOME/.local/share/fonts"
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "$TMPDIR"' EXIT
+
+if [[ $EUID -eq 0 ]]; then
+    REAL_USER="$SUDO_USER"
+    REAL_HOME=$(eval echo "~$REAL_USER")
+else
+    REAL_USER="$USER"
+    REAL_HOME="$HOME"
+fi
+
+FONT_DIR="$REAL_HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
-NERD_FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaMono.zip"
-NERD_FONT_TMP="/tmp/CascadiaMono.zip"
-curl -Lo "$NERD_FONT_TMP" "$NERD_FONT_URL"
-unzip -o "$NERD_FONT_TMP" -d "$FONT_DIR"
+CASCADIA_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaMono.zip"
+CASCADIA_ZIP="$TMPDIR/CascadiaMono.zip"
+curl -Lo "$CASCADIA_ZIP" "$CASCADIA_URL"
+unzip -o "$CASCADIA_ZIP" -d "$FONT_DIR/CascadiaMono"
 
-MONA_URL="https://github.com/githubnext/monaspace/releases/download/v1.301/monaspace-nerdfonts-v1.301.zip"
-MONA_ZIP="/tmp/monaspace-nerdfonts-v1.301.zip"
-curl -Lo "$MONA_ZIP" "$MONA_URL"
+MONASPACE_URL="https://github.com/githubnext/monaspace/releases/download/v1.301/monaspace-nerdfonts-v1.301.zip"
+MONASPACE_ZIP="$TMPDIR/monaspace-nerdfonts.zip"
+curl -Lo "$MONASPACE_ZIP" "$MONASPACE_URL"
+unzip -o "$MONASPACE_ZIP" -d "$FONT_DIR/monaspace"
 
-unzip -o "$MONA_ZIP" -d "$FONT_DIR"
-rm "$MONA_ZIP"
-rm "$NERD_FONT_TMP"
+JETBRAINS_URL="https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip"
+JETBRAINS_ZIP="$TMPDIR/JetBrainsMono.zip"
+curl -Lo "$JETBRAINS_ZIP" "$JETBRAINS_URL"
+unzip -o "$JETBRAINS_ZIP" -d "$FONT_DIR/JetBrainsMono"
 
-fc-cache -fv
+LEXEND_URL="https://github.com/googlefonts/lexend/archive/refs/heads/main.tar.gz"
+LEXEND_TAR="$TMPDIR/lexend.tar.gz"
+curl -Lo "$LEXEND_TAR" "$LEXEND_URL"
+mkdir -p "$FONT_DIR/Lexend"
+tar -xzf "$LEXEND_TAR" \
+    --strip-components=3 \
+    -C "$FONT_DIR/Lexend" \
+    lexend-main/fonts/lexend
+
+fc-cache -f

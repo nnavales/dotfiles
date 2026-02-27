@@ -1,34 +1,29 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 add_newline = false 
 command_timeout = 200
-format = "$directory$git_branch$git_status$character"
+format = "$hostname$directory$git_branch$git_status$character"
 
 [character]
-error_symbol   = "[»](bold #eb6f92)"
-success_symbol = "[»](bold #a6acb9)"   
+error_symbol   = "[›](bold #E0617A)"
+success_symbol = "[›](bold #A5E9F5)"   
 
 [directory]
-truncation_length = 2
-truncation_symbol = "…/"
-style = "bold #a6acb9"             
-repo_root_style = "bold #a6acb9"   
+truncation_length = 3
+truncation_symbol = "../"
+style = "bold #BFD6D8"
+repo_root_style = "bold #BFD6D8"   
 repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
+
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+style = "#7A878A"
 
 [git_branch]
 format = "[$branch]($style) "
-style = "#eb6f92"               
+style = "#8B9C9F"
 
 [git_status]
-format = "[$all_status]($style)"
-style  = "#454752"               
-
-ahead      = "⇡${count} "
-diverged   = "⇕⇡${ahead_count}⇣${behind_count} "
-behind     = "⇣${count} "
-conflicted = ""
-up_to_date = ""
-untracked  = ""
-modified   = ""
-stashed    = ""
-staged     = ""
-renamed    = ""
-deleted    = ""
+format = "[$conflicted](bold #E0617A)"
+conflicted = "!"

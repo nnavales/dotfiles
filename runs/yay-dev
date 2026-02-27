@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-yay -S hyprshot obsidian stremio protonvpn-cli-ng localsend-bin zen-browser-bin cursor-bin bruno-bin hyprshade --noconfirm

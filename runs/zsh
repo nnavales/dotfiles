@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
+set -e
 
-pacman -S --noconfirm zsh
+sudo pacman -S --noconfirm zsh
 hash -r
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+if ! command -v starship &>/dev/null; then
+    sh -c "$(curl -sS https://starship.rs/install.sh)" -- --yes
+fi
+
 sudo chsh -s $(which zsh)
-sh -c "$(curl -sS https://starship.rs/install.sh)" -- --yes

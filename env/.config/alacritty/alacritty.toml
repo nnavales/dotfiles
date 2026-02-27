@@ -1,13 +1,14 @@
 [general]
-import = ["rose-pine-moon.toml"]
+import = ["paragon.toml"]
 
 [window]
 opacity = 1.0
-padding = { x = 4, y = 4 }
+padding = { x = 0, y = 0 }
+decorations_theme_variant = "Dark"
 
 [font]
-normal = { family = "JetBrainsMono SemiBold" }
-size = 14
+normal = { family = "JetBrainsMono" }
+size = 13
 
 [cursor]
 style = "Block"

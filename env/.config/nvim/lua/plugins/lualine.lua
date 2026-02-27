@@ -5,11 +5,16 @@ return {
 		require("mini.icons").setup()
 		MiniIcons.mock_nvim_web_devicons()
 
-		local theme_colors = require("config.colors")
+		local colors = {
+			fg = "#e0def4",
+			bg = "NONE",
+			yellow = "#f6c177",
+			green = "#b6e07d",
+			blue = "#3e8fb0",
+			red = "#eb6f92",
+		}
 
 		local custom_theme = function()
-			local colors = theme_colors.default_theme == "light" and theme_colors.light or theme_colors.dark
-
 			return {
 				normal = {
 					a = { fg = colors.fg, bg = colors.bg, gui = "bold" },

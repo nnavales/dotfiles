@@ -5,17 +5,30 @@ export FZF_DEFAULT_OPTS=" \
   --ansi \
   --cycle \
   --no-mouse \
+  --info=inline-right \
   --layout=reverse \
   --border=rounded \
-  --info=inline \
-  --prompt='▶ ' \
-  --pointer='◆' \
+  --prompt='› ' \
+  --pointer='>' \
   --marker='*' \
-  --separator='━' \
-  --color=bg:#1a1d23,hl:#ea9a97 \
-  --color=fg+:#e0def4,bg+:#33364a,hl+:#ea9a97 \
-  --color=info:#f6c177,prompt:#9ccfd8,pointer:#f6c177 \
-  --color=marker:#f6c177,spinner:#9ccfd8,header:#9ccfd8,border:#1a1d23 \
+  --color=bg:#1F2225 \
+  --color=fg:#E9F2F2 \
+  --color=hl:#D9CC58 \
+  --color=fg+:#E9F2F2 \
+  --color=bg+:#33383C \
+  --color=hl+:#D9CC58 \
+  --color=info:#879297 \
+  --color=prompt:#A5E9F5 \
+  --color=pointer:#D9CC58 \
+  --color=marker:#D78CF0 \
+  --color=spinner:#A5E9F5 \
+  --color=header:#A5E9F5 \
+  --color=border:#272C2F \
+  --color=gutter:#1F2225 \
+  --color=query:#E9F2F2:regular \
+  --color=scrollbar:#272C2F \
+  --color=separator:#879297 \
+  --highlight-line \
 "
 
 fzf-history() {
@@ -89,21 +102,17 @@ fkill() {
 zle -N fkill
 bindkey '^K' fkill
 
+
 fpath_any() {
   local last_arg=${LBUFFER##* }
-  local dir
-  dir=$(eval echo "$last_arg")
+  local dir="${last_arg/#\~/$HOME}" 
   [[ ! -d "$dir" ]] && dir="$PWD"
 
   local file
-  file=$(fd --absolute-path . "$dir" --type f \
+  file=$(fd -HI --absolute-path . "$dir" --type f \
     | fzf --prompt="file > " \
-        --preview '([[ $(file --mime-type -b {}) == text/* ]] \
-          && bat --color=always {} \
-          || ([[ $(file --mime-type -b {}) =~ ^image/ ]] \
-          && chafa {} \
-                || file --brief {}))' \
-        --preview-window=right:50%)
+          --preview '[[ $(file --mime-type -b {}) == text/* ]] && bat --color=always {} || ([[ $(file --mime-type -b {}) =~ ^image/ ]] && chafa {} || file --brief {})' \
+          --preview-window=right:50%)
 
   if [[ -n "$file" ]]; then
     LBUFFER="${LBUFFER%$last_arg*}$file "
@@ -112,9 +121,9 @@ fpath_any() {
   zle reset-prompt
 }
 
-
 zle -N fpath_any
 bindkey '^P' fpath_any
+
 
 
 bookie() {
