@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 
 local set = vim.keymap.set
 
--- Remap < y > para mantener el modo visual
+-- Remap < y > to keep visual mode
 set("v", "<", "<gv", { silent = true })
 set("v", ">", ">gv", { silent = true })
 
@@ -12,7 +12,7 @@ set("n", "<c-k>", "<c-w><c-k>")
 set("n", "<c-l>", "<c-w><c-l>")
 set("n", "<c-h>", "<c-w><c-h>")
 
--- Navegación centrada
+-- Centered navigation
 set("n", "<C-d>", "<C-d>zz")
 set("n", "<C-u>", "<C-u>zz")
 set("n", "n", "nzzzv")
@@ -34,7 +34,8 @@ set("n", "<M-.>", "<c-w>5>")
 set("n", "<M-t>", "<C-W>+")
 set("n", "<M-s>", "<C-W>-")
 
--- Best script?
-set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
--- replace
+-- Replace
 set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- theprimeagen.
+set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")

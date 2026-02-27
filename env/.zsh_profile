@@ -2,6 +2,8 @@ export XDG_CONFIG_HOME=$HOME/.config
 export DEV_ENV=$HOME/personal/dev
 export DEV_ENV_HOME="$HOME/personal/dev"
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+export GOPATH="$HOME/go"
+export GOROOT=/usr/lib/go
 
 addToPath() {
     if [[ "$PATH" != *"$1"* ]]; then
@@ -15,16 +17,11 @@ addToPathFront() {
     fi
 }
 
-# locals:
 addToPathFront $HOME/.local/apps
 addToPathFront $HOME/.local/scripts
 addToPathFront $HOME/.local/bin
-
-#langs
-addToPathFront $HOME/.uv/bin
+addToPath $HOME/.uv/bin
 addToPath $HOME/.cargo/bin
-export GOPATH="$HOME/go"
-export GOROOT=/usr/lib/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-export PATH="/home/nahuel/.bun/bin:$PATH"
-export PATH=/home/nahuel/.opencode/bin:$PATH
+addToPath $HOME/.bun/bin
+addToPath $HOME/.opencode/bin
+addToPath $GOROOT/bin:$GOPATH/bin

@@ -1,20 +1,20 @@
 command = "tmux new-session -A -s default"
 
-window-padding-x = 4
-window-padding-y = 4,0
+window-padding-x = 0
+window-padding-y = 0,0
 window-padding-balance = false
 window-decoration = false
-
 resize-overlay = never
+
 confirm-close-surface = false
 mouse-hide-while-typing = true
 macos-titlebar-style = tabs
 macos-titlebar-proxy-icon = hidden
 macos-option-as-alt = true
 
-theme = rose-pine.conf
-font-family = "JetBrainsMono SemiBold"
-font-size = 14
+theme = paragon.conf
+font-family = "JetBrainsMono"
+font-size = 13
 font-feature = calt, liga, ss04, ss05, ss06, ss07, ss08, ss09
 
 cursor-style = block
@@ -32,6 +32,5 @@ keybind=alt+seven=unbind
 keybind=alt+eight=unbind
 keybind=alt+nine=unbind
 
-keybind = ctrl+v=paste_from_clipboard
 keybind = ctrl+up=increase_font_size:1
 keybind = ctrl+down=decrease_font_size:1

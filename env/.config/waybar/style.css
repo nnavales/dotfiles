@@ -1,78 +1,87 @@
 * {
+    background-color: #1f2225;
+    color: #e9f2f2;
+
     border: none;
     border-radius: 0;
     min-height: 0;
+    font-family: "Lexend"; /* set your favorite font */
+    font-size: 13px;
 }
 
-window#waybar {
-    background-color: #1a1d23; /* 121212 */
-    color: #e0def4;
-    font-family: "Inter", "CaskaydiaMono Nerd Font", monospace;
-    font-size: 15px;
-}
-
-#workspaces {
-    background-color: transparent;
-    margin-left: 4px;
-}
-
-#workspaces button {
-    padding: 0 6px;
-    color: #6e6a86;
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-#workspaces button.active {
-    color: #e0def4;
-    font-size: 19px;
-}
-
-#workspaces button:hover {
-    background: transparent;
-    box-shadow: none;
-    text-shadow: none;
-    color: #c4a7e7;
-}
-
-#clock {
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
-    color: #e0def4;
-    margin-top: 0px;
-    margin-bottom: 0px;
+.modules-left {
+    margin-left: 8px;
 }
 
 .modules-right {
-    margin-right: 4px;
+    margin-right: 8px;
+}
+
+#workspaces button {
+    all: initial;
+    background-color: transparent;
+    color: #6e797e;
+    padding: 0 6px;
+    margin: 0 1.5px;
+    min-width: 9px;
+}
+
+#workspaces button.empty {
+    opacity: 0.5;
+}
+
+#workspaces button.active {
+    color: #e9f2f2;
+    font-weight: bold;
+}
+
+#workspaces button:hover {
+    color: #a5e9f5;
+}
+
+#clock {
+    color: #e9f2f2;
+    margin-left: 8.75px;
 }
 
 #cpu,
 #memory,
 #network,
 #pulseaudio {
-    padding: 0 6px;
-    border-radius: 15px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-left: 6px;
+    min-width: 12px;
+    padding: 4px 10px;
+    margin: 0 4px;
+    color: #e9f2f2;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+#cpu:hover,
+#memory:hover,
+#network:hover,
+#pulseaudio:hover {
+    background-color: #33383c;
 }
 
 #pulseaudio.muted {
-    color: #908caa;
+    color: #6e797e;
 }
 
 #network.disconnected {
-    color: #eb6f92;
+    color: #e0617a;
 }
 
 tooltip {
-    background: #1f1d2e;
-    border: 1px solid #26233a;
+    background: #1f2225;
+    border: 1px solid #272c2f;
     border-radius: 4px;
+    padding: 2px;
 }
 
 tooltip label {
-    color: #e0def4;
+    color: #e9f2f2;
+}
+
+.hidden {
+    opacity: 0;
 }
