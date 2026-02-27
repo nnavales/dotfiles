@@ -1,10 +1,10 @@
 # dotfiles
 My Arch Linux environment setup.
 
-> Requirements
+### Requirements
 Arch Linux (or Arch-based distro)
 
-> Setup
+### Setup
 ```sh
 curl -Lo setup https://raw.githubusercontent.com/nnavales/dotfiles/main/setup && chmod +x setup && sudo ./setup
 ```
