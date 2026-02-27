@@ -1,8 +1,8 @@
 # dotfiles
-My Arch Linux environment setup. :)
+My Arch Linux environment setup.
 
 > Requirements
-- Arch Linux (or Arch-based distro)
+Arch Linux (or Arch-based distro)
 
 > Setup
 ```sh
