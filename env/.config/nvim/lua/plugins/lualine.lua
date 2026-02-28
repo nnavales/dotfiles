@@ -52,7 +52,7 @@ return {
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
-				theme = custom_theme(),
+				theme = "paragon_transparent",
 				section_separators = { left = "", right = "" },
 				component_separators = { left = "", right = "" },
 				globalstatus = true,

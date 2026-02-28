@@ -82,7 +82,6 @@ return {
 
 			require("dap-python").setup(find_python())
 
-			-- KEYBINDS estilo VSCode
 			vim.keymap.set("n", "<F5>", dap.continue, { desc = "Start / Continue Debug" })
 			vim.keymap.set("n", "<F9>", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
 			vim.keymap.set("n", "<F10>", dap.step_over, { desc = "Step Over" })
