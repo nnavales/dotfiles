@@ -111,7 +111,7 @@ fpath_any() {
   local file
   file=$(fd -HI --absolute-path . "$dir" --type f \
     | fzf --prompt="file > " \
-          --preview '[[ $(file --mime-type -b {}) == text/* ]] && bat --color=always {} || ([[ $(file --mime-type -b {}) =~ ^image/ ]] && chafa {} || file --brief {})' \
+          --preview '[[ $(file --mime-type -b {}) == text/* ]] && bat --color=always {} || ([[ $(file --mime-type -b {}) =~ ^image/ ]] && chafa --symbols vhalf -w 1 {} || file --brief {})' \
           --preview-window=right:50%)
 
   if [[ -n "$file" ]]; then

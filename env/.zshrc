@@ -1,4 +1,6 @@
 source ~/.zsh_profile
+autoload -Uz compinit
+compinit -C
 
 [ -f ~/.config/fzf/config.zsh ] && source ~/.config/fzf/config.zsh
 eval "$(starship init zsh)"

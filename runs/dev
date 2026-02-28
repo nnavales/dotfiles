@@ -4,4 +4,4 @@ sudo pacman -Syu --noconfirm ripgrep jq tldr gimp btop curl wget unzip fzf bat e
 sudo pacman -Syu --noconfirm calibre bitwarden dbeaver thunderbird discord nautilus libreoffice-fresh vlc okular wl-clipboard playerctl waybar
 sudo pacman -Syu --noconfirm hypridle hyprpicker hyprlock
 
-yay -S hyprshot obsidian stremio protonvpn-cli-ng yazi localsend-bin zen-browser-bin cursor-bin bruno-bin hyprshade --noconfirm
+yay -S hyprshot obsidian stremio protonvpn-cli-ng yazi mpv localsend-bin zen-browser-bin cursor-bin bruno-bin hyprshade --noconfirm
