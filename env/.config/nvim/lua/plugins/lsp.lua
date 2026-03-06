@@ -165,7 +165,7 @@ return {
 				float = {
 					focusable = true,
 					style = "minimal",
-					border = "",
+					border = "single",
 					source = true,
 					header = "",
 					prefix = "",

@@ -68,10 +68,10 @@ return {
 					border = "",
 					max_height = 8,
 					scrollbar = false,
-					winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:CmpCursorLine,Search:None",
+					winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
 				}),
 				documentation = cmp.config.window.bordered({
-					border = "",
+					border = "single",
 					scrollbar = false,
 					winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
 				}),

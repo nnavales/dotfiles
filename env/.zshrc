@@ -15,6 +15,7 @@ export BAT_STYLE="plain"
 export BAT_THEME="paragon"
 export BAT_PAGER="less -FR"
 
+HISTFILE=~/.zsh_history
 HISTSIZE=5000
 SAVEHIST=10000
 
