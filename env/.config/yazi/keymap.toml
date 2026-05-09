@@ -6,7 +6,7 @@
 
 keymap = [
 	{ on = "<Esc>", run = "escape",             desc = "Exit visual mode, clear selection, or cancel search" },
-	{ on = "q",     run = "quit",               desc = "Quit the process" },
+	{ on = "q",     run = "close",              desc = "Close tab (or quit with confirm if last)" },
 
 	# Hopping
 	{ on = "k", run = "arrow prev", desc = "Previous file" },
@@ -51,12 +51,13 @@ keymap = [
 	{ on = "D",         run = "remove --permanently",        desc = "Permanently delete selected files" },
 	{ on = "a",         run = "create",                      desc = "Create a file (ends with / for directories)" },
 	{ on = "r",         run = "rename --cursor=before_ext",  desc = "Rename selected file(s)" },
-	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
+	{ on = "<C-h>",     run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
 	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
 	{ on = "S",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
 	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
-    { on = "<C-f>",     run = "plugin fzf",                 desc = "Jump to a file/directory via fzf from home" },
-    { on = "<C-e>",     run = "plugin zoxide --cwd=$HOME", desc = "Jump to a directory via zoxide from home" },
+    { on = "<C-e>",     run = "cd --interactive",            desc = "Jump to any directory (type ~ for home)" },
+    { on = "<C-f>",     run = "plugin fzf",                  desc = "Jump to a file/directory via fzf from home" },
+    { on = "<C-g>",     run = "plugin zoxide --cwd=$HOME",   desc = "Jump to a directory via zoxide from home" },
 
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },

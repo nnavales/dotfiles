@@ -1,26 +1,21 @@
 command = "tmux new-session -A -s default"
 
-window-padding-x = 0
-window-padding-y = 0,0
-window-padding-balance = false
+window-padding-x = 120,120
 window-decoration = false
 resize-overlay = never
+background-opacity = 0.95
+background-blur-radius = 20
 
 confirm-close-surface = false
 mouse-hide-while-typing = true
-macos-titlebar-style = tabs
-macos-titlebar-proxy-icon = hidden
-macos-option-as-alt = true
 
-theme = paragon.conf
-font-family = "JetBrainsMono"
-font-size = 13
-font-feature = calt, liga, ss04, ss05, ss06, ss07, ss08, ss09
+theme = rozefine.conf
+font-family = IoskeleyMonoTerm Nerd Font
+font-size = 12.5
+font-style = Medium
 
 cursor-style = block
 cursor-style-blink = false
-
-alpha-blending = linear-corrected
 
 keybind=alt+one=unbind
 keybind=alt+two=unbind

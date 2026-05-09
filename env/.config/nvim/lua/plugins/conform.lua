@@ -22,6 +22,7 @@ return {
 				html = { "prettierd" },
 				css = { "prettierd" },
 				python = { "ruff_organize_imports", "ruff_format" },
+				markdown = { "prettier" },
 			},
 			formatters = {
 				prettierd = {
@@ -32,7 +33,7 @@ return {
 						"--single-quote=false",
 						"--trailing-comma=es5",
 						"--arrow-parens=always",
-						"--prose-wrap=preserve",
+						"--prose-wrap=always",
 						"--end-of-line=lf",
 					},
 				},
