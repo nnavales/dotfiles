@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+DIR="$HOME/personal/hub/notes"
+SESSION="notes"
+WIN=2
+
+tmux-sessionizer "$DIR"
+
+if ! tmux list-windows -t "$SESSION" | grep -q "^$WIN:"; then
+  tmux new-window -t "$SESSION:$WIN" -c "$DIR" -n "nvim"
+fi
+
+if ! tmux list-panes -t "$SESSION:$WIN" -F "#{pane_current_command}" | grep -q "nvim"; then
+  tmux send-keys -t "$SESSION:$WIN" "nvim" C-m
+fi
+
+tmux select-window -t "$SESSION:$WIN"

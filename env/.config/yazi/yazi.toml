@@ -4,7 +4,7 @@
 
 [mgr]
 ratio          = [ 1, 4, 3 ]
-sort_by        = "alphabetical"
+sort_by        = "natural"
 sort_sensitive = false
 sort_reverse 	 = false
 sort_dir_first = true
@@ -12,7 +12,7 @@ sort_translit  = false
 linemode       = "none"
 show_hidden    = false
 show_symlink   = true
-scrolloff      = 5
+scrolloff      = 99
 mouse_events   = [ "click", "scroll" ]
 title_format   = "Yazi: {cwd}"
 
@@ -23,37 +23,36 @@ max_width       = 600
 max_height      = 900
 cache_dir       = ""
 image_delay     = 30
-image_filter    = "triangle"
-image_quality   = 75
+image_filter    = "lanczos3"
+image_quality   = 85
 ueberzug_scale  = 1
 ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-    { run = "${EDITOR:-vi} %s", desc = "$EDITOR",      for = "unix", block = true },
-    { run = "code %s",          desc = "code",         for = "windows", orphan = true },
-    { run = "code -w %s",       desc = "code (block)", for = "windows", block = true },
+    { run = "nvim %s",      desc = "Neovim",    for = "unix", block = true },
+]
+img = [
+    { run = "ristretto %s1", desc = "Ristretto", for = "linux", orphan = true },
+    { run = "gimp %s1",      desc = "GIMP",      for = "linux", orphan = true },
+    { run = "inkscape %s1",  desc = "Inkscape",  for = "linux", orphan = true },
 ]
 play = [
-    { run = "xdg-open %s1",    desc = "Play", for = "linux", orphan = true },
-    { run = "open %s",         desc = "Play", for = "macos" },
-    { run = 'start "" %s1',    desc = "Play", for = "windows", orphan = true },
-    { run = "termux-open %s1", desc = "Play", for = "android" },
-    { run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
-    { run = "mediainfo %s1 & pause", block = true, desc = "Show media info", for = "windows" },
+    { run = "mpv %s1",       desc = "mpv",      for = "linux", orphan = true },
+    { run = "vlc %s1",       desc = "VLC",      for = "linux", orphan = true },
+    { run = "mediainfo %s1; echo 'Press enter to exit'; read _", desc = "Media info", for = "unix", block = true },
+]
+pdf = [
+    { run = "mupdf %s1",    desc = "MuPDF",    for = "linux", orphan = true },
+    { run = "evince %s1",   desc = "Evince",   for = "linux", orphan = true },
+    { run = "firefox %s1",  desc = "Firefox",  for = "linux", orphan = true },
+    { run = "inkscape %s1", desc = "Inkscape", for = "linux", orphan = true },
 ]
 open = [
-    { run = "xdg-open %s1",    desc = "Open", for = "linux" },
-    { run = "open %s",         desc = "Open", for = "macos" },
-    { run = 'start "" %s1',    desc = "Open", for = "windows", orphan = true },
-    { run = "termux-open %s1", desc = "Open", for = "android" },
+    { run = "xdg-open %s1", desc = "xdg-open", for = "linux" },
 ]
 reveal = [
-    { run = "xdg-open %d1",         desc = "Reveal", for = "linux" },
-    { run = "open -R %s1",          desc = "Reveal", for = "macos" },
-    { run = "explorer /select,%s1", desc = "Reveal", for = "windows", orphan = true },
-    { run = "termux-open %d1",      desc = "Reveal", for = "android" },
-    { run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
+    { run = "xdg-open %d1",  desc = "Reveal",  for = "linux" },
 ]
 extract = [
     { run = "ya pub extract --list %s", desc = "Extract here" },
@@ -65,25 +64,25 @@ download = [
 
 [open]
 rules = [
-    # Folder
-    { url = "*/", use = [ "edit", "open", "reveal" ] },
-    # Text
-    { mime = "text/*", use = [ "edit", "reveal" ] },
     # Image
-    { mime = "image/*", use = [ "open", "reveal" ] },
-    # Media
-    { mime = "{audio,video}/*", use = [ "play", "reveal" ] },
+    { mime = "image/*",          use = [ "img", "gimp" ] },
+    # Video / Audio
+    { mime = "{audio,video}/*",  use = [ "play", "reveal" ] },
+    # PDF
+    { mime = "application/pdf",  use = [ "pdf", "reveal" ] },
+    # Code / Text
+    { mime = "text/*",           use = [ "edit", "reveal" ] },
+    { mime = "*/javascript",     use = [ "edit", "reveal" ] },
     # Archive
     { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = [ "extract", "reveal" ] },
-    # JSON
+    # JSON / structured data
     { mime = "application/{json,ndjson}", use = [ "edit", "reveal" ] },
-    { mime = "*/javascript", use = [ "edit", "reveal" ] },
     # Empty file
-    { mime = "inode/empty", use = [ "edit", "reveal" ] },
+    { mime = "inode/empty",      use = [ "edit", "reveal" ] },
     # Virtual file system
     { mime = "vfs/{absent,stale}", use = "download" },
     # Fallback
-    { url = "*", use = [ "open", "reveal" ] },
+    { url = "*",                 use = [ "open", "reveal" ] },
 ]
 
 [tasks]
@@ -92,7 +91,7 @@ macro_workers    = 10
 bizarre_retry    = 3
 image_alloc      = 536870912  # 512MB
 image_bound      = [ 10000, 10000 ]
-suppress_preload = false
+suppress_preload = true
 
 [plugin]
 fetchers = [
@@ -225,7 +224,7 @@ overwrite_offset = [ 0, 0, 50, 15 ]
 
 # quit
 quit_title  = "Quit?"
-quit_body   = "There are unfinished tasks, quit anyway?\n(Open task manager with default key 'w')"
+quit_body   = "Are you sure you want to quit Yazi?"
 quit_origin = "center"
 quit_offset = [ 0, 0, 50, 15 ]
 
