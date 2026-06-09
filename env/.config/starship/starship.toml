@@ -1,29 +1,29 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = false 
-command_timeout = 500
+command_timeout = 200
 format = "$hostname$directory$git_branch$git_status$character"
 
 [character]
-error_symbol   = "[›](bold #E0617A)"
-success_symbol = "[›](bold #A5E9F5)"   
+error_symbol   = "[›](bold #E66B80)"
+success_symbol = "[›](bold #A1DEEA)"
 
 [directory]
 truncation_length = 3
 truncation_symbol = "../"
-style = "bold #BFD6D8"
-repo_root_style = "bold #BFD6D8"   
+style = "bold #B8D3D5"
+repo_root_style = "bold #B8D3D5"
 repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
 
 [hostname]
 ssh_only = true
 format = "[$hostname]($style) "
-style = "#7A878A"
+style = "#5C6870"
 
 [git_branch]
 format = "[$branch]($style) "
-style = "#8B9C9F"
+style = "#5C6870"
 
 [git_status]
-format = "[$conflicted](bold #E0617A)"
+format = "[$conflicted](bold #E66B80)"
 conflicted = "!"
