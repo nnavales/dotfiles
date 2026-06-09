@@ -1,20 +1,20 @@
 [global]
-frame_color = "#272C2F"
+frame_color = "#282B2F"
 separator_color = frame
 
-highlight = "#A5E9F5"
+highlight = "#A1DEEA"
 
 [urgency_low]
-background = "#1F2225"
-foreground = "#8B9C9F"
-frame_color = "#33383C"
+background = "#1E2124"
+foreground = "#5C6870"
+frame_color = "#33383D"
 
 [urgency_normal]
-background = "#1F2225"
-foreground = "#E9F2F2"
-frame_color = "#272C2F"
+background = "#1E2124"
+foreground = "#DCE5E5"
+frame_color = "#282B2F"
 
 [urgency_critical]
-background = "#1F2225"
-foreground = "#E9F2F2"
-frame_color = "#E0617A"
+background = "#1E2124"
+foreground = "#DCE5E5"
+frame_color = "#E66B80"

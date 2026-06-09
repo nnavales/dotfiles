@@ -11,7 +11,7 @@
 
   background-color: transparent;
   text-color: @fg;
-  font: "Lexend 13"; // use your favorite font
+  font: "Inter 12"; // use your favorite font
   spacing: 0;
 }
 

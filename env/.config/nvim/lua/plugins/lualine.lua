@@ -5,54 +5,10 @@ return {
 		require("mini.icons").setup()
 		MiniIcons.mock_nvim_web_devicons()
 
-		local colors = {
-			fg = "#e0def4",
-			bg = "NONE",
-			yellow = "#f6c177",
-			green = "#b6e07d",
-			blue = "#3e8fb0",
-			red = "#eb6f92",
-		}
-
-		local custom_theme = function()
-			return {
-				normal = {
-					a = { fg = colors.fg, bg = colors.bg, gui = "bold" },
-					b = { fg = colors.fg, bg = colors.bg },
-					c = { fg = colors.fg, bg = colors.bg },
-				},
-				insert = {
-					a = { fg = colors.blue, bg = colors.bg, gui = "bold" },
-					b = { fg = colors.fg, bg = colors.bg },
-					c = { fg = colors.fg, bg = colors.bg },
-				},
-				visual = {
-					a = { fg = colors.yellow, bg = colors.bg, gui = "bold" },
-					b = { fg = colors.fg, bg = colors.bg },
-					c = { fg = colors.fg, bg = colors.bg },
-				},
-				replace = {
-					a = { fg = colors.red, bg = colors.bg, gui = "bold" },
-					b = { fg = colors.fg, bg = colors.bg },
-					c = { fg = colors.fg, bg = colors.bg },
-				},
-				command = {
-					a = { fg = colors.green, bg = colors.bg, gui = "bold" },
-					b = { fg = colors.fg, bg = colors.bg },
-					c = { fg = colors.fg, bg = colors.bg },
-				},
-				inactive = {
-					a = { fg = colors.fg, bg = colors.bg },
-					b = { fg = colors.fg, bg = colors.bg },
-					c = { fg = colors.fg, bg = colors.bg },
-				},
-			}
-		end
-
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
-				theme = "paragon_transparent",
+				theme = "paradise_transparent",
 				section_separators = { left = "", right = "" },
 				component_separators = { left = "", right = "" },
 				globalstatus = true,

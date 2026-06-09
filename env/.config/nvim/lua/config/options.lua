@@ -15,7 +15,7 @@ opt.number = true
 opt.signcolumn = "yes"
 opt.splitbelow = true
 opt.splitright = true
-opt.cursorline = true
+-- opt.cursorline = true
 
 opt.clipboard = "unnamedplus"
 
@@ -36,7 +36,7 @@ opt.isfname:append("@-@")
 opt.autoread = true
 
 opt.smoothscroll = true
-opt.updatetime = 100
+opt.updatetime = 50
 opt.scrolloff = 8
 opt.conceallevel = 2
 

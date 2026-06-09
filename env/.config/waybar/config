@@ -1,9 +1,9 @@
 {
     "reload_style_on_change": true,
     "layer": "top",
-    "position": "top",
+    "position": "bottom",
     "spacing": 0,
-    "height": 25,
+    "height": 22,
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": [
@@ -27,41 +27,47 @@
             "7": "7",
             "8": "8",
             "9": "9",
-            "active": "●"
+            "active": "●",
+            "urgent": "!"
         }
     },
 
     "clock": {
-        "format": "{:L%A %H:%M}",
-        "format-alt": "{:L%d %B W%V %Y}",
-        "tooltip": false
+        "format": "{:%H:%M}",
+        "format-alt": "{:%a %d %b}",
+        "tooltip": false,
+        "interval": 30
     },
 
     "cpu": {
         "interval": 5,
         "format": "CPU {usage}%",
-        "tooltip": false
+        "max-length": 12,
+        "tooltip": true
     },
 
     "memory": {
         "interval": 3,
         "format": "MEM {percentage}%",
-        "tooltip": false
+        "max-length": 12,
+        "tooltip": true
     },
 
     "network": {
         "format-wifi": "NET {signalStrength}%",
         "format-ethernet": "NET",
         "format-disconnected": "NET --",
-        "tooltip-format": "{essid}",
-        "interval": 3
+        "tooltip-format": "{essid}\n{ipaddr}/{cidr}\n↑{bandwidthUpBits} ↓{bandwidthDownBits}",
+        "interval": 5
     },
 
     "pulseaudio": {
         "format": "VOL {volume}%",
-        "format-muted": "VOL ----",
+        "format-muted": "VOL --",
         "scroll-step": 5,
         "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
         "tooltip": false
     }
 }

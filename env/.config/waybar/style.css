@@ -1,87 +1,113 @@
 * {
-    background-color: #1f2225;
-    color: #e9f2f2;
-
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
     border: none;
     border-radius: 0;
     min-height: 0;
-    font-family: "Lexend"; /* set your favorite font */
-    font-size: 13px;
 }
 
-.modules-left {
-    margin-left: 8px;
+window#waybar {
+    background: #1e2124;
+    color: #d4dddd;
+    border-top: 1px solid #272c2f;
 }
 
-.modules-right {
-    margin-right: 8px;
+window#waybar > box {
+    padding: 0 4px;
+}
+
+#workspaces {
+    background: #25292b;
+    border-radius: 5px;
+    padding: 1px;
+    margin: 4px 0;
 }
 
 #workspaces button {
-    all: initial;
-    background-color: transparent;
-    color: #6e797e;
-    padding: 0 6px;
-    margin: 0 1.5px;
-    min-width: 9px;
+    padding: 0 8px;
+    margin: 0;
+    color: #5a6668;
+    background: transparent;
+    min-width: 0;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
 }
 
 #workspaces button.empty {
-    opacity: 0.5;
+    opacity: 0.25;
 }
 
 #workspaces button.active {
-    color: #e9f2f2;
-    font-weight: bold;
+    background: #3a4142;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+#workspaces button.urgent {
+    background: #3d2d2d;
+    color: #e87777;
+    font-weight: 600;
 }
 
 #workspaces button:hover {
-    color: #a5e9f5;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    color: #5a6668;
 }
 
 #clock {
-    color: #e9f2f2;
-    margin-left: 8.75px;
+    padding: 0 14px;
+    margin: 4px 2px;
+    background: #25292b;
+    border-radius: 5px;
+    font-weight: 500;
 }
 
 #cpu,
 #memory,
 #network,
 #pulseaudio {
-    min-width: 12px;
-    padding: 4px 10px;
-    margin: 0 4px;
-    color: #e9f2f2;
-    border-radius: 3px;
-    transition: all 0.2s ease;
+    padding: 0 10px;
+    margin: 4px 2px;
+    background: #25292b;
+    border-radius: 5px;
+    color: #c8d2d2;
+    font-weight: 400;
+}
+
+#cpu + #memory,
+#memory + #network,
+#network + #pulseaudio {
+    border-left: 1px solid #31373a;
+    margin-left: 2px;
+    padding-left: 14px;
 }
 
 #cpu:hover,
 #memory:hover,
 #network:hover,
 #pulseaudio:hover {
-    background-color: #33383c;
+    background: #2e3436;
 }
 
 #pulseaudio.muted {
-    color: #6e797e;
+    color: #5a6668;
 }
 
 #network.disconnected {
-    color: #e0617a;
+    color: #6a4848;
 }
 
 tooltip {
-    background: #1f2225;
-    border: 1px solid #272c2f;
-    border-radius: 4px;
-    padding: 2px;
+    background: #181b1c;
+    border: 1px solid #32383b;
+    border-radius: 6px;
+    padding: 6px 10px;
 }
 
 tooltip label {
-    color: #e9f2f2;
-}
-
-.hidden {
-    opacity: 0;
+    color: #d4dddd;
 }
