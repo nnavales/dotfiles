@@ -6,7 +6,6 @@ parse_git_branch() {
 
 precmd() {
     local exit_code=$?
-
     local DIR=$'%{\033[38;2;191;214;216m%}'    
     local BRANCH=$'%{\033[38;2;139;156;159m%}'  
     local SUCCESS=$'%{\033[38;2;165;233;245m%}'  
@@ -41,9 +40,6 @@ eval "$(zoxide init zsh)"
 export MANWIDTH=$(tput cols)
 export MANPAGER="less -S -j.5 -FX"
 export LESS='-R'
-export BAT_STYLE="plain"
-export BAT_THEME="paragon"
-export BAT_PAGER="less -FR"
 
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=5000

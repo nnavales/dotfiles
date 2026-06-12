@@ -52,7 +52,53 @@ return {
 		lazy = false,
 		priority = 4000,
 		config = function()
-			vim.g.everforest_enable_italic = true
+			vim.g.everforest_enable_italic = false
+		end,
+	},
+
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 5000,
+		config = function()
+			require("catppuccin").setup({
+				flavour = "mocha", -- latte, frappe, macchiato, mocha
+			})
+		end,
+	},
+	{
+		"folke/tokyonight.nvim",
+		lazy = false,
+		priority = 6000,
+		opts = {},
+	},
+
+	{
+		"rebelot/kanagawa.nvim",
+		name = "kanagawa",
+		priority = 7000,
+		config = function()
+			require("kanagawa").setup({
+				theme = "wave", -- Load "wave" theme
+				colors = {
+					theme = {
+						all = {
+							ui = {
+								bg_gutter = "none",
+							},
+						},
+					},
+				},
+			})
+		end,
+	},
+	{
+		"navarasu/onedark.nvim",
+		priority = 9000,
+		config = function()
+			require("onedark").setup({
+				style = "dark",
+			})
 			ColorMyPencils()
 		end,
 	},

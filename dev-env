@@ -26,22 +26,41 @@ log() {
 
 log "env: $DEV_ENV"
 
+# remember the currently active theme before we overwrite configs, so we can
+# re-apply it at the end instead of leaving the repo defaults in place
+current_theme=""
+if [ -L "$XDG_CONFIG_HOME/colors/current" ]; then
+    current_theme="$(basename "$(readlink "$XDG_CONFIG_HOME/colors/current")")"
+    log "current theme: $current_theme"
+fi
+
 update_files() {
     log "copying over files from: $1"
     pushd $1 &>/dev/null
     (
-        configs=$(find . -mindepth 1 -maxdepth 1 -type d)
+        # Only the directories that actually contain files in the repo are
+        # "managed". We replace those, never their parents, so unrelated
+        # sibling content in the target tree survives. Keeping only the
+        # top-most managed dir avoids redundant re-copies of nested dirs.
+        configs=$(find . -type f -printf '%h\n' | sort -u | awk '
+            { keep = 1
+              for (p in seen) if (index($0, p "/") == 1) { keep = 0; break }
+              if (keep) { print; seen[$0] = 1 } }')
+
         for c in $configs; do
-            directory=${2%/}/${c#./}
+            rel=${c#./}
+            directory=${2%/}/$rel
+            parent=$(dirname "$directory")
             log "    removing: rm -rf $directory"
 
             if [[ $dry_run == "0" ]]; then
-                rm -rf $directory
+                rm -rf "$directory"
             fi
 
-            log "    copying env: cp $c $2"
+            log "    copying env: cp -r ./$rel -> $parent/"
             if [[ $dry_run == "0" ]]; then
-                cp -r ./$c $2
+                mkdir -p "$parent"
+                cp -r "./$rel" "$parent/"
             fi
         done
 
@@ -68,6 +87,15 @@ copy $DEV_ENV/env/.zshrc $HOME/.zshrc
 copy $DEV_ENV/env/.zshrc $HOME/.environment.d
 copy $DEV_ENV/env/.profile $HOME/.profile
 copy $DEV_ENV/dev-env $HOME/.local/scripts/dev-env
+
+# re-apply the theme that was active before, restoring the symlinks/copies that
+# update_files just overwrote with repo defaults
+if [ -n "$current_theme" ]; then
+    log "re-applying theme: $current_theme"
+    if [[ $dry_run == "0" ]]; then
+        "$XDG_CONFIG_HOME/colors/scripts/theme-switch.sh" "$current_theme"
+    fi
+fi
 
 hyprctl reload
 hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl

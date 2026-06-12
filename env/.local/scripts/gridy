@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+
 uv run --project /home/nahuel/personal/hub/mini/tarjetitas /home/nahuel/personal/hub/mini/tarjetitas/main.py "$@"

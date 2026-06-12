@@ -1,9 +1,12 @@
 {
     "reload_style_on_change": true,
     "layer": "top",
-    "position": "bottom",
+    "position": "top",
     "spacing": 0,
-    "height": 22,
+    "height": 34,
+    "margin-top": 8,
+    "margin-left": 160,
+    "margin-right": 160,
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": [
@@ -16,6 +19,7 @@
     "hyprland/workspaces": {
         "on-click": "activate",
         "ignore-special": true,
+        "persistent-workspaces": { "*": 9 },
         "format": "{icon}",
         "format-icons": {
             "1": "1",
@@ -33,37 +37,44 @@
     },
 
     "clock": {
-        "format": "{:%H:%M}",
-        "format-alt": "{:%a %d %b}",
+        "format": "{:%d %b %H:%M}",
+        "format-alt": "{:%A %d %B %Y}",
         "tooltip": false,
         "interval": 30
     },
 
     "cpu": {
         "interval": 5,
-        "format": "CPU {usage}%",
-        "max-length": 12,
-        "tooltip": true
+        "states": { "warning": 70, "critical": 90 },
+        "format": "  {usage}%",
+        "on-click": "kitty -o window_padding_width='0 0 0 0' -e btop",
+        "tooltip": false
     },
 
     "memory": {
         "interval": 3,
-        "format": "MEM {percentage}%",
-        "max-length": 12,
-        "tooltip": true
+        "states": { "warning": 75, "critical": 90 },
+        "format": "  {percentage}%",
+        "on-click": "kitty -o window_padding_width='0 0 0 0' -e btop",
+        "tooltip": false
     },
 
     "network": {
-        "format-wifi": "NET {signalStrength}%",
-        "format-ethernet": "NET",
-        "format-disconnected": "NET --",
+        "format-wifi": "  {signalStrength}%",
+        "format-ethernet": "  eth",
+        "format-disconnected": "󰖪  off",
+        "on-click": "nm-connection-editor",
+        "tooltip": false,
         "tooltip-format": "{essid}\n{ipaddr}/{cidr}\n↑{bandwidthUpBits} ↓{bandwidthDownBits}",
         "interval": 5
     },
 
     "pulseaudio": {
-        "format": "VOL {volume}%",
-        "format-muted": "VOL --",
+        "format": "{icon}  {volume}%",
+        "format-muted": " Muted",
+        "format-icons": {
+            "default": ["", ""]
+        },
         "scroll-step": 5,
         "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
         "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
