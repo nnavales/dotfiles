@@ -1,5 +1,5 @@
 [general]
-import = ["paragon.toml"]
+import = ["~/.config/colors/current/alacritty.toml"]
 
 [window]
 opacity = 1.0
@@ -8,7 +8,7 @@ decorations_theme_variant = "Dark"
 
 [font]
 normal = { family = "JetBrainsMono" }
-size = 13
+size = 12
 
 [cursor]
 style = "Block"

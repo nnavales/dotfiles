@@ -63,6 +63,7 @@ return {
 							"golangci-lint",
 							"gofumpt",
 						},
+						run_on_start = false,
 					})
 				end, 100)
 			end, 50)

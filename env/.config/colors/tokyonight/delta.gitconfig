@@ -1,0 +1,17 @@
+[delta]
+  plus-style                    = "#C0CAF5 #20303B"
+  plus-emph-style               = "#9ECE6A #20303B bold"
+  plus-non-emph-style           = "#C0CAF5 #20303B"
+
+  minus-style                   = "#F7768E #37222C"
+  minus-emph-style              = "#F7768E #37222C bold"
+  minus-non-emph-style          = "#F7768E #37222C"
+
+  line-numbers-minus-style      = "#F7768E"
+  line-numbers-plus-style       = "#9ECE6A"
+  line-numbers-zero-style       = "#545C7E"
+
+  file-style                    = "#7AA2F7 bold"
+  commit-style                  = "#E0AF68 bold"
+  hunk-header-style             = "#7AA2F7 bold"
+  hunk-header-decoration-style  = "#292E42"

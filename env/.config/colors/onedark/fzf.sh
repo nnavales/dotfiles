@@ -1,0 +1,30 @@
+export FZF_DEFAULT_OPTS=" \
+  --tmux=82% \
+  --ansi \
+  --cycle \
+  --no-mouse \
+  --info=inline-right \
+  --layout=reverse \
+  --border=rounded \
+  --prompt='› ' \
+  --pointer='>' \
+  --marker='*' \
+  --color=bg:#31353F \
+  --color=fg:#ABB2BF \
+  --color=hl:#98C379 \
+  --color=fg+:#ABB2BF \
+  --color=bg+:#393F4A \
+  --color=hl+:#98C379 \
+  --color=info:#5C6370 \
+  --color=prompt:#61AFEF \
+  --color=pointer:#E86671 \
+  --color=marker:#C678DD \
+  --color=spinner:#61AFEF \
+  --color=header:#61AFEF \
+  --color=border:#3B3F4C \
+  --color=gutter:#31353F \
+  --color=query:#ABB2BF:regular \
+  --color=scrollbar:#3B3F4C \
+  --color=separator:#5C6370 \
+  --highlight-line \
+"

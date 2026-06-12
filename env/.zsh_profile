@@ -1,7 +1,6 @@
 export DEV_ENV="$HOME/personal/dev"
 export GOPATH="$HOME/go"
 export GOROOT="/usr/lib/go"
-export ANDROID_HOME="$HOME/Android/Sdk"
 
 typeset -U path
 
@@ -19,7 +18,4 @@ path+=(
   "$HOME/.opencode/bin"
   "$GOROOT/bin"
   "$GOPATH/bin"
-  "$ANDROID_HOME/emulator"
-  "$ANDROID_HOME/platform-tools"
-  "$ANDROID_HOME/cmdline-tools/latest/bin"
 )

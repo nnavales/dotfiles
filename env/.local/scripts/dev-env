@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 dry_run="0"
 
 if [ -z "$XDG_CONFIG_HOME" ]; then
