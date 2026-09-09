@@ -127,7 +127,7 @@ window#waybar > box {
 
 #bluetooth {
     border-radius: 0;
-    margin: 0 8px 0 0;
+    margin: 0;
     padding: 0 4px;
 }
 
@@ -250,6 +250,25 @@ window#waybar > box {
 
 #bluetooth.connected {
     color: #d4dddd;
+}
+
+#language {
+    background: transparent;
+    padding: 0 4px;
+    margin: 0 8px 0 0;
+    color: #d4dddd;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    min-width: 28px;
+}
+
+#language:hover {
+    color: #E6EDED;
+}
+
+#language.es {
+    color: #6B7D7F;
 }
 
 #custom-power {

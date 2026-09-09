@@ -28,27 +28,14 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 edit = [
     { run = "nvim %s",      desc = "Neovim",    for = "unix", block = true },
 ]
-img = [
-    { run = "ristretto %s1", desc = "Ristretto", for = "linux", orphan = true },
-    { run = "gimp %s1",      desc = "GIMP",      for = "linux", orphan = true },
-    { run = "inkscape %s1",  desc = "Inkscape",  for = "linux", orphan = true },
-]
-play = [
-    { run = "mpv %s1",       desc = "mpv",      for = "linux", orphan = true },
-    { run = "vlc %s1",       desc = "VLC",      for = "linux", orphan = true },
+info = [
     { run = "mediainfo %s1; echo 'Press enter to exit'; read _", desc = "Media info", for = "unix", block = true },
-]
-pdf = [
-    { run = "mupdf %s1",    desc = "MuPDF",    for = "linux", orphan = true },
-    { run = "evince %s1",   desc = "Evince",   for = "linux", orphan = true },
-    { run = "firefox %s1",  desc = "Firefox",  for = "linux", orphan = true },
-    { run = "inkscape %s1", desc = "Inkscape", for = "linux", orphan = true },
 ]
 open = [
     { run = "xdg-open %s1", desc = "xdg-open", for = "linux" },
 ]
-reveal = [
-    { run = "xdg-open %d1",  desc = "Reveal",  for = "linux" },
+browser = [
+    { run = "zen-browser %s1", desc = "Zen", for = "linux", orphan = true },
 ]
 extract = [
     { run = "ya pub extract --list %s", desc = "Extract here" },
@@ -60,25 +47,25 @@ download = [
 
 [open]
 rules = [
-    # Image
-    { mime = "image/*",          use = [ "img", "gimp" ] },
-    # Video / Audio
-    { mime = "{audio,video}/*",  use = [ "play", "reveal" ] },
-    # PDF
-    { mime = "application/pdf",  use = [ "pdf", "reveal" ] },
+    # Image - default app via mimeapps.list (xdg-open)
+    { mime = "image/*",          use = [ "open" ] },
+    # Video / Audio - default app via mimeapps.list (xdg-open)
+    { mime = "{audio,video}/*",  use = [ "open", "info" ] },
+    # PDF - default app via mimeapps.list (xdg-open)
+    { mime = "application/pdf",  use = [ "open", "browser" ] },
     # Code / Text
-    { mime = "text/*",           use = [ "edit", "reveal" ] },
-    { mime = "*/javascript",     use = [ "edit", "reveal" ] },
+    { mime = "text/*",           use = [ "edit" ] },
+    { mime = "*/javascript",     use = [ "edit" ] },
     # Archive
-    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = [ "extract", "reveal" ] },
+    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = [ "extract" ] },
     # JSON / structured data
-    { mime = "application/{json,ndjson}", use = [ "edit", "reveal" ] },
+    { mime = "application/{json,ndjson}", use = [ "edit" ] },
     # Empty file
-    { mime = "inode/empty",      use = [ "edit", "reveal" ] },
+    { mime = "inode/empty",      use = [ "edit" ] },
     # Virtual file system
     { mime = "vfs/{absent,stale}", use = "download" },
     # Fallback
-    { url = "*",                 use = [ "open", "reveal" ] },
+    { url = "*",                 use = [ "open" ] },
 ]
 
 [tasks]
