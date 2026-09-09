@@ -16,7 +16,8 @@
         "cpu",
         "memory",
         "network",
-        "bluetooth"
+        "bluetooth",
+        "hyprland/language"
     ],
     "_comment_bgp_disabled": "uncomment to enable: custom/bgp-prev, custom/bgp, custom/bgp-next, custom/bgp-loop, custom/bgp-volume - add back to modules-right",
 
@@ -34,6 +35,15 @@
             "active": "●",
             "urgent": "!"
         }
+    },
+
+    "hyprland/language": {
+        "format": "{}",
+        "format-en": "EN",
+        "format-es": "ES",
+        "min-length": 2,
+        "on-click": "hyprctl switchxkblayout all next",
+        "tooltip": false
     },
 
     "clock": {
