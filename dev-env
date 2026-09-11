@@ -96,5 +96,11 @@ if [ -n "$current_theme" ]; then
     fi
 fi
 
-hyprctl reload
-hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl
+if [[ $dry_run == "0" ]]; then
+    hyprctl reload
+    # default waybar = on: reload no la reinicia y pkill solo la deja apagada
+    # (desync con gaps 12/rounding 10 y waybar_visible=true) -> matar y arrancar
+    pkill -x waybar >/dev/null 2>&1 || true
+    nohup waybar >/dev/null 2>&1 & disown
+    hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl
+fi

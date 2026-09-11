@@ -1,40 +1,88 @@
 @import "~/.config/rofi/theme.rasi"
 
 configuration {
+  show-icons: false;
+  drun-display-format: "{name}";
+  disable-history: true;
+  click-to-exit: true;
 }
 
 * {
   background-color: transparent;
   text-color: @fg;
-  font: "GeistMono Nerd Font Medium 10";
+  font: "GeistMono Nerd Font Medium 11";
   spacing: 0;
 }
 
+/* ── floating centered card ── */
 window {
   background-color: @bg-alt;
   border: 1px solid;
   border-color: @border;
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 0;
-  width: 200px;
+  width: 360px;
   location: center;
+  anchor: center;
   y-offset: 0;
+  x-offset: 0;
 }
 
 mainbox {
-  padding: 8px;
-  spacing: 0;
+  padding: 10px;
+  spacing: 8px;
   border: 0;
 }
 
+/* ── prompt / search row ── */
 inputbar {
+  padding: 10px 14px;
+  spacing: 10px;
+  background-color: @bg;
+  border: 1px solid;
+  border-color: @input-border;
+  border-radius: 12px;
+  margin: 0;
+  children: [ prompt, entry ];
+}
+
+prompt {
+  enabled: true;
+  text-color: @prompt;
+  font: "GeistMono Nerd Font 13";
+  vertical-align: 0.5;
+}
+
+entry {
+  text-color: @fg;
+  placeholder-color: @info;
+  placeholder: "System menu…";
+  vertical-align: 0.5;
+}
+
+case-indicator {
   enabled: false;
 }
 
+message {
+  padding: 2px 6px;
+  background-color: transparent;
+  text-color: @info;
+  font: "GeistMono Nerd Font 10";
+  border: 0;
+  margin: 0;
+}
+
+textbox {
+  text-color: inherit;
+  background-color: transparent;
+}
+
+/* ── list ── */
 listview {
-  padding: 0;
+  padding: 2px;
   spacing: 4px;
-  lines: 4;
+  lines: 7;
   fixed-height: true;
   scrollbar: false;
   border: 0;
@@ -43,12 +91,12 @@ listview {
 
 element {
   padding: 10px 14px;
-  spacing: 0;
+  spacing: 12px;
   border: 0;
   border-radius: 10px;
   background-color: transparent;
   text-color: @fg;
-  children: [element-text];
+  orientation: horizontal;
 }
 
 element normal.normal {
@@ -61,35 +109,29 @@ element alternate.normal {
   text-color: @fg;
 }
 
+/* hover / keyboard focus: solid pill */
 element selected.normal {
   background-color: @bg-selected;
-  text-color: @fg;
+  text-color: #ffffff;
+  border: 1px solid;
+  border-color: @border;
 }
 
 element-text {
   background-color: transparent;
   text-color: inherit;
-  vertical-align: 0.5;
-  horizontal-align: 0.5;
   font: "GeistMono Nerd Font Medium 12";
+  vertical-align: 0.5;
+  horizontal-align: 0;
+  highlight: none;
 }
 
-message {
-  enabled: false;
+element-icon {
+  background-color: transparent;
+  size: 0px;
 }
 
-scrollbar {
-  enabled: false;
-}
-
-sidebar {
-  enabled: false;
-}
-
-button {
-  enabled: false;
-}
-
-mode-switcher {
-  enabled: false;
-}
+scrollbar { enabled: false; }
+sidebar { enabled: false; }
+button { enabled: false; }
+mode-switcher { enabled: false; }
