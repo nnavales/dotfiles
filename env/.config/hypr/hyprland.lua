@@ -33,6 +33,7 @@ hl.on("hyprland.start", function()
 		"bash -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE; systemctl --user start hyprland-session.target'"
 	)
 	hl.exec_cmd("hyprpaper")
+	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl")
 	hl.exec_cmd(terminal, { workspace = "1 silent" })
 	hl.exec_cmd(browser, { workspace = "2 silent" })
@@ -40,12 +41,12 @@ hl.on("hyprland.start", function()
 end)
 
 -- Workspace rules.
-hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
-hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
+hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 12, gaps_in = 6 })
+hl.workspace_rule({ workspace = "f[1]", gaps_out = 12, gaps_in = 6 })
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 10 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 
 -- Binds.
 local mainMod = "SUPER"
@@ -55,7 +56,7 @@ hl.bind("mouse:276", hl.dsp.focus({ workspace = "-1" }))
 hl.bind("mouse:275", hl.dsp.focus({ workspace = "+1" }))
 
 -- WaybarToggle this binds shows/hides the gaps/borders from windows depending on waybar status.
-local waybar_visible = false
+local waybar_visible = true
 hl.bind(mainMod .. " + GRAVE", function()
 	hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-waybar.sh"))
 	waybar_visible = not waybar_visible

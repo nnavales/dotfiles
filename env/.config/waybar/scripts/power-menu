@@ -1,12 +1,102 @@
 #!/usr/bin/env bash
+# System menu for waybar + rofi. Main menu + Power submenu with Back.
+set -euo pipefail
 
-entries="Shutdown\nReboot\nLogout\nSuspend"
+THEME="${ROFI_POWER_THEME:-$HOME/.config/rofi/power.rasi}"
+ROFI=(rofi -dmenu -i -no-custom -markup-rows -theme "$THEME")
 
-selected=$(printf "%b" "$entries" | rofi -dmenu -theme ~/.config/rofi/power.rasi)
+# ── main entries ──
+apps="󰀻  Apps"
+files="󰉋  Files"
+monitor="󰻠  Monitor"
+network="󰖩  Network"
+audio="󰕾  Sound"
+update="󰚰  Update"
+wallpaper="󰸉  Wallpaper"
+power="󰐥  Power  <span foreground='#5c5c5c'>›</span>"
 
-case "$selected" in
-  Shutdown) systemctl poweroff ;;
-  Reboot)   systemctl reboot ;;
-  Logout)   hyprctl dispatch exit ;;
-  Suspend)  systemctl suspend ;;
-esac
+# ── power submenu entries ──
+back="<span foreground='#5c5c5c'>‹</span>  Back"
+lock="󰌾  Lock"
+reboot="󰜉  Reboot"
+shutdown="󰐥  Shutdown"
+
+# Lanzador robusto: recibe UN string completo, ej: launch_app "kitty -e yazi"
+launch_app() {
+  local cmd="$1"
+  # 1. Hyprland nativo (sin "--", que rompe en algunas versiones)
+  if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && command -v hyprctl >/dev/null 2>&1; then
+    if hyprctl dispatch exec "$cmd" >/dev/null 2>&1; then
+      return 0
+    fi
+  fi
+  # 2. Fallback: exec directo detached (funciona dentro y fuera de Hyprland)
+  # shellcheck disable=SC2086
+  if command -v setsid >/dev/null 2>&1; then
+    setsid -f bash -c "$cmd" >/dev/null 2>&1 < /dev/null &
+  else
+    bash -c "$cmd" >/dev/null 2>&1 < /dev/null &
+  fi
+  disown 2>/dev/null || true
+}
+
+do_lock() {
+  if pidof hyprlock >/dev/null 2>&1; then exit 0; fi
+  if command -v hyprlock >/dev/null 2>&1; then
+    hyprlock &
+    disown 2>/dev/null || true
+  elif command -v swaylock >/dev/null 2>&1; then
+    swaylock -f &
+    disown 2>/dev/null || true
+  elif command -v loginctl >/dev/null 2>&1; then
+    loginctl lock-session
+  fi
+}
+
+power_menu() {
+  local entries sel
+  entries=$(printf "%s\n" "$back" "$lock" "$reboot" "$shutdown")
+  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 4 -p "󰐥 " -mesg "Power") || exit 0
+  [ -z "${sel:-}" ] && exit 0
+  case "$sel" in
+    "$back") main_menu ;;
+    "$lock") do_lock ;;
+    "$reboot") systemctl reboot ;;
+    "$shutdown") systemctl poweroff ;;
+  esac
+}
+
+main_menu() {
+  local entries sel
+  entries=$(printf "%s\n" "$apps" "$files" "$wallpaper" "$monitor" "$network" "$audio" "$update" "$power")
+  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 8 -p "󰍉 " -mesg "System Menu") || exit 0
+  [ -z "${sel:-}" ] && exit 0
+  case "$sel" in
+    "$apps")
+      rofi -show drun -theme "$HOME/.config/rofi/config.rasi" ;;
+    "$files")
+      launch_app "kitty -o window_padding_width='0 0 0 0' -e yazi" ;;
+    "$monitor")
+      launch_app "kitty -o window_padding_width='0 0 0 0' -e btop" ;;
+    "$network")
+      if command -v nm-connection-editor >/dev/null 2>&1; then
+        launch_app "nm-connection-editor"
+      else
+        launch_app "kitty -e nmtui"
+      fi ;;
+    "$audio")
+      if command -v pavucontrol >/dev/null 2>&1; then
+        launch_app "pavucontrol"
+      else
+        launch_app "kitty -e pulsemixer"
+      fi ;;
+    "$update")
+      launch_app "kitty -o window_padding_width='0 0 0 0' -e sh -c 'yay -Syu; echo; read -rp \"Done — press Enter to close... \" _'" ;;
+    "$wallpaper")
+      "$HOME/.config/hypr/scripts/wallpaper.sh" ;;
+    "$power")
+      power_menu ;;
+  esac
+}
+
+main_menu
