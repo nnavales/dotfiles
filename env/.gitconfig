@@ -3,21 +3,19 @@
 	email = navalesnahuel@gmail.com
 [core]
 	editor = nvim
+	pager = delta
 [init]
 	defaultBranch = master
 
 [include]
     path = ~/.config/colors/current/delta.gitconfig
 
-[core]
-    pager = delta
-
 [interactive]
     diffFilter = delta --color-only
 
 [delta]
-    navigate = true  # use n and N to move between diff sections
-    dark = true      # or light = true, or omit for auto-detection
+    navigate = true  
+    dark = true      
 
 [merge]
     conflictStyle = zdiff3

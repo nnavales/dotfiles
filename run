@@ -10,18 +10,11 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 DEV_ENV="${DEV_ENV:-$(pwd)}"
 export DEV_ENV
 
-grep=""
 dry_run="0"
 
-while [[ $# -gt 0 ]]; do
-    echo "ARG: \"$1\""
-    if [[ "$1" == "--dry" ]]; then
-        dry_run="1"
-    else
-        grep="$1"
-    fi
-    shift
-done
+if [[ "${1:-}" == "--dry" ]]; then
+    dry_run="1"
+fi
 
 log() {
     if [[ $dry_run == "1" ]]; then
@@ -31,7 +24,7 @@ log() {
     fi
 }
 
-log "RUN: env: $DEV_ENV -- grep: $grep"
+log "RUN: env: $DEV_ENV"
 
 order_file="$script_dir/runs/ORDER"
 if [[ ! -f "$order_file" ]]; then
@@ -46,11 +39,6 @@ while IFS= read -r script_name || [[ -n "$script_name" ]]; do
 
     if [[ ! -x "$s" ]]; then
         log "skipping (not executable): $s"
-        continue
-    fi
-
-    if [[ -n "$grep" ]] && ! echo "$script_name" | grep -q "$grep"; then
-        log "grep \"$grep\" filtered out $s"
         continue
     fi
 

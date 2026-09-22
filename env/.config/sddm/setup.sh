@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Installs sddm-custom (personal fork of sddm-astronaut-theme).
-# Usage: sudo ./setup.sh
+# Usage: sudo ./setup.sh.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -17,7 +17,7 @@ rm -rf "$DEST"
 mkdir -p "$DEST"
 cp -r "$SCRIPT_DIR/$THEME/." "$DEST/"
 
-# Geist Mono font: sddm runs as the sddm user, so it can't see ~/.local/share/fonts
+# Geist Mono font: SDDM runs as the sddm user, so it can't see ~/.local/share/fonts.
 USER_HOME="$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)"
 if fc-list | grep -qi "GeistMono Nerd Font"; then
   if [ -d "$USER_HOME/.local/share/fonts/GeistMonoNF" ] && [ ! -d /usr/share/fonts/GeistMonoNF ]; then

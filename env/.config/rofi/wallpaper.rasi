@@ -97,4 +97,5 @@ element-text {
   font: "GeistMono Nerd Font 10";
   horizontal-align: 0.5;
   vertical-align: 0.5;
+  highlight: @accent;
 }

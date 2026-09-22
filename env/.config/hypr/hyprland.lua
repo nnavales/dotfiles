@@ -21,7 +21,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 hl.env("HYPRSHOT_DIR", "/home/nahuel/Pictures/screenshots")
 
--- Default programs i use.
+-- Default programs I use.
 local terminal = "kitty"
 local menu = "rofi -show drun -show-icons"
 local browser = "zen-browser"
@@ -48,14 +48,17 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 10 
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 
+-- Opacity overrides.
+hl.window_rule({ match = { class = "zen" }, opacity = "1.0 override" })
+hl.window_rule({ match = { class = "md.obsidian.Obsidian" }, opacity = "1.0 override" })
+
 -- Binds.
 local mainMod = "SUPER"
 
--- REMOVE:
 hl.bind("mouse:276", hl.dsp.focus({ workspace = "-1" }))
 hl.bind("mouse:275", hl.dsp.focus({ workspace = "+1" }))
 
--- WaybarToggle this binds shows/hides the gaps/borders from windows depending on waybar status.
+-- Waybar toggle. Shows/hides gaps and borders depending on waybar status.
 local waybar_visible = true
 hl.bind(mainMod .. " + GRAVE", function()
 	hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-waybar.sh"))
@@ -82,8 +85,11 @@ end)
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("notes"))
 
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.config/hypr/scripts/theme-picker.sh"))
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh"))
-hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("DEV_ENV=/home/nahuel/personal/dev /home/nahuel/personal/dev/dev-env"))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.config/waybar/scripts/power-menu"))
+hl.bind(
+	mainMod .. " + SHIFT + R",
+	hl.dsp.exec_cmd("DEV_ENV=/home/nahuel/personal/dev /home/nahuel/personal/dev/dev-env")
+)
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
 
@@ -126,9 +132,9 @@ hl.config({
 	general = {
 		gaps_in = 6,
 		gaps_out = 12,
-		border_size = 1,
+		border_size = 2,
 		col = {
-			active_border = "rgba(2a2a2aff)",
+			active_border = "rgba(4a9eff54)",
 			inactive_border = "rgba(59595900)",
 		},
 		resize_on_border = false,
@@ -138,14 +144,14 @@ hl.config({
 
 	decoration = {
 		rounding = 10,
-		active_opacity = 1.0,
+		active_opacity = 0.98, -- transparency
 		inactive_opacity = 0.95,
 
 		shadow = {
 			enabled = false,
 			range = 4,
 			render_power = 3,
-			color = 0xee1a1a1a,
+			color = "rgba(1a1a1aee)",
 		},
 
 		blur = {

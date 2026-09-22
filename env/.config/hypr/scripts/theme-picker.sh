@@ -28,7 +28,7 @@ choice="$(
 )" || exit 0
 [ -z "${choice:-}" ] && exit 0
 
-# strip icon, markup and current-marker → plain theme name
+# Strip icon, markup and current-marker → plain theme name.
 name="$(printf "%s" "$choice" | sed -e 's/<[^>]*>//g' -e 's/●//g' | awk '{print $NF}')"
 [ -z "$name" ] && exit 0
 

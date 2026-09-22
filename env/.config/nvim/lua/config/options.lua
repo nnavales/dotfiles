@@ -1,10 +1,10 @@
 local opt = vim.opt
 
--- You have to turn this one on :)
+-- You have to turn this one on.
 opt.inccommand = "split"
 opt.incsearch = true
 
--- Best search settings :)
+-- Best search settings.
 opt.smartcase = true
 opt.ignorecase = true
 opt.hlsearch = false
@@ -15,7 +15,7 @@ opt.number = true
 opt.signcolumn = "yes"
 opt.splitbelow = true
 opt.splitright = true
--- opt.cursorline = true
+-- opt.cursorline = true.
 
 opt.clipboard = "unnamedplus"
 

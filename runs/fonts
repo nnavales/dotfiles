@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
-
 set -e
+
+# CommitMono20 is installed manually from https://commitmono.com
+# with these custom settings (save as custom-settings.json before download):
+#
+#   {"weight":400,"italic":false,"alternates":{"cv01":false,"cv02":false,
+#   "cv03":false,"cv04":false,"cv05":false,"cv06":false,"cv07":true,
+#   "cv08":false,"cv09":false,"cv10":false,"cv11":false},"features":
+#   {"ss01":false,"ss02":false,"ss03":true,"ss04":false,"ss05":true},
+#   "letterSpacing":0,"lineHeight":1.2,"fontName":"20"}
+#
+# Install the 4 font files to ~/.local/share/fonts/CommitMono20/.
 
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
@@ -16,28 +26,13 @@ fi
 FONT_DIR="$REAL_HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
-CASCADIA_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaMono.zip"
-CASCADIA_ZIP="$TMPDIR/CascadiaMono.zip"
-curl -Lo "$CASCADIA_ZIP" "$CASCADIA_URL"
-unzip -o "$CASCADIA_ZIP" -d "$FONT_DIR/CascadiaMono"
+NF_VERSION="v3.5.1"
+NF_BASE="https://github.com/ryanoasis/nerd-fonts/releases/download/$NF_VERSION"
 
-MONASPACE_URL="https://github.com/githubnext/monaspace/releases/download/v1.301/monaspace-nerdfonts-v1.301.zip"
-MONASPACE_ZIP="$TMPDIR/monaspace-nerdfonts.zip"
-curl -Lo "$MONASPACE_ZIP" "$MONASPACE_URL"
-unzip -o "$MONASPACE_ZIP" -d "$FONT_DIR/monaspace"
-
-JETBRAINS_URL="https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip"
-JETBRAINS_ZIP="$TMPDIR/JetBrainsMono.zip"
-curl -Lo "$JETBRAINS_ZIP" "$JETBRAINS_URL"
-unzip -o "$JETBRAINS_ZIP" -d "$FONT_DIR/JetBrainsMono"
-
-LEXEND_URL="https://github.com/googlefonts/lexend/archive/refs/heads/main.tar.gz"
-LEXEND_TAR="$TMPDIR/lexend.tar.gz"
-curl -Lo "$LEXEND_TAR" "$LEXEND_URL"
-mkdir -p "$FONT_DIR/Lexend"
-tar -xzf "$LEXEND_TAR" \
-    --strip-components=3 \
-    -C "$FONT_DIR/Lexend" \
-    lexend-main/fonts/lexend
+for font in GeistMono JetBrainsMono; do
+    zip="$TMPDIR/$font.zip"
+    curl -Lo "$zip" "$NF_BASE/$font.zip"
+    unzip -o "$zip" -d "$FONT_DIR/$font"
+done
 
 fc-cache -f
