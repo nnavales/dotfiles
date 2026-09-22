@@ -34,14 +34,14 @@ fi
 echo "Switching to theme: $THEME"
 ln -sfn "$THEME_DIR" "$CURRENT_LINK"
 
-# symlinks (apps without include support)
+# Symlinks (apps without include support).
 ln -sf "$CURRENT_LINK/eza.yaml" "$HOME/.config/eza/theme.yaml"
 
-# native theme dirs
+# Native theme dirs.
 mkdir -p "$HOME/.config/opencode/themes"
 cp "$THEME_DIR/theme-opencode.json" "$HOME/.config/opencode/themes/$THEME.json"
 mkdir -p "$HOME/.config/bat/themes"
 cp "$THEME_DIR/bat.tmTheme" "$HOME/.config/bat/themes/current-theme.tmTheme"
 
-# live reload of running apps (waybar reloads itself via reload_style_on_change)
+# Live reload of running apps (waybar reloads itself via reload_style_on_change).
 pkill -SIGUSR1 kitty 2>/dev/null || true # kitty hot-reloads its config

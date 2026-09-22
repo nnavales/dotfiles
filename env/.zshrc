@@ -22,26 +22,20 @@ else
 fi
 
 bindkey -e
-
 bindkey -s '^f' "tmux-sessionizer\n"
-
 bindkey '^[b' backward-word
 bindkey '^[w' forward-word
 
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -selection clipboard -o'
-alias vim="nvim"
-alias ls='eza'
+alias cd="z"
+alias cat="bat"
 alias l='eza -l'
 alias la='eza -la'
+alias ls='eza'
 alias lt='eza --tree'
-alias cat="bat"
+alias pbcopy='wl-copy'
+alias pbpaste='wl-paste'
 alias rg='rg --no-ignore'
-alias cd="z"
-
-parse_git_branch() {
-    git symbolic-ref --short HEAD 2>/dev/null | sed 's/.*/ &/'
-}
+alias vim="nvim"
 
 precmd() {
     local exit_code=$?
@@ -56,7 +50,7 @@ precmd() {
     [[ $exit_code -eq 0 ]] && arrow_color=$SUCCESS || arrow_color=$ERROR
 
     local branch
-    branch=$(parse_git_branch)
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null | sed 's/.*/ &/')
 
     PS1="${DIR}%1~${BRANCH}${branch}${arrow_color} ›${GREY} ${RESET}"
     PS2=$'%{\033[38;2;180;150;80m%}continue %{\033[0m%}%{\033[1m%}> '

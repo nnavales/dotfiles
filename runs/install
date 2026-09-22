@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Terminals.
+sudo pacman -S --needed --noconfirm \
+    ghostty alacritty kitty
+
+# Dev tools.
+sudo pacman -S --needed --noconfirm \
+    tmux neovim ripgrep jq tldr fzf bat eza zoxide fd \
+    git-delta wl-clipboard playerctl
+
+# Languages.
+sudo pacman -S --needed --noconfirm \
+    go jdk-openjdk uv zig nodejs npm
+
+# GUI apps.
+sudo pacman -S --needed --noconfirm \
+    sddm waybar rofi dunst hypridle hyprpicker hyprlock hyprpaper hyprcursor \
+    btop curl wget unzip pavucontrol imagemagick \
+    calibre bitwarden discord nautilus libreoffice-fresh vlc
+
+# AUR packages.
+yay -S --needed --noconfirm \
+    hyprshot yazi mpv localsend-bin zen-browser-bin cursor-bin \
+    hyprshade obsidian stremio protonvpn-cli-ng

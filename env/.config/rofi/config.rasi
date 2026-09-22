@@ -111,7 +111,7 @@ element-text {
   text-color: inherit;
   vertical-align: 0.5;
   horizontal-align: 0;
-  highlight: inherit;
+  highlight: @accent;
 }
 
 element-icon {
