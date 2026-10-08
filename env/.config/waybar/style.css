@@ -47,12 +47,6 @@ window#waybar > box {
     font-size: 15px;
 }
 
-#workspaces button.urgent {
-    background: transparent;
-    color: #e87777;
-    font-weight: 500;
-}
-
 #workspaces button:hover {
     background: transparent;
     border: none;
@@ -89,34 +83,20 @@ window#waybar > box {
     transition: color 150ms ease;
 }
 
-#custom-bgp-prev,
-#custom-bgp,
-#custom-bgp-next,
-#custom-bgp-loop,
-#custom-bgp-volume {
-    background: transparent;
-    margin: 0;
-    color: #d4dddd;
-    font-weight: 500;
-    font-feature-settings: "ss09";
-    border-radius: 0;
-    font-size: 16px;
-    transition: color 150ms ease;
-}
-
-#custom-bgp-name {
-    background: transparent;
-    margin: 0;
-    color: #d4dddd;
-    font-weight: 500;
-    font-feature-settings: "ss09";
-    border-radius: 0;
-}
-
 #pulseaudio {
     border-radius: 0;
     margin: 0;
     padding: 0 4px;
+}
+
+#custom-nowplaying {
+    background: transparent;
+    margin: 0;
+    padding: 0 4px;
+    color: #dce5e5;
+    font-weight: 500;
+    font-feature-settings: "ss09";
+    border-radius: 0;
 }
 
 #network {
@@ -138,42 +118,6 @@ window#waybar > box {
     min-width: 28px;
 }
 
-#custom-bgp-prev {
-    border-radius: 0;
-    margin-left: 0;
-    padding: 0 4px;
-}
-
-#custom-bgp,
-#custom-bgp-next {
-    padding: 0 4px;
-}
-
-#custom-bgp-loop {
-    padding: 0 4px;
-}
-
-#custom-bgp-volume {
-    border-radius: 0;
-    margin-right: 0;
-    padding: 0 4px;
-    min-width: 28px;
-}
-
-#custom-bgp-name {
-    padding: 0 13px 0 4px;
-    min-width: 150px;
-}
-
-#custom-bgp-prev:hover,
-#custom-bgp:hover,
-#custom-bgp-next:hover,
-#custom-bgp-loop:hover,
-#custom-bgp-volume:hover,
-#custom-bgp-name:hover {
-    color: #E6EDED;
-}
-
 #pulseaudio:hover,
 #cpu:hover,
 #memory:hover,
@@ -181,39 +125,6 @@ window#waybar > box {
 #bluetooth:hover,
 #custom-mic:hover {
     color: #E6EDED;
-}
-
-#custom-bgp-prev.bgp-disabled,
-#custom-bgp-next.bgp-disabled {
-    color: #6B7D7F;
-}
-
-#custom-bgp.stopped {
-    color: #6B7D7F;
-}
-
-#custom-bgp.paused {
-    color: #d4dddd;
-}
-
-#custom-bgp-loop.loop-off {
-    color: #6B7D7F;
-}
-
-#custom-bgp-loop.loop-all {
-    color: #d4dddd;
-}
-
-#custom-bgp-loop.loop-one {
-    color: #e0b074;
-}
-
-#custom-bgp-name.stopped {
-    color: #6B7D7F;
-}
-
-#custom-bgp-volume.muted {
-    color: #6B7D7F;
 }
 
 #pulseaudio.muted {

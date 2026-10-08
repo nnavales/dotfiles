@@ -3,7 +3,7 @@
     "layer": "top",
     "position": "top",
     "spacing": 0,
-    "height": 26,
+    "height": 34,
     "margin-top": 0,
     "margin-left": 0,
     "margin-right": 0,
@@ -11,6 +11,7 @@
     "modules-left": ["custom/power", "hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": [
+        "custom/nowplaying",
         "pulseaudio",
         "custom/mic",
         "cpu",
@@ -19,8 +20,6 @@
         "bluetooth",
         "hyprland/language"
     ],
-    "_comment_bgp_disabled": "uncomment to enable: custom/bgp-prev, custom/bgp, custom/bgp-next, custom/bgp-loop, custom/bgp-volume - add back to modules-right",
-
     "hyprland/workspaces": {
         "ignore-special": true,
         "persistent-workspaces": { "*": 5 },
@@ -32,8 +31,7 @@
             "3": "3",
             "4": "4",
             "5": "5",
-            "active": "●",
-            "urgent": "!"
+            "active": "●"
         }
     },
 
@@ -72,8 +70,10 @@
     },
 
     "network": {
+        "format": "󰈀",
         "format-wifi": "󰖩",
         "format-ethernet": "󰈀",
+        "format-linked": "󰈀",
         "format-disconnected": "󰖪",
         "on-click": "nm-connection-editor",
         "tooltip": true,
@@ -81,53 +81,13 @@
         "interval": 5
     },
 
-    "custom/bgp-prev": {
-        "exec": "/home/nahuel/.config/waybar/scripts/bgp-waybar prev",
-        "interval": 2,
-        "return-type": "json",
-        "signal": 5,
-        "on-click": "/home/nahuel/go/bin/bgp prev; pkill -RTMIN+5 waybar",
-        "tooltip": true
-    },
-
-    "custom/bgp": {
-        "exec": "/home/nahuel/.config/waybar/scripts/bgp-waybar play",
+    "custom/nowplaying": {
+        "exec": "/home/nahuel/.config/waybar/scripts/nowplaying",
         "interval": 1,
         "return-type": "json",
-        "signal": 5,
-        "on-click": "/home/nahuel/.config/waybar/scripts/bgp-waybar toggle-play",
-        "on-scroll-up": "/home/nahuel/.config/waybar/scripts/bgp-waybar adj-vol 5",
-        "on-scroll-down": "/home/nahuel/.config/waybar/scripts/bgp-waybar adj-vol -5",
-        "tooltip": true
-    },
-
-    "custom/bgp-next": {
-        "exec": "/home/nahuel/.config/waybar/scripts/bgp-waybar next",
-        "interval": 2,
-        "return-type": "json",
-        "signal": 5,
-        "on-click": "/home/nahuel/go/bin/bgp next; pkill -RTMIN+5 waybar",
-        "tooltip": true
-    },
-
-    "custom/bgp-loop": {
-        "exec": "/home/nahuel/.config/waybar/scripts/bgp-waybar loop",
-        "interval": 2,
-        "return-type": "json",
-        "signal": 5,
-        "on-click": "/home/nahuel/.config/waybar/scripts/bgp-waybar cycle-loop",
-        "tooltip": true
-    },
-
-    "custom/bgp-volume": {
-        "exec": "/home/nahuel/.config/waybar/scripts/bgp-waybar vol",
-        "interval": 1,
-        "return-type": "json",
-        "signal": 5,
-        "on-click": "/home/nahuel/.config/waybar/scripts/bgp-waybar toggle-vol",
-        "on-scroll-up": "/home/nahuel/.config/waybar/scripts/bgp-waybar adj-vol 5",
-        "on-scroll-down": "/home/nahuel/.config/waybar/scripts/bgp-waybar adj-vol -5",
-        "tooltip": true
+        "signal": 9,
+        "on-click": "/home/nahuel/.config/waybar/scripts/nowplaying --toggle; pkill -RTMIN+9 waybar",
+        "tooltip": false
     },
 
     "pulseaudio": {

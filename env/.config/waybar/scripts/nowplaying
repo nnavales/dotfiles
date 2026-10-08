@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# nowplaying - MPRIS title with a click-to-collapse toggle
+# Icons: 󰅁 expand f0141, 󰅂 collapse f0142
+
+STATE_FILE="/tmp/nowplaying-visible"
+OFFSET_FILE="/tmp/nowplaying-offset"
+
+WIDTH=40
+STEP=3
+PAUSE_STEPS=2
+
+if [ "$1" = "--toggle" ]; then
+    if [ -f "$STATE_FILE" ]; then
+        rm -f "$STATE_FILE"
+    else
+        touch "$STATE_FILE"
+    fi
+    exit 0
+fi
+
+collapsed=1
+[ -f "$STATE_FILE" ] && collapsed=0
+
+players="$(playerctl -l 2>/dev/null)"
+
+if [ -z "$players" ]; then
+    rm -f "$OFFSET_FILE"
+    if [ "$collapsed" = 1 ]; then
+        printf '{"text":%s,"class":"collapsed","tooltip":"no player"}\n' \
+            "$(printf '%s' '<span size="16000" foreground="#6B7D7F">󰅁</span>' | jq -Rs .)"
+    else
+        printf '{"text":"","class":"empty","tooltip":"no player"}\n'
+    fi
+    exit 0
+fi
+
+title="$(playerctl metadata title 2>/dev/null)"
+artist="$(playerctl metadata artist 2>/dev/null)"
+album="$(playerctl metadata album 2>/dev/null)"
+
+tooltip="$title"
+[ -n "$artist" ] && tooltip="$artist - $title"
+[ -n "$album" ] && tooltip="$tooltip - $album"
+
+track_key="$players|$title"
+last_key="$(cat "$OFFSET_FILE.key" 2>/dev/null || true)"
+if [ "$track_key" != "$last_key" ]; then
+    printf '%s' "$track_key" >"$OFFSET_FILE.key"
+    rm -f "$OFFSET_FILE"
+fi
+
+# "artist - title" scrolls as one single string, never truncated: the whole
+# thing is always visible by cycling through it. All the offset math below runs
+# on plain text, because pango markup inside $label would break ${#label}.
+label="$title"
+[ -n "$artist" ] && label="$artist - $title"
+artist_len=${#artist}
+
+if [ "${#label}" -le "$WIDTH" ]; then
+    rm -f "$OFFSET_FILE"
+    start=0
+else
+    span=$(( ${#label} - WIDTH ))
+    cycle=$(( span * 2 + PAUSE_STEPS * 2 ))
+    off="$(cat "$OFFSET_FILE" 2>/dev/null || echo 0)"
+    [ "$off" -ge "$cycle" ] && off=0
+    off=$(( off + STEP ))
+    printf '%s' "$off" >"$OFFSET_FILE"
+
+    if [ "$off" -le "$PAUSE_STEPS" ]; then
+        start=0
+    elif [ "$off" -le $(( PAUSE_STEPS + span )) ]; then
+        start=$(( off - PAUSE_STEPS ))
+    elif [ "$off" -le $(( PAUSE_STEPS + span + PAUSE_STEPS )) ]; then
+        start=$span
+    else
+        start=$(( span - (off - PAUSE_STEPS - span - PAUSE_STEPS) ))
+    fi
+fi
+
+# The visible slice of $label. No ellipsis: the window is always exactly
+# WIDTH chars so the text is never cut mid-word on the left edge.
+win_len=$WIDTH
+win_end=$(( start + win_len ))
+body="${label:start:win_len}"
+
+# Dim the slice of the artist that falls inside the window. The artist sits at
+# offset 0 of $label, so it is only visible while $start is still below its end.
+# Foreground #6B7D7F is the same grey as the collapse icon.
+if [ -n "$artist" ] && [ "$start" -lt "$artist_len" ]; then
+    vis=$win_end
+    [ "$vis" -gt "$artist_len" ] && vis=$artist_len
+    art_part="${label:start:vis-start}"
+    rest_part="${label:vis:win_end-vis}"
+    body="<span foreground=\"#6B7D7F\">$art_part</span>$rest_part"
+fi
+
+shown="$body"
+
+if [ "$collapsed" = 1 ]; then
+    col_text='<span size="16000" foreground="#6B7D7F">󰅁</span>'
+    printf '{"text":%s,"class":"collapsed","tooltip":%s}\n' \
+        "$(printf '%s' "$col_text" | jq -Rs .)" "$(printf '%s' "$tooltip" | jq -Rs .)"
+else
+    printf '{"text":%s,"class":"expanded","tooltip":%s}\n' \
+        "$(printf '%s' "<span rise=\"3300\">$shown</span> <span size=\"16000\" foreground=\"#6B7D7F\">󰅂</span>" | jq -Rs .)" \
+        "$(printf '%s' "$tooltip" | jq -Rs .)"
+fi

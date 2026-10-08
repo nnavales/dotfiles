@@ -13,6 +13,7 @@ network="󰖩  Network"
 audio="󰕾  Sound"
 update="󰚰  Update"
 wallpaper="󰸉  Wallpaper"
+theme="󰔎  Theme"
 power="󰐥  Power  <span foreground='#5c5c5c'>›</span>"
 
 # ── power submenu entries ──
@@ -68,8 +69,8 @@ power_menu() {
 
 main_menu() {
   local entries sel
-  entries=$(printf "%s\n" "$apps" "$files" "$wallpaper" "$monitor" "$network" "$audio" "$update" "$power")
-  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 8 -p "󰍉 " -mesg "System Menu") || exit 0
+  entries=$(printf "%s\n" "$apps" "$files" "$wallpaper" "$theme" "$monitor" "$network" "$audio" "$update" "$power")
+  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 9 -p "󰍉 " -mesg "System Menu") || exit 0
   [ -z "${sel:-}" ] && exit 0
   case "$sel" in
     "$apps")
@@ -94,6 +95,8 @@ main_menu() {
       launch_app "kitty -o window_padding_width='0 0 0 0' -e sh -c 'yay -Syu; echo; read -rp \"Done — press Enter to close... \" _'" ;;
     "$wallpaper")
       "$HOME/.config/hypr/scripts/wallpaper.sh" ;;
+    "$theme")
+      "$HOME/.config/hypr/scripts/theme-picker.sh" ;;
     "$power")
       power_menu ;;
   esac

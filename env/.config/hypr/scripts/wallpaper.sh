@@ -5,6 +5,8 @@ WALL_DIR="$HOME/.local/share/wallpapers"
 CONF="$HOME/.config/hypr/hyprpaper.conf"
 THEME="$HOME/.config/rofi/wallpaper.rasi"
 
+REPO_CONF="${DEV_ENV:-$HOME/personal/dev}/env/.config/hypr/hyprpaper.conf"
+
 # Pick a wallpaper with rofi (grid + thumbnails).
 choice="$(
     for f in "$WALL_DIR"/*; do
@@ -47,6 +49,10 @@ gen_conf() {
 # below fails (with `set -e` a failing hyprctl would abort the script before
 # persistence ran -- the bug that made wallpapers reset on reboot).
 gen_conf >"$CONF"
+
+if [ -d "$(dirname "$REPO_CONF")" ]; then
+    gen_conf >"$REPO_CONF" 2>/dev/null || true
+fi
 
 # Apply live. `|| true` so a transient IPC failure doesn't abort the script
 # (persistence already happened above, so the next reboot is still correct).

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+orientation=3 # 3 = portrait (vertical), 4 = landscape (horizontal)
+landscape_opt=()
+
+usage() {
+  cat <<EOF
+Print PDF(s) on Brother HL-1210W (A4, no scaling).
+
+Usage:
+  $(basename "$0") [option] <file> [file...]
+
+Options:
+  -p, --portrait    Print vertical (default).
+  -l, --landscape   Print horizontal.
+  -h, --help        Show this help.
+
+Examples:
+  $(basename "$0") doc.pdf
+  $(basename "$0") -l doc.pdf
+  $(basename "$0") --landscape doc1.pdf doc2.pdf
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -l | --landscape)
+      orientation=4
+      landscape_opt=(-o landscape)
+      shift
+      ;;
+    -p | --portrait)
+      orientation=3
+      landscape_opt=()
+      shift
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 1
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+if [[ $# -eq 0 ]]; then
+  usage >&2
+  exit 1
+fi
+
+lp -d Brother_HL-1210W_series -o media=A4 -o print-scaling=none -o orientation-requested="$orientation" "${landscape_opt[@]}" "$@"
