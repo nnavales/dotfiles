@@ -37,7 +37,9 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl")
 	hl.exec_cmd(terminal, { workspace = "1 silent" })
 	hl.exec_cmd(browser, { workspace = "2 silent" })
-	hl.exec_cmd("obsidian", { workspace = "special:notes silent" })
+	hl.exec_cmd("obsidian")
+	hl.exec_cmd("gtk-launch zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b.desktop")
+	hl.exec_cmd("gtk-launch zen.webapp-be410f64-10c2-41dc-ba22-8839c4895861.desktop")
 end)
 
 -- Workspace rules.
@@ -51,6 +53,33 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 -- Opacity overrides.
 hl.window_rule({ match = { class = "zen" }, opacity = "1.0 override" })
 hl.window_rule({ match = { class = "md.obsidian.Obsidian" }, opacity = "1.0 override" })
+
+-- Scratchpad windows rules: force each app into its special workspace.
+-- NOTE: exec `workspace = "..."` does NOT work for gtk-launch/zen webapps
+-- because gtk-launch exits immediately and zen-bin reuses the existing
+-- Zen PID (see `hyprctl clients`: webapps share pid with main `zen` window),
+-- so the exec workspace token never sticks. windowrule by class does.
+hl.window_rule({
+	match = { class = "md.obsidian.Obsidian" },
+	workspace = "special:notes silent",
+	border_size = 2,
+	border_color = "rgba(9aa0a6ee)",
+	opacity = "1.0 override",
+})
+hl.window_rule({
+	match = { class = "zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b" },
+	workspace = "special:chat silent",
+	border_size = 2,
+	border_color = "rgba(9aa0a6ee)",
+	opacity = "1.0 override",
+})
+hl.window_rule({
+	match = { class = "zen.webapp-be410f64-10c2-41dc-ba22-8839c4895861" },
+	workspace = "special:music silent",
+	border_size = 2,
+	border_color = "rgba(9aa0a6ee)",
+	opacity = "1.0 override",
+})
 
 -- Binds.
 local mainMod = "SUPER"
@@ -82,9 +111,10 @@ hl.bind(mainMod .. " + GRAVE", function()
 	end
 end)
 
+hl.bind(mainMod .. " + A", hl.dsp.workspace.toggle_special("chat"))
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("notes"))
+hl.bind(mainMod .. " + D", hl.dsp.workspace.toggle_special("music"))
 
-hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.config/hypr/scripts/theme-picker.sh"))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.config/waybar/scripts/power-menu"))
 hl.bind(
 	mainMod .. " + SHIFT + R",
@@ -114,7 +144,15 @@ hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
 
 for i = 1, 10 do
 	local key = i % 10
-	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
+	hl.bind(mainMod .. " + " .. key, function()
+		-- Read the special workspace BEFORE switching: if the compositor ever
+		-- auto-hides specials on workspace change, this still sees it and closes it.
+		local sp = hl.get_active_special_workspace()
+		hl.dispatch(hl.dsp.focus({ workspace = i }))
+		if sp ~= nil then
+			hl.dispatch(hl.dsp.workspace.toggle_special((sp.name:gsub("^special:", ""))))
+		end
+	end)
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 

@@ -1,7 +1,7 @@
-bookie() {
+bookies() {
     local file
     file=$(
-        fd . /home/nahuel/personal/hub/bookies -t f -e pdf -e epub --hidden \
+        fd . /home/nahuel/personal/hub/hosted/shelf/media/books -t f -e pdf -e epub --hidden \
         | awk '{bn=$0; sub(".*/","",bn); printf "%s\t%s\n", bn, $0}' \
         | fzf --multi --prompt="Select book > " --with-nth=1 --delimiter="\t" \
         | cut -f2
