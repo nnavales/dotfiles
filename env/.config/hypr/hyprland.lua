@@ -39,7 +39,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd(browser, { workspace = "2 silent" })
 	hl.exec_cmd("obsidian")
 	hl.exec_cmd("gtk-launch zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b.desktop")
-	hl.exec_cmd("gtk-launch zen.webapp-be410f64-10c2-41dc-ba22-8839c4895861.desktop")
+	hl.exec_cmd("gtk-launch zen.webapp-3d0e37d8-2840-4b3a-8b49-02fdf12e2ac0.desktop")
 end)
 
 -- Workspace rules.
@@ -74,7 +74,7 @@ hl.window_rule({
 	opacity = "1.0 override",
 })
 hl.window_rule({
-	match = { class = "zen.webapp-be410f64-10c2-41dc-ba22-8839c4895861" },
+	match = { class = "zen.webapp-3d0e37d8-2840-4b3a-8b49-02fdf12e2ac0" },
 	workspace = "special:music silent",
 	border_size = 2,
 	border_color = "rgba(9aa0a6ee)",

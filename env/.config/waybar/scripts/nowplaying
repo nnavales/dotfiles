@@ -1,13 +1,118 @@
 #!/usr/bin/env bash
-# nowplaying - MPRIS title with a click-to-collapse toggle
+# nowplaying - MPRIS metadata with a seamless marquee, click-to-collapse toggle
 # Icons: 󰅁 expand f0141, 󰅂 collapse f0142
+#
+# Ported from a CSS/JS marquee: the window slides over a repeating loop so text
+# leaving on the left re-enters on the right (no jump back to the start), with
+# a dwell at the start of each lap, a gap between repetitions, and a soft fade
+# on both edges. Waybar polls this once a second, so motion is discrete.
 
 STATE_FILE="/tmp/nowplaying-visible"
 OFFSET_FILE="/tmp/nowplaying-offset"
+PAUSE_FILE="/tmp/nowplaying-pause"
+TRACK_FILE="/tmp/nowplaying-track"
 
-WIDTH=40
-STEP=3
-PAUSE_STEPS=2
+# --- geometry (the JS options, translated to characters) ---
+WIDTH=40         # visible characters, the marquee container width
+STEP=3           # chars per tick -> the "speed"
+PAUSE_TICKS=0    # ticks of dwell at the start of each lap -> the "pause"
+GAP="      "     # gap between repetitions -> the "gap"
+FADE=3           # chars at each edge that fade -> the mask (must be >= 2)
+FADE_MIN=40      # alpha percent at the outermost char
+
+# Only show metadata for this MPRIS player; anything else reports as "no
+# player" so the module stays hidden when Spotify/other apps take over.
+PLAYER="deck"
+DIM="#6B7D7F"   # artist
+FG="#dce5e5"    # title, same value as #custom-nowplaying in style.css
+
+[ "$FADE" -ge 2 ] || FADE=2
+
+ICON_COL='<span size="16000" foreground="#6B7D7F">󰅁</span>'
+ICON_EXP='<span size="16000" foreground="#6B7D7F">󰅂</span>'
+
+# JSON string escaper in pure bash; jq would work but forks needlessly.
+json_escape() {
+    local s=$1
+    s=${s//\\/\\\\}
+    s=${s//\"/\\\"}
+    s=${s//$'\t'/\\t}
+    s=${s//$'\r'/\\r}
+    printf '"%s"' "$s"
+}
+
+# Reduce an MPRIS artist string to its first credited artist.
+#   "A, B, C"   -> "A"
+#   "A feat. B" -> "A"
+primary_artist() {
+    local a=$1
+    [ -z "$a" ] && return
+    a=${a%% feat.*}
+    a=${a%% featuring*}
+    a=${a%% ft.*}
+    a=${a%% \&*}
+    a=${a%% x *}
+    a=${a%%,*}
+    a=${a#"${a%%[![:space:]]*}"}
+    a=${a%"${a##*[![:space:]]}"}
+    printf '%s' "$a"
+}
+
+# One styled run of characters. Every run gets an explicit foreground: the
+# artist is DIM, everything else is FG. Setting the colour here instead of
+# relying on the CSS inheritance guarantees the title never renders dimmed.
+render_run() {
+    local text=$1 kind=$2 alpha=$3
+    local color="$FG"
+    [ "$kind" = artist ] && color="$DIM"
+    local attrs=" foreground=\"$color\""
+    [ "$alpha" -lt 100 ] && attrs="$attrs alpha=\"$(( alpha * 65535 / 100 ))\""
+    printf '<span%s>%s</span>' "$attrs" "$text"
+}
+
+# Build the visible window: dim the artist wherever it appears, and fade the
+# chars at both edges. Character-wise so the two effects compose without the
+# spans colliding. Pass fade=0 to skip the edge fade (non-overflowing text).
+build_body() {
+    local buf=$1 start=$2 winlen=$3 period=$4 artist_len=$5 fade=$6
+    local out="" i=0 cur_text="" cur_kind="" cur_alpha=""
+    while [ "$i" -lt "$winlen" ]; do
+        local abs=$(( start + i ))
+        local rel=$(( abs % period ))
+        local kind=plain
+        if [ "$artist_len" -gt 0 ] && [ "$rel" -lt "$artist_len" ]; then
+            kind=artist
+        fi
+
+        # Distance from the nearest edge, for the fade.
+        local edge=$i
+        local from_right=$(( winlen - 1 - i ))
+        [ "$from_right" -lt "$edge" ] && edge=$from_right
+
+        local alpha=100
+        if [ "$fade" -gt 1 ] && [ "$edge" -lt "$fade" ]; then
+            alpha=$(( FADE_MIN + (100 - FADE_MIN) * edge / (fade - 1) ))
+        fi
+
+        # Past the end of the buffer (padding) render spaces.
+        local ch="${buf:abs:1}"
+        [ -z "$ch" ] && ch=" "
+
+        if [ -n "$cur_text" ] && [ "$kind" = "$cur_kind" ] && [ "$alpha" = "$cur_alpha" ]; then
+            cur_text="$cur_text$ch"
+        else
+            if [ -n "$cur_text" ]; then
+                out="$out$(render_run "$cur_text" "$cur_kind" "$cur_alpha")"
+            fi
+            cur_text="$ch"; cur_kind="$kind"; cur_alpha="$alpha"
+        fi
+        i=$(( i + 1 ))
+    done
+    if [ -n "$cur_text" ]; then
+        out="$out$(render_run "$cur_text" "$cur_kind" "$cur_alpha")"
+    fi
+    printf '%s' "$out"
+}
 
 if [ "$1" = "--toggle" ]; then
     if [ -f "$STATE_FILE" ]; then
@@ -23,86 +128,97 @@ collapsed=1
 
 players="$(playerctl -l 2>/dev/null)"
 
-if [ -z "$players" ]; then
-    rm -f "$OFFSET_FILE"
+# Only the configured player counts; ignore everything else.
+if ! printf '%s\n' "$players" | grep -Fxq "$PLAYER"; then
     if [ "$collapsed" = 1 ]; then
         printf '{"text":%s,"class":"collapsed","tooltip":"no player"}\n' \
-            "$(printf '%s' '<span size="16000" foreground="#6B7D7F">󰅁</span>' | jq -Rs .)"
+            "$(json_escape "$ICON_COL")"
     else
         printf '{"text":"","class":"empty","tooltip":"no player"}\n'
     fi
     exit 0
 fi
 
-title="$(playerctl metadata title 2>/dev/null)"
-artist="$(playerctl metadata artist 2>/dev/null)"
-album="$(playerctl metadata album 2>/dev/null)"
+title="$(playerctl -p "$PLAYER" metadata title 2>/dev/null)"
+raw_artist="$(playerctl -p "$PLAYER" metadata artist 2>/dev/null)"
+album="$(playerctl -p "$PLAYER" metadata album 2>/dev/null)"
+
+# Keep only the primary artist in the bar; the tooltip keeps the full credit.
+artist="$(primary_artist "$raw_artist")"
 
 tooltip="$title"
-[ -n "$artist" ] && tooltip="$artist - $title"
+[ -n "$raw_artist" ] && tooltip="$raw_artist - $title"
 [ -n "$album" ] && tooltip="$tooltip - $album"
+tip_json="$(json_escape "$tooltip")"
 
+# New track: restart the lap and dwell before moving again.
 track_key="$players|$title"
-last_key="$(cat "$OFFSET_FILE.key" 2>/dev/null || true)"
-if [ "$track_key" != "$last_key" ]; then
-    printf '%s' "$track_key" >"$OFFSET_FILE.key"
+if [ "$track_key" != "$(cat "$TRACK_FILE" 2>/dev/null || true)" ]; then
+    printf '%s' "$track_key" >"$TRACK_FILE"
     rm -f "$OFFSET_FILE"
+    printf '%s' "$PAUSE_TICKS" >"$PAUSE_FILE"
 fi
-
-# "artist - title" scrolls as one single string, never truncated: the whole
-# thing is always visible by cycling through it. All the offset math below runs
-# on plain text, because pango markup inside $label would break ${#label}.
-label="$title"
-[ -n "$artist" ] && label="$artist - $title"
-artist_len=${#artist}
-
-if [ "${#label}" -le "$WIDTH" ]; then
-    rm -f "$OFFSET_FILE"
-    start=0
-else
-    span=$(( ${#label} - WIDTH ))
-    cycle=$(( span * 2 + PAUSE_STEPS * 2 ))
-    off="$(cat "$OFFSET_FILE" 2>/dev/null || echo 0)"
-    [ "$off" -ge "$cycle" ] && off=0
-    off=$(( off + STEP ))
-    printf '%s' "$off" >"$OFFSET_FILE"
-
-    if [ "$off" -le "$PAUSE_STEPS" ]; then
-        start=0
-    elif [ "$off" -le $(( PAUSE_STEPS + span )) ]; then
-        start=$(( off - PAUSE_STEPS ))
-    elif [ "$off" -le $(( PAUSE_STEPS + span + PAUSE_STEPS )) ]; then
-        start=$span
-    else
-        start=$(( span - (off - PAUSE_STEPS - span - PAUSE_STEPS) ))
-    fi
-fi
-
-# The visible slice of $label. No ellipsis: the window is always exactly
-# WIDTH chars so the text is never cut mid-word on the left edge.
-win_len=$WIDTH
-win_end=$(( start + win_len ))
-body="${label:start:win_len}"
-
-# Dim the slice of the artist that falls inside the window. The artist sits at
-# offset 0 of $label, so it is only visible while $start is still below its end.
-# Foreground #6B7D7F is the same grey as the collapse icon.
-if [ -n "$artist" ] && [ "$start" -lt "$artist_len" ]; then
-    vis=$win_end
-    [ "$vis" -gt "$artist_len" ] && vis=$artist_len
-    art_part="${label:start:vis-start}"
-    rest_part="${label:vis:win_end-vis}"
-    body="<span foreground=\"#6B7D7F\">$art_part</span>$rest_part"
-fi
-
-shown="$body"
 
 if [ "$collapsed" = 1 ]; then
-    col_text='<span size="16000" foreground="#6B7D7F">󰅁</span>'
     printf '{"text":%s,"class":"collapsed","tooltip":%s}\n' \
-        "$(printf '%s' "$col_text" | jq -Rs .)" "$(printf '%s' "$tooltip" | jq -Rs .)"
-else
-    printf '{"text":%s,"class":"expanded","tooltip":%s}\n' \
-        "$(printf '%s' "<span rise=\"3300\">$shown</span> <span size=\"16000\" foreground=\"#6B7D7F\">󰅂</span>" | jq -Rs .)" \
-        "$(printf '%s' "$tooltip" | jq -Rs .)"
+        "$(json_escape "$ICON_COL")" "$tip_json"
+    exit 0
 fi
+
+# "artist - title" scrolls as one single string, never truncated.
+# Some players already prefix the title with the artist ("Sia - Cheap
+# Thrills"), which would render the artist twice, so detect that first.
+SEP_TEXT=" - "
+if [ -n "$artist" ] && [ "${title#"$artist$SEP_TEXT"}" != "$title" ]; then
+    title="${title#"$artist$SEP_TEXT"}"
+fi
+
+label="$title"
+[ -n "$artist" ] && label="$artist$SEP_TEXT$title"
+artist_len=${#artist}
+winlen=$WIDTH
+
+if [ "${#label}" -le "$winlen" ]; then
+    # Fits on screen: no scroll and no fade, like the JS reference does when the
+    # content doesn't overflow. build_body still dims just the artist.
+    # The window is the exact text length (no padding to WIDTH), otherwise the
+    # module reserves the full width and shows dead space before the icon.
+    # period=winlen keeps the modulo from wrapping, so nothing after the artist
+    # is mistaken for a second one.
+    rm -f "$OFFSET_FILE" "$PAUSE_FILE"
+    winlen=${#label}
+    body="$(build_body "$label" 0 "$winlen" "$winlen" "$artist_len" 0)"
+else
+    # One repetition plus the gap; a lap is exactly this long.
+    loop="$label$GAP"
+    period=${#loop}
+
+    # Dwell at the start of each lap, otherwise advance.
+    pause_left="$(cat "$PAUSE_FILE" 2>/dev/null || echo 0)"
+    if [ "$pause_left" -gt 0 ]; then
+        pause_left=$(( pause_left - 1 ))
+        printf '%s' "$pause_left" >"$PAUSE_FILE"
+    else
+        pos="$(cat "$OFFSET_FILE" 2>/dev/null || echo 0)"
+        pos=$(( pos + STEP ))
+        if [ "$pos" -ge "$period" ]; then
+            pos=0
+            printf '%s' "$PAUSE_TICKS" >"$PAUSE_FILE"
+        fi
+        printf '%s' "$pos" >"$OFFSET_FILE"
+    fi
+    pos="$(cat "$OFFSET_FILE" 2>/dev/null || echo 0)"
+
+    # Repeat the loop long enough that slicing $winlen chars at any offset
+    # inside one period never runs off the end.
+    buf="$loop"
+    while [ "${#buf}" -lt $(( period + winlen )) ]; do
+        buf="$buf$loop"
+    done
+
+    body="$(build_body "$buf" "$pos" "$winlen" "$period" "$artist_len" "$FADE")"
+fi
+
+printf '{"text":%s,"class":"expanded","tooltip":%s}\n' \
+    "$(json_escape "<span rise=\"3300\">$body</span> $ICON_EXP")" \
+    "$tip_json"
