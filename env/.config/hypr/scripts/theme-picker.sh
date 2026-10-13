@@ -5,7 +5,7 @@ set -euo pipefail
 COLORS_DIR="${COLORS_DIR:-$HOME/.config/colors}"
 CURRENT_LINK="$COLORS_DIR/current"
 SWITCH="$COLORS_DIR/scripts/theme-switch.sh"
-THEME="${ROFI_POWER_THEME:-$HOME/.config/rofi/power.rasi}"
+THEME="${HOME}/.config/rofi/theme-picker.rasi"
 
 current=""
 if [ -L "$CURRENT_LINK" ]; then
@@ -24,7 +24,7 @@ entries="${entries%$'\n'}"
 
 choice="$(
   printf "%b" "$entries" | rofi -dmenu -i -no-custom -markup-rows \
-    -theme "$THEME" -p "󰸞 " -mesg "Theme"
+    -theme "$THEME" -p "󰍉 "
 )" || exit 0
 [ -z "${choice:-}" ] && exit 0
 

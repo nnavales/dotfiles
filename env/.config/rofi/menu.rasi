@@ -48,8 +48,8 @@ inputbar {
 
 prompt {
   enabled: true;
-  text-color: @prompt;
-  font: "GeistMono Nerd Font 13";
+  text-color: @info;
+  font: "GeistMono Nerd Font 12";
   vertical-align: 0.5;
 }
 
@@ -120,7 +120,7 @@ element selected.normal {
 element-text {
   background-color: transparent;
   text-color: inherit;
-  font: "GeistMono Nerd Font Medium 12";
+  font: "GeistMono Nerd Font Medium 11";
   vertical-align: 0.5;
   horizontal-align: 0;
   highlight: none;
