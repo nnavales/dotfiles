@@ -2,7 +2,7 @@
 
 configuration {
   drun-display-format: "{name}";
-  display-drun: "󰍉";
+  display-drun: "󰍉 ";
   show-icons: true;
   disable-history: false;
   click-to-exit: true;
@@ -47,15 +47,15 @@ inputbar {
 
 prompt {
   enabled: true;
-  text-color: @accent;
-  font: "GeistMono Nerd Font 13";
+  text-color: @muted;
+  font: "GeistMono Nerd Font 12";
   vertical-align: 0.5;
 }
 
 entry {
   text-color: @fg;
   placeholder-color: @muted;
-  placeholder: "Search apps...";
+  placeholder: "Apps";
   vertical-align: 0.5;
 }
 

@@ -37,15 +37,15 @@ inputbar {
 
 prompt {
   enabled: true;
-  text-color: @accent;
-  font: "GeistMono Nerd Font Medium 11";
+  text-color: @muted;
+  font: "GeistMono Nerd Font 12";
   vertical-align: 0.5;
 }
 
 entry {
   text-color: @fg;
   placeholder-color: @muted;
-  placeholder: "";
+  placeholder: "Wallpaper";
   vertical-align: 0.5;
 }
 
@@ -94,7 +94,7 @@ element-icon {
 element-text {
   background-color: transparent;
   text-color: @muted;
-  font: "GeistMono Nerd Font 10";
+  font: "GeistMono Nerd Font Medium 11";
   horizontal-align: 0.5;
   vertical-align: 0.5;
   highlight: @accent;

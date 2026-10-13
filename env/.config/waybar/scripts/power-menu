@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# System menu for waybar + rofi. Main menu + Power submenu with Back.
+# System menu for waybar + rofi. Main menu + Customize and Power submenus,
+# each with Back.
 set -euo pipefail
 
-THEME="${ROFI_POWER_THEME:-$HOME/.config/rofi/power.rasi}"
+THEME="${ROFI_MENU_THEME:-$HOME/.config/rofi/menu.rasi}"
+POWER_THEME="${HOME}/.config/rofi/menu-power.rasi"
+CUSTOM_THEME="${HOME}/.config/rofi/menu-custom.rasi"
 ROFI=(rofi -dmenu -i -no-custom -markup-rows -theme "$THEME")
 
 # ── main entries ──
@@ -11,16 +14,22 @@ files="󰉋  Files"
 monitor="󰻠  Monitor"
 network="󰖩  Network"
 audio="󰕾  Sound"
+custom="󰸌  Customize  <span foreground='#5c5c5c'>›</span>"
 update="󰚰  Update"
-wallpaper="󰸉  Wallpaper"
-theme="󰔎  Theme"
 power="󰐥  Power  <span foreground='#5c5c5c'>›</span>"
 
-# ── power submenu entries ──
+# ── shared submenu nav ──
 back="<span foreground='#5c5c5c'>‹</span>  Back"
+
+# ── power submenu entries ──
 lock="󰌾  Lock"
 reboot="󰜉  Reboot"
 shutdown="󰐥  Shutdown"
+
+# ── customize submenu entries ──
+theme="󰔎  Theme"
+wallpaper="󰸉  Wallpaper"
+topbar="󰔡  Top bar opacity"
 
 # Lanzador robusto: recibe UN string completo, ej: launch_app "kitty -e yazi"
 launch_app() {
@@ -57,7 +66,7 @@ do_lock() {
 power_menu() {
   local entries sel
   entries=$(printf "%s\n" "$back" "$lock" "$reboot" "$shutdown")
-  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 4 -p "󰐥 " -mesg "Power") || exit 0
+  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 4 -p "󰍉 " -theme "$POWER_THEME") || exit 0
   [ -z "${sel:-}" ] && exit 0
   case "$sel" in
     "$back") main_menu ;;
@@ -67,10 +76,28 @@ power_menu() {
   esac
 }
 
+custom_menu() {
+  local entries sel
+  entries=$(printf "%s\n" "$back" "$theme" "$wallpaper" "$topbar")
+  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 4 -p "󰍉 " -theme "$CUSTOM_THEME") || exit 0
+  [ -z "${sel:-}" ] && exit 0
+  case "$sel" in
+    "$back") main_menu ;;
+    "$theme")
+      "$HOME/.config/hypr/scripts/theme-picker.sh" ;;
+    "$wallpaper")
+      "$HOME/.config/hypr/scripts/wallpaper.sh" ;;
+    "$topbar")
+      # Toggle straight away: the label has no state to show, and picking a
+      # value was explicitly not wanted.
+      "$HOME/.config/waybar/scripts/topbar-opacity" ;;
+  esac
+}
+
 main_menu() {
   local entries sel
-  entries=$(printf "%s\n" "$apps" "$files" "$wallpaper" "$theme" "$monitor" "$network" "$audio" "$update" "$power")
-  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 9 -p "󰍉 " -mesg "System Menu") || exit 0
+  entries=$(printf "%s\n" "$apps" "$files" "$monitor" "$network" "$audio" "$custom" "$update" "$power")
+  sel=$(printf "%s\n" "$entries" | "${ROFI[@]}" -l 8 -p "󰍉 ") || exit 0
   [ -z "${sel:-}" ] && exit 0
   case "$sel" in
     "$apps")
@@ -93,10 +120,8 @@ main_menu() {
       fi ;;
     "$update")
       launch_app "kitty -o window_padding_width='0 0 0 0' -e sh -c 'yay -Syu; echo; read -rp \"Done — press Enter to close... \" _'" ;;
-    "$wallpaper")
-      "$HOME/.config/hypr/scripts/wallpaper.sh" ;;
-    "$theme")
-      "$HOME/.config/hypr/scripts/theme-picker.sh" ;;
+    "$custom")
+      custom_menu ;;
     "$power")
       power_menu ;;
   esac

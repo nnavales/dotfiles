@@ -12,7 +12,7 @@ choice="$(
     for f in "$WALL_DIR"/*; do
         [ -f "$f" ] || continue
         printf '%s\x00icon\x1f%s\n' "$(basename "$f")" "$f"
-    done | rofi -dmenu -i -p "Wallpaper" -show-icons -theme "$THEME" \
+    done | rofi -dmenu -i -p "󰍉 " -show-icons -theme "$THEME" \
         -kb-element-next "Control+n" -kb-element-prev "Control+p" \
         -kb-row-up "Up" -kb-row-down "Down"
 )"

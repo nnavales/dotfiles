@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Toggle the top bar between translucent and fully opaque.
+#
+# The alpha lives in the `window#waybar` block of style.css. Rather than
+# hardcoding a line number (which breaks the moment the file is reordered),
+# this rewrites the `background:` declaration only inside that block, so the
+# identically-shaped `tooltip` rule further down is left alone.
+set -euo pipefail
+
+CSS="${WAYBAR_CSS:-$HOME/.config/waybar/style.css}"
+TRANSLUCENT="0.35"
+OPAQUE="1"
+
+[ -w "$CSS" ] || { echo "no write access to $CSS" >&2; exit 1; }
+
+current_alpha() {
+  awk '
+    /^[[:space:]]*window#waybar[[:space:]]*{/ { inblock = 1; next }
+    inblock && /^[[:space:]]*}/ { inblock = 0 }
+    inblock && /background:[[:space:]]*rgba\(/ {
+      if (match($0, /rgba\([^)]*,[^)]*,[^)]*,[[:space:]]*[0-9.]+[[:space:]]*\)/)) {
+        line = substr($0, RSTART, RLENGTH)
+        sub(/.*,[[:space:]]*/, "", line)
+        sub(/[[:space:]]*\).*/, "", line)
+        print line
+        exit
+      }
+    }
+  ' "$CSS"
+}
+
+set_alpha() {
+  local want="$1" tmp
+  tmp=$(mktemp) || exit 1
+  awk -v want="$want" '
+    /^[[:space:]]*window#waybar[[:space:]]*{/ { inblock = 1; print; next }
+    inblock && /^[[:space:]]*}/ { inblock = 0; print; next }
+    inblock && /background:[[:space:]]*rgba\(/ {
+      sub(/rgba\([^)]*,[^)]*,[^)]*,[[:space:]]*[0-9.]+[[:space:]]*\)/,
+          "rgba(24, 26, 28, " want ")")
+    }
+    { print }
+  ' "$CSS" >"$tmp" || { rm -f "$tmp"; exit 1; }
+  cat "$tmp" >"$CSS"
+  rm -f "$tmp"
+}
+
+before=$(current_alpha)
+if [ -z "$before" ]; then
+  echo "could not read the window#waybar background from $CSS" >&2
+  exit 1
+fi
+
+if [ "$before" = "$TRANSLUCENT" ]; then
+  set_alpha "$OPAQUE"
+  state="opaque"
+else
+  set_alpha "$TRANSLUCENT"
+  state="translucent"
+fi
+
+# SIGUSR2 reloads waybar in place; SIGUSR1 also works but re-reads config.
+pkill -SIGUSR2 -x waybar 2>/dev/null || true
+
+echo "$state"
