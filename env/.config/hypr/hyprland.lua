@@ -19,11 +19,11 @@ hl.env("MOZ_DISABLE_RDD_SANDBOX", "1")
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
-hl.env("HYPRSHOT_DIR", "/home/nahuel/Pictures/screenshots")
+hl.env("HYPRSHOT_DIR", os.getenv("HOME") .. "/Pictures/screenshots")
 
 -- Default programs I use.
 local terminal = "kitty"
-local menu = "rofi -show drun -show-icons"
+local menu = "~/.local/libexec/menu"
 local browser = "zen-browser"
 local fileManager = terminal .. " -o window_padding_width='0 0 0 0' -e yazi"
 
@@ -33,7 +33,7 @@ hl.on("hyprland.start", function()
 		"bash -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE; systemctl --user start hyprland-session.target'"
 	)
 	hl.exec_cmd("hyprpaper")
-	hl.exec_cmd("waybar")
+	hl.exec_cmd("waybar -c ~/.config/waybar/config.jsonc")
 	hl.exec_cmd("hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl")
 	hl.exec_cmd(terminal, { workspace = "1 silent" })
 	hl.exec_cmd(browser, { workspace = "2 silent" })
@@ -90,7 +90,7 @@ hl.bind("mouse:275", hl.dsp.focus({ workspace = "+1" }))
 -- Waybar toggle. Shows/hides gaps and borders depending on waybar status.
 local waybar_visible = true
 hl.bind(mainMod .. " + GRAVE", function()
-	hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-waybar.sh"))
+	hl.dispatch(hl.dsp.exec_cmd("~/.local/libexec/toggle-waybar"))
 	waybar_visible = not waybar_visible
 	if waybar_visible then
 		-- waybar abierta: gaps/border/rounding normales
@@ -115,27 +115,26 @@ hl.bind(mainMod .. " + A", hl.dsp.workspace.toggle_special("chat"))
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("notes"))
 hl.bind(mainMod .. " + D", hl.dsp.workspace.toggle_special("music"))
 
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.config/waybar/scripts/power-menu"))
-hl.bind(
-	mainMod .. " + SHIFT + R",
-	hl.dsp.exec_cmd("DEV_ENV=/home/nahuel/personal/dev /home/nahuel/personal/dev/dev-env")
-)
-hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
-
-hl.bind(mainMod .. " + W", hl.dsp.window.cycle_next())
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 
+hl.bind(
+	mainMod .. " + SHIFT + R",
+	hl.dsp.exec_cmd("DEV_ENV=~/personal/dev ~/personal/dev/dev-env")
+)
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exit())
-hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
-hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 
-hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
+
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("hyprshot -m region"))
 hl.bind(mainMod .. " + PAUSE", hl.dsp.exec_cmd("hyprshot -m window"))
 hl.bind(mainMod .. " + SCROLL_LOCK", hl.dsp.exec_cmd("hyprshot -m output"))
+
+hl.bind(mainMod .. " + Q", hl.dsp.window.close())
+
+hl.bind(mainMod .. " + W", hl.dsp.window.cycle_next())
 
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
@@ -172,7 +171,7 @@ hl.config({
 		gaps_out = 12,
 		border_size = 2,
 		col = {
-			active_border = "rgba(4a9eff54)",
+			active_border = "rgba(a1deea54)",
 			inactive_border = "rgba(59595900)",
 		},
 		resize_on_border = false,
@@ -189,7 +188,7 @@ hl.config({
 			enabled = false,
 			range = 4,
 			render_power = 3,
-			color = "rgba(1a1a1aee)",
+			color = "rgba(1b1b1bee)",
 		},
 
 		blur = {

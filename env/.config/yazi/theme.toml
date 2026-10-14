@@ -4,11 +4,11 @@ overall = { bg = "#161616" }
 [mgr]
 cwd = { fg = "#dce5e5" }
 
-hovered = { bg = "#252525" }
-preview_hovered = { bg = "#252525" }
+hovered = { bg = "#2a2a2a" }
+preview_hovered = { bg = "#2a2a2a" }
 
 find_keyword = { fg = "#161616", bg = "#e4c56b", bold = false }
-find_position = { fg = "#dce5e5", bg = "#252525", bold = false }
+find_position = { fg = "#dce5e5", bg = "#2a2a2a", bold = false }
 
 marker_copied = { fg = "#5fc878", bg = "#5fc878" }
 marker_cut = { fg = "#e66b80", bg = "#e66b80" }
@@ -26,7 +26,7 @@ sep_inner = { open = "", close = "" }
 sep_outer = { open = "", close = "" }
 
 [mode]
-normal_main = { fg = "#dce5e5", bg = "#252525", bold = false }
+normal_main = { fg = "#dce5e5", bg = "#2a2a2a", bold = false }
 normal_alt = { fg = "#626262", bg = "#1b1b1b" }
 
 select_main = { fg = "#dce5e5", bg = "#303030", bold = false }
@@ -36,9 +36,9 @@ unset_main = { fg = "#e66b80", bg = "#1b1b1b", bold = false }
 unset_alt = { fg = "#626262", bg = "#1b1b1b" }
 
 [indicator]
-parent = { fg = "#4a4a4a" }
+parent = { fg = "#626262" }
 current = { bg = "#303030", bold = false }
-preview = { fg = "#4a4a4a" }
+preview = { fg = "#626262" }
 padding = { open = " ", close = " " }
 
 [status]
@@ -47,8 +47,8 @@ sep_left = { open = "", close = "" }
 sep_right = { open = "", close = "" }
 
 progress_label = { fg = "#dce5e5", bold = false }
-progress_normal = { fg = "#dce5e5", bg = "#252525" }
-progress_error = { fg = "#e66b80", bg = "#252525" }
+progress_normal = { fg = "#dce5e5", bg = "#2a2a2a" }
+progress_error = { fg = "#e66b80", bg = "#2a2a2a" }
 
 perm_sep = { fg = "#2a2a2a" }
 perm_type = { fg = "#5aa6e6" }
@@ -61,7 +61,7 @@ cols = 3
 mask = { bg = "#161616" }
 cand = { fg = "#dce5e5" }
 rest = { fg = "#626262" }
-desc = { fg = "#4a4a4a" }
+desc = { fg = "#626262" }
 separator = "  "
 separator_style = { fg = "#2a2a2a" }
 
@@ -69,7 +69,7 @@ separator_style = { fg = "#2a2a2a" }
 border = { fg = "#2a2a2a" }
 title = { fg = "#dce5e5" }
 btn_yes = { fg = "#161616", bg = "#dce5e5", bold = false }
-btn_no = { fg = "#626262", bg = "#252525" }
+btn_no = { fg = "#626262", bg = "#2a2a2a" }
 btn_labels = [ "  Yes  ", "  No  " ]
 
 [spot]
@@ -101,37 +101,37 @@ inactive = { fg = "#626262" }
 
 [tasks]
 border = { fg = "#2a2a2a" }
-hovered = { bg = "#252525" }
+hovered = { bg = "#2a2a2a" }
 
 [help]
 on = { fg = "#dce5e5" }
 run = { fg = "#626262" }
-desc = { fg = "#4a4a4a" }
-hovered = { bg = "#252525" }
-footer = { fg = "#4a4a4a", bg = "#161616" }
+desc = { fg = "#626262" }
+hovered = { bg = "#2a2a2a" }
+footer = { fg = "#626262", bg = "#161616" }
 
 [filetype]
 rules = [
-    { url = "*/", fg = "#e5ecec", bold = false },
+    { url = "*/", fg = "#dce5e5", bold = false },
     { url = "*", fg = "#dce5e5" }
 ]
 
 [icon]
 globs = []
 dirs = [
-    { name = ".config", text = "", fg = "#e5ecec" },
-    { name = ".git", text = "", fg = "#e5ecec" },
-    { name = ".github", text = "", fg = "#e5ecec" },
-    { name = "Desktop", text = "", fg = "#e5ecec" },
-    { name = "Development", text = "", fg = "#e5ecec" },
-    { name = "Documents", text = "", fg = "#e5ecec" },
-    { name = "Downloads", text = "", fg = "#e5ecec" },
-    { name = "Library", text = "", fg = "#e5ecec" },
-    { name = "Movies", text = "", fg = "#e5ecec" },
-    { name = "Music", text = "", fg = "#e5ecec" },
-    { name = "Pictures", text = "", fg = "#e5ecec" },
-    { name = "Public", text = "", fg = "#e5ecec" },
-    { name = "Videos", text = "", fg = "#e5ecec" },
+    { name = ".config", text = "", fg = "#dce5e5" },
+    { name = ".git", text = "", fg = "#dce5e5" },
+    { name = ".github", text = "", fg = "#dce5e5" },
+    { name = "Desktop", text = "", fg = "#dce5e5" },
+    { name = "Development", text = "", fg = "#dce5e5" },
+    { name = "Documents", text = "", fg = "#dce5e5" },
+    { name = "Downloads", text = "", fg = "#dce5e5" },
+    { name = "Library", text = "", fg = "#dce5e5" },
+    { name = "Movies", text = "", fg = "#dce5e5" },
+    { name = "Music", text = "", fg = "#dce5e5" },
+    { name = "Pictures", text = "", fg = "#dce5e5" },
+    { name = "Public", text = "", fg = "#dce5e5" },
+    { name = "Videos", text = "", fg = "#dce5e5" },
 ]
 files = [
     { name = ".bash_profile", text = "", fg = "#5fc878" },
@@ -234,10 +234,10 @@ exts = [
     { name = "pptx", text = "󰈬", fg = "#e66b80" },
     { name = "epub", text = "", fg = "#eca25c" },
 
-    { name = "ttf", text = "", fg = "#4a4a4a" },
-    { name = "otf", text = "", fg = "#4a4a4a" },
-    { name = "woff", text = "", fg = "#4a4a4a" },
-    { name = "woff2", text = "", fg = "#4a4a4a" },
+    { name = "ttf", text = "", fg = "#626262" },
+    { name = "otf", text = "", fg = "#626262" },
+    { name = "woff", text = "", fg = "#626262" },
+    { name = "woff2", text = "", fg = "#626262" },
 
     { name = "git", text = "", fg = "#e66b80" },
     { name = "sqlite", text = "", fg = "#5aa6e6" },
@@ -252,10 +252,10 @@ exts = [
 conds = [
     { if = "orphan", text = "", fg = "#e66b80" },
     { if = "link", text = "", fg = "#626262" },
-    { if = "block", text = "", fg = "#4a4a4a" },
-    { if = "char", text = "", fg = "#4a4a4a" },
-    { if = "fifo", text = "", fg = "#4a4a4a" },
-    { if = "sock", text = "", fg = "#4a4a4a" },
+    { if = "block", text = "", fg = "#626262" },
+    { if = "char", text = "", fg = "#626262" },
+    { if = "fifo", text = "", fg = "#626262" },
+    { if = "sock", text = "", fg = "#626262" },
     { if = "sticky", text = "", fg = "#e4c56b" },
     { if = "dummy", text = "", fg = "#e66b80" },
 

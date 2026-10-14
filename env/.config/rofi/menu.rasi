@@ -1,4 +1,4 @@
-@import "~/.config/rofi/theme.rasi"
+@import "~/.config/rofi/colors.rasi"
 
 configuration {
   show-icons: false;
@@ -40,7 +40,7 @@ inputbar {
   spacing: 10px;
   background-color: @bg;
   border: 1px solid;
-  border-color: @input-border;
+  border-color: @border;
   border-radius: 12px;
   margin: 0;
   children: [ prompt, entry ];
@@ -48,14 +48,14 @@ inputbar {
 
 prompt {
   enabled: true;
-  text-color: @info;
+  text-color: @fg-muted;
   font: "GeistMono Nerd Font 12";
   vertical-align: 0.5;
 }
 
 entry {
   text-color: @fg;
-  placeholder-color: @info;
+  placeholder-color: @fg-muted;
   placeholder: "System menu…";
   vertical-align: 0.5;
 }
@@ -67,7 +67,7 @@ case-indicator {
 message {
   padding: 2px 6px;
   background-color: transparent;
-  text-color: @info;
+  text-color: @fg-muted;
   font: "GeistMono Nerd Font 10";
   border: 0;
   margin: 0;
@@ -82,7 +82,7 @@ textbox {
 listview {
   padding: 2px;
   spacing: 4px;
-  lines: 7;
+  lines: 8;
   fixed-height: true;
   scrollbar: false;
   border: 0;
@@ -112,7 +112,7 @@ element alternate.normal {
 /* hover / keyboard focus: solid pill */
 element selected.normal {
   background-color: @bg-selected;
-  text-color: #ffffff;
+  text-color: #dce5e5;
   border: 1px solid;
   border-color: @border;
 }

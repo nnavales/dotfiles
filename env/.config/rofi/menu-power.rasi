@@ -1,6 +1,0 @@
-/* Menú de Power: mismo estilo que menu.rasi, con su propio placeholder. */
-@import "~/.config/rofi/menu.rasi"
-
-entry {
-  placeholder: "Power…";
-}

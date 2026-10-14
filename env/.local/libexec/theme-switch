@@ -6,7 +6,7 @@ COLORS_DIR="$HOME/.config/colors"
 CURRENT_LINK="$COLORS_DIR/current"
 
 usage() {
-    echo "Usage: theme-switch.sh <theme>"
+    echo "Usage: theme-switch <theme>"
     echo ""
     echo "Available themes:"
     for d in "$COLORS_DIR"/*/; do
