@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mic-waybar - show mic mute/volume with nf-md icons, click to mute
+# mic - show mic mute/volume with nf-md icons, click to mute
 # Icons: 󰍭 muted f036d, 󰍮 outline little f036e, 󰍬 high f036c
 
 vol=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -oP '\d+%' | head -1 | tr -d '%' )

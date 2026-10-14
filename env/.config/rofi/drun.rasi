@@ -1,0 +1,45 @@
+/* App launcher: base menu style + icon list overrides. */
+@import "~/.config/rofi/menu.rasi"
+
+configuration {
+  drun-display-format: "{name}";
+  display-drun: "󰍉 ";
+  show-icons: true;
+  disable-history: false;
+  click-to-exit: true;
+}
+
+entry {
+  placeholder: "Apps";
+}
+
+element-text {
+  highlight: @cyan;
+}
+
+element-icon {
+  size: 1em;
+  text-color: inherit;
+  vertical-align: 0.5;
+}
+
+element selected.urgent {
+  background-color: @red;
+  text-color: #161616;
+}
+
+element selected.active {
+  background-color: @cyan;
+  text-color: #161616;
+}
+
+message {
+  padding: 8px 12px;
+  background-color: @bg;
+  text-color: @fg;
+  font: "GeistMono Nerd Font Medium 11";
+  border: 1px solid;
+  border-color: @border;
+  margin: 0;
+  border-radius: 10px;
+}

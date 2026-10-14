@@ -8,7 +8,7 @@
 set -euo pipefail
 
 CSS="${WAYBAR_CSS:-$HOME/.config/waybar/style.css}"
-TRANSLUCENT="0.35"
+TRANSLUCENT="0.25"
 OPAQUE="1"
 
 [ -w "$CSS" ] || { echo "no write access to $CSS" >&2; exit 1; }
@@ -37,7 +37,7 @@ set_alpha() {
     inblock && /^[[:space:]]*}/ { inblock = 0; print; next }
     inblock && /background:[[:space:]]*rgba\(/ {
       sub(/rgba\([^)]*,[^)]*,[^)]*,[[:space:]]*[0-9.]+[[:space:]]*\)/,
-          "rgba(24, 26, 28, " want ")")
+          "rgba(27, 27, 27, " want ")")
     }
     { print }
   ' "$CSS" >"$tmp" || { rm -f "$tmp"; exit 1; }

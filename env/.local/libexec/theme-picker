@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Theme picker matching the system menu style.
+set -euo pipefail
+
+COLORS_DIR="${COLORS_DIR:-$HOME/.config/colors}"
+CURRENT_LINK="$COLORS_DIR/current"
+SWITCH="$HOME/.local/libexec/theme-switch"
+THEME="$HOME/.config/rofi/theme-picker.rasi"
+
+current=""
+if [ -L "$CURRENT_LINK" ]; then
+    current="$(basename "$(readlink "$CURRENT_LINK")")"
+fi
+
+entries=""
+
+for d in "$COLORS_DIR"/*/; do
+    [ -d "$d" ] || continue
+
+    name="$(basename "$d")"
+    [ "$name" = "scripts" ] && continue
+    [ "$name" = "current" ] && continue
+
+    if [ "$name" = "$current" ]; then
+        entries+="$name  <span foreground='#626262'>(current)</span>"$'\n'
+    else
+        entries+="$name"$'\n'
+    fi
+done
+
+entries="${entries%$'\n'}"
+[ -z "$entries" ] && exit 0
+
+choice="$(
+    printf '%s\n' "$entries" |
+        rofi -dmenu -i -no-custom -markup-rows \
+            -theme "$THEME" \
+            -p "󰍉 "
+)" || exit 0
+
+[ -z "${choice:-}" ] && exit 0
+
+# Remove markup to recover the selected theme name.
+name="$(
+    printf '%s\n' "$choice" |
+        sed 's/<[^>]*>//g' |
+        sed 's/[[:space:]]*(current)$//'
+)"
+
+[ -z "$name" ] && exit 0
+[ "$name" = "$current" ] && exit 0
+
+exec "$SWITCH" "$name"

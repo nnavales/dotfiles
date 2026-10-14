@@ -1,0 +1,197 @@
+#!/usr/bin/env bash
+# System menu for waybar + rofi, using rofi script mode.
+#
+# With empty input only the 8 top-level rows are listed. Typing filters
+# across everything, including submenu leaves, which stay hidden until
+# you search. Selecting a › row drills into its submenu in place.
+set -euo pipefail
+
+THEME="${ROFI_MENU_THEME:-$HOME/.config/rofi/menu.rasi}"
+DRUN_THEME="$HOME/.config/rofi/drun.rasi"
+
+# ── launched directly (waybar click / keybind): open rofi on ourselves ──
+# Rofi always sets ROFI_RETV when invoking us as a mode script, so its
+# absence unambiguously means a direct launch (rofi 2.x calls the script
+# with zero args on empty input, $# can't be used to tell them apart).
+if [ -z "${ROFI_RETV:-}" ]; then
+    # shellcheck disable=SC2093
+    exec rofi -show menu -modi "menu:$0" -theme "$THEME" -i -no-custom -markup-rows -p "󰍉 "
+fi
+
+retv="${ROFI_RETV:-0}"
+input="${1:-}"
+state="${ROFI_DATA:-main}"
+
+# ── rows ──
+apps="󰀻  Apps"
+files="󰉋  Files"
+monitor="󰻠  Monitor"
+network="󰖩  Network"
+audio="󰕾  Sound"
+custom="󰸌  Customize  <span foreground='#626262'>›</span>"
+update="󰚰  Update"
+power="󰐥  Power  <span foreground='#626262'>›</span>"
+back="<span foreground='#626262'>‹</span>  Back"
+lock="󰌾  Lock"
+reboot="󰜉  Reboot"
+shutdown="󰐥  Shutdown"
+theme="󰔎  Theme"
+wallpaper="󰸉  Wallpaper"
+topbar="󰔡  Top bar opacity"
+
+row() { printf '%s\0info\x1f%s\n' "$1" "$2"; }
+
+header() {
+    printf '\0markup-rows\x1ftrue\n'
+    printf '\0prompt\x1f\U000F0349 \n'
+}
+
+# NOTE: rofi 2.x runs a mode script once with empty input and filters
+# its output locally as you type, never re-invoking it with the query.
+# So the main list always carries every row (top-level + submenu leaves):
+# leaves sit below the fold until a search surfaces them.
+show_main() {
+    header
+    row "$apps" "nav:apps"
+    row "$files" "nav:files"
+    row "$monitor" "nav:monitor"
+    row "$network" "nav:network"
+    row "$audio" "nav:audio"
+    row "$custom" "nav:custom"
+    row "$update" "nav:update"
+    row "$power" "nav:power"
+    row "$theme" "leaf:theme"
+    row "$wallpaper" "leaf:wallpaper"
+    row "$topbar" "leaf:topbar"
+    row "$lock" "leaf:lock"
+    row "$reboot" "leaf:reboot"
+    row "$shutdown" "leaf:shutdown"
+}
+
+show_power() {
+    header
+    printf '\0data\x1fpower\n'
+    row "$back" "nav:back"
+    row "$lock" "leaf:lock"
+    row "$reboot" "leaf:reboot"
+    row "$shutdown" "leaf:shutdown"
+}
+
+show_custom() {
+    header
+    printf '\0data\x1fcustom\n'
+    row "$back" "nav:back"
+    row "$theme" "leaf:theme"
+    row "$wallpaper" "leaf:wallpaper"
+    row "$topbar" "leaf:topbar"
+}
+
+# Lanzador robusto: recibe UN string completo, ej: launch_app "kitty -e yazi"
+launch_app() {
+    local cmd="$1"
+    # 1. Hyprland nativo (sin "--", que rompe en algunas versiones)
+    if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && command -v hyprctl >/dev/null 2>&1; then
+        if hyprctl dispatch exec "$cmd" >/dev/null 2>&1; then
+            return 0
+        fi
+    fi
+    # 2. Fallback: exec directo detached (funciona dentro y fuera de Hyprland)
+    # shellcheck disable=SC2086
+    if command -v setsid >/dev/null 2>&1; then
+        setsid -f bash -c "$cmd" >/dev/null 2>&1 </dev/null &
+    else
+        bash -c "$cmd" >/dev/null 2>&1 </dev/null &
+    fi
+    disown 2>/dev/null || true
+}
+
+# Picker basado en rofi: rofi es single-instance (pidfile lock), así que el
+# menú padre debe morir antes de abrir el nuevo. Se le pide salir con TERM
+# y se espera su muerte en vez de un sleep fijo: abre apenas se libera.
+nested_picker() {
+    local ppid=$PPID comm=""
+    [ -r "/proc/$ppid/comm" ] && comm=$(cat "/proc/$ppid/comm")
+    if [ "$comm" = "rofi" ]; then
+        kill -TERM "$ppid" 2>/dev/null || true
+        (
+            for _ in $(seq 1 25); do
+                kill -0 "$ppid" 2>/dev/null || break
+                sleep 0.02
+            done
+            exec "$@"
+        ) >/dev/null 2>&1 </dev/null &
+        disown 2>/dev/null || true
+    else
+        "$@" >/dev/null 2>&1 </dev/null &
+        disown 2>/dev/null || true
+    fi
+}
+
+do_lock() {
+    if pidof hyprlock >/dev/null 2>&1; then exit 0; fi
+    if command -v hyprlock >/dev/null 2>&1; then
+        hyprlock >/dev/null 2>&1 </dev/null &
+        disown 2>/dev/null || true
+    elif command -v swaylock >/dev/null 2>&1; then
+        swaylock -f >/dev/null 2>&1 </dev/null &
+        disown 2>/dev/null || true
+    elif command -v loginctl >/dev/null 2>&1; then
+        loginctl lock-session >/dev/null 2>&1
+    fi
+}
+
+do_action() {
+    case "$1" in
+    nav:apps) nested_picker rofi -show drun -theme "$DRUN_THEME" ;;
+    nav:files) launch_app "kitty -o window_padding_width='0 0 0 0' -e yazi" ;;
+    nav:monitor) launch_app "kitty -o window_padding_width='0 0 0 0' -e btop" ;;
+    nav:network)
+        if command -v nm-connection-editor >/dev/null 2>&1; then
+            launch_app "nm-connection-editor"
+        else
+            launch_app "kitty -e nmtui"
+        fi
+        ;;
+    nav:audio)
+        if command -v pavucontrol >/dev/null 2>&1; then
+            launch_app "pavucontrol"
+        else
+            launch_app "kitty -e pulsemixer"
+        fi
+        ;;
+    nav:update) launch_app "kitty -o window_padding_width='0 0 0 0' -e sh -c 'yay -Syu; echo; read -rp \"Done — press Enter to close... \" _'" ;;
+    leaf:theme) nested_picker "$HOME/.local/libexec/theme-picker" ;;
+    leaf:wallpaper) nested_picker "$HOME/.local/libexec/wallpaper" ;;
+    leaf:topbar) "$HOME/.local/libexec/waybar-opacity" >/dev/null 2>&1 ;;
+    leaf:lock) do_lock ;;
+    leaf:reboot) systemctl reboot >/dev/null 2>&1 ;;
+    leaf:shutdown) systemctl poweroff >/dev/null 2>&1 ;;
+    esac
+}
+
+# ── selección de una fila ──
+if [ "$retv" = "1" ]; then
+    case "${ROFI_INFO:-}" in
+    nav:power) show_power; exit 0 ;;
+    nav:custom) show_custom; exit 0 ;;
+    nav:back)
+        printf '\0data\x1fmain\n'
+        show_main
+        exit 0
+        ;;
+    nav:* | leaf:*) do_action "${ROFI_INFO:-}" ; exit 0 ;;
+    *) exit 1 ;;
+    esac
+fi
+
+# ── render de listas (retv 0; el input nunca llega al script, ver arriba) ──
+if [ "$state" = "power" ]; then
+    show_power
+    exit 0
+elif [ "$state" = "custom" ]; then
+    show_custom
+    exit 0
+fi
+
+show_main
+exit 0

@@ -48,14 +48,20 @@ update_files() {
             log "    replacing: $directory"
 
             if [[ $dry_run == "0" ]]; then
-                rm -rf "$directory"
+                # Swap atómico: el destino siempre existe (versión vieja o
+                # nueva, nunca faltante), así los watchers (hyprland) jamás
+                # ven el archivo ausente y no muestran "cannot open".
+                tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/deploy.XXXXXX")
+                cp -r "./$rel/." "$tmpdir/"
+                mkdir -p "$parent"
+                bak="$directory.deploy-bak-$$"
+                rm -rf "$bak"
+                [ -e "$directory" ] && mv "$directory" "$bak"
+                mv "$tmpdir" "$directory"
+                rm -rf "$bak"
             fi
 
             log "    copying: $rel -> $parent/"
-            if [[ $dry_run == "0" ]]; then
-                mkdir -p "$parent"
-                cp -r "./$rel" "$parent/"
-            fi
         done
 
     )
@@ -73,6 +79,17 @@ copy() {
     fi
 }
 
+# Hyprland recarga la config al detectar cambios; pausar el autoreload
+# evita que intente leer el árbol a mitad del deploy (rm -rf + copia)
+# y muestre el popup de "cannot open hyprland.lua".
+prev_autoreload="false"
+if [[ $dry_run == "0" ]]; then
+    prev_autoreload=$(hyprctl getoption misc:disable_autoreload 2>/dev/null | awk '/^bool:/{print $2}')
+    [ -z "$prev_autoreload" ] && prev_autoreload="false"
+    hyprctl keyword misc:disable_autoreload 1 >/dev/null 2>&1 || true
+    trap 'hyprctl keyword misc:disable_autoreload "$prev_autoreload" >/dev/null 2>&1 || true' EXIT
+fi
+
 update_files "$DEV_ENV/env/.config" "$XDG_CONFIG_HOME"
 update_files "$DEV_ENV/env/.local" "$HOME/.local"
 copy "$DEV_ENV/env/.zsh_profile" "$HOME/.zsh_profile"
@@ -83,13 +100,13 @@ copy "$DEV_ENV/dev-env" "$HOME/.local/scripts/dev-env"
 if [ -n "$current_theme" ]; then
     log "restoring theme: $current_theme"
     if [[ $dry_run == "0" ]]; then
-        "$XDG_CONFIG_HOME/colors/scripts/theme-switch.sh" "$current_theme"
+        "$HOME/.local/libexec/theme-switch" "$current_theme"
     fi
 fi
 
 if [[ $dry_run == "0" ]]; then
     hyprctl reload
     pkill -x waybar >/dev/null 2>&1 || true
-    nohup waybar >/dev/null 2>&1 & disown
+    nohup waybar -c "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1 & disown
     hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl
 fi

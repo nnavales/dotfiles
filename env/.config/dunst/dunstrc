@@ -1,28 +1,28 @@
 [global]
-    width = 360
-    height = 70
+    width = 300
+    height = 60
     origin = top-right
-    offset = 42x42
+    offset = 22x22
     scale = 0
     notification_limit = 4
-    corner_radius = 10
-    frame_width = 0
+    corner_radius = 12
+    frame_width = 1
     frame_color = "#2a2a2a"
     separator_color = "#2a2a2a"
     separator_height = 0
-    padding = 10
-    horizontal_padding = 12
-    text_icon_padding = 10
+    padding = 8
+    horizontal_padding = 10
+    text_icon_padding = 8
     icon_path = "/usr/share/icons/Papirus/:/usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/:/usr/share/icons/gnome/16x16/apps/"
-    min_icon_size = 28
-    max_icon_size = 48
+    min_icon_size = 24
+    max_icon_size = 36
     icon_position = left
-    icon_corner_radius = 6
-    gap_size = 6
+    icon_corner_radius = 8
+    gap_size = 8
     font = GeistMono Nerd Font 9
     line_height = 0
     markup = full
-    format = "<b>%s</b>\n%b"
+    format = "<span foreground='#626262'>%a</span>\n<b>%s</b>\n%b"
     alignment = left
     vertical_alignment = center
     show_age_threshold = 60
@@ -35,7 +35,7 @@
     # 0 = don't pause timeouts when idle (fixes "stuck" notifications after AFK)
     idle_threshold = 0
     history_length = 20
-    dmenu = /usr/bin/rofi -dmenu -p dunst:
+    dmenu = /usr/bin/rofi -dmenu -p dunst: -theme ~/.config/rofi/drun.rasi
     browser = /usr/bin/xdg-open
     always_run_script = true
     title = Dunst
@@ -48,11 +48,11 @@
     background = "#1b1b1b"
     # progress bar (volume/brightness) matches theme
     progress_bar = true
-    progress_bar_height = 8
+    progress_bar_height = 6
     progress_bar_frame_width = 0
-    progress_bar_min_width = 150
-    progress_bar_max_width = 300
-    progress_bar_corner_radius = 4
+    progress_bar_min_width = 120
+    progress_bar_max_width = 220
+    progress_bar_corner_radius = 3
     progress_bar_corners = all
     # modern display settings
     layer = top
@@ -80,8 +80,8 @@
     timeout = 6
 
 [urgency_critical]
-    background = "#252525"
-    foreground = "#eef3f3"
+    background = "#2a2a2a"
+    foreground = "#dce5e5"
     frame_color = "#e66b80"
     highlight = "#e66b80"
     # was 0 (never expired) -> the stuck-notification bug
