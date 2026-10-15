@@ -1,5 +1,5 @@
-# Secretos: nunca versionar credenciales reales.
-# Si alguna vez hacen falta, se symlinkean desde ~/.config fuera del repo.
+# Secrets: never commit real credentials.
+# If they are necessary, link them from ~/.config outside the repo.
 *.key
 *.pem
 *.age
@@ -8,14 +8,14 @@
 .env.*
 !.env.example
 
-# Estado de editores / herramientas.
+# Editor and tool state.
 .kilo/
 .luarc.json.local
 *.swp
 *.swo
 *~
 
-# Caches y artefactos de build.
+# Caches and build artifacts.
 node_modules/
 __pycache__/
 *.pyc
@@ -25,10 +25,10 @@ dist/
 build/
 .target/
 
-# Notas locales, por ahora fuera del repo.
+# Local notes, currently outside the repo.
 tools.md
 
-# Backups: los scripts de `run` suelen dejar copias con timestamp.
+# Backups: the `run` scripts can leave timestamped copies.
 *.bak
 *.old
 *.orig

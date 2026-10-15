@@ -86,16 +86,16 @@ show_custom() {
     row "$topbar" "leaf:topbar"
 }
 
-# Lanzador robusto: recibe UN string completo, ej: launch_app "kitty -e yazi"
+# Launcher: it receives ONE full string. Example: launch_app "kitty -e yazi".
 launch_app() {
     local cmd="$1"
-    # 1. Hyprland nativo (sin "--", que rompe en algunas versiones)
+    # 1. Native Hyprland (without "--", it breaks some versions).
     if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && command -v hyprctl >/dev/null 2>&1; then
         if hyprctl dispatch exec "$cmd" >/dev/null 2>&1; then
             return 0
         fi
     fi
-    # 2. Fallback: exec directo detached (funciona dentro y fuera de Hyprland)
+    # 2. Fallback: direct detached exec (it works inside and outside Hyprland).
     # shellcheck disable=SC2086
     if command -v setsid >/dev/null 2>&1; then
         setsid -f bash -c "$cmd" >/dev/null 2>&1 </dev/null &
@@ -105,9 +105,9 @@ launch_app() {
     disown 2>/dev/null || true
 }
 
-# Picker basado en rofi: rofi es single-instance (pidfile lock), así que el
-# menú padre debe morir antes de abrir el nuevo. Se le pide salir con TERM
-# y se espera su muerte en vez de un sleep fijo: abre apenas se libera.
+# Rofi-based picker: rofi is single-instance (pidfile lock), so the
+# parent menu must exit before the new picker opens. Send TERM to exit it
+# and wait for its death instead of a fixed sleep: it opens when free.
 nested_picker() {
     local ppid=$PPID comm=""
     [ -r "/proc/$ppid/comm" ] && comm=$(cat "/proc/$ppid/comm")
@@ -169,7 +169,7 @@ do_action() {
     esac
 }
 
-# ── selección de una fila ──
+# ── select one row ──
 if [ "$retv" = "1" ]; then
     case "${ROFI_INFO:-}" in
     nav:power) show_power; exit 0 ;;
@@ -184,7 +184,7 @@ if [ "$retv" = "1" ]; then
     esac
 fi
 
-# ── render de listas (retv 0; el input nunca llega al script, ver arriba) ──
+# ── list render (retv 0; the input never reaches the script, see above) ──
 if [ "$state" = "power" ]; then
     show_power
     exit 0

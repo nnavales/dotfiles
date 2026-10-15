@@ -37,7 +37,6 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl")
 	hl.exec_cmd(terminal, { workspace = "1 silent" })
 	hl.exec_cmd(browser, { workspace = "2 silent" })
-	hl.exec_cmd("obsidian")
 	hl.exec_cmd("gtk-launch zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b.desktop")
 	hl.exec_cmd("gtk-launch zen.webapp-3d0e37d8-2840-4b3a-8b49-02fdf12e2ac0.desktop")
 end)
@@ -52,20 +51,12 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 
 -- Opacity overrides.
 hl.window_rule({ match = { class = "zen" }, opacity = "1.0 override" })
-hl.window_rule({ match = { class = "md.obsidian.Obsidian" }, opacity = "1.0 override" })
 
 -- Scratchpad windows rules: force each app into its special workspace.
 -- NOTE: exec `workspace = "..."` does NOT work for gtk-launch/zen webapps
 -- because gtk-launch exits immediately and zen-bin reuses the existing
 -- Zen PID (see `hyprctl clients`: webapps share pid with main `zen` window),
 -- so the exec workspace token never sticks. windowrule by class does.
-hl.window_rule({
-	match = { class = "md.obsidian.Obsidian" },
-	workspace = "special:notes silent",
-	border_size = 2,
-	border_color = "rgba(9aa0a6ee)",
-	opacity = "1.0 override",
-})
 hl.window_rule({
 	match = { class = "zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b" },
 	workspace = "special:chat silent",
@@ -93,7 +84,7 @@ hl.bind(mainMod .. " + GRAVE", function()
 	hl.dispatch(hl.dsp.exec_cmd("~/.local/libexec/toggle-waybar"))
 	waybar_visible = not waybar_visible
 	if waybar_visible then
-		-- waybar abierta: gaps/border/rounding normales
+		-- Waybar visible: use normal gaps, border, and rounding.
 		hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 12, gaps_in = 6 })
 		hl.workspace_rule({ workspace = "f[1]", gaps_out = 12, gaps_in = 6 })
 		hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
@@ -101,7 +92,7 @@ hl.bind(mainMod .. " + GRAVE", function()
 		hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
 		hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 	else
-		-- waybar oculta: sin gaps/border/rounding
+		-- Waybar hidden: use no gaps, border, or rounding.
 		hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 		hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
 		hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
@@ -112,7 +103,6 @@ hl.bind(mainMod .. " + GRAVE", function()
 end)
 
 hl.bind(mainMod .. " + A", hl.dsp.workspace.toggle_special("chat"))
-hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("notes"))
 hl.bind(mainMod .. " + D", hl.dsp.workspace.toggle_special("music"))
 
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))

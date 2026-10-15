@@ -105,11 +105,40 @@ return {
 			desc = "Git Blame Line",
 		},
 		{
-			"<leader>gs",
+			"<leader>fr",
 			function()
-				Snacks.picker.git_status()
+				-- git_status ordered by mtime (newest first): stock
+				-- git_status sorts alphabetically and its items carry
+				-- no mtime, so build the list here instead.
+				local cwd = vim.fs.root(0, ".git") or vim.uv.cwd()
+				local out = vim.system({ "git", "status", "--porcelain=v1", "-uall", "-z" }, { cwd = cwd }):wait()
+				local items = {}
+				for entry in (out.stdout or ""):gmatch("[^%z]+") do
+					local status, file = entry:match("^(..) (.+)$")
+					if status and file then
+						local path = file:match(" -> (.+)$") or file
+						local stat = vim.uv.fs_stat(cwd .. "/" .. path)
+						items[#items + 1] = {
+							text = entry,
+							status = status,
+							file = path,
+							cwd = cwd,
+							mtime = stat and stat.mtime.sec or 0,
+						}
+					end
+				end
+				table.sort(items, function(a, b)
+					return a.mtime > b.mtime
+				end)
+				Snacks.picker({
+					title = "Recent Changes",
+					items = items,
+					format = "git_status",
+					preview = "git_status",
+					sort = { fields = { "score:desc", "mtime:desc", "idx" } },
+				})
 			end,
-			desc = "Git Status",
+			desc = "Recent Changes (git, newest first)",
 		},
 		{
 			"<leader>xX",

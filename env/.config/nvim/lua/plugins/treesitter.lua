@@ -5,12 +5,12 @@ return {
 		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			-- Setup de nvim-treesitter (solo si necesitas configurar install_dir)
+			-- Set up nvim-treesitter. Set install_dir only if you need it.
 			require("nvim-treesitter").setup({
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
 
-			-- Instalar parsers
+			-- Install the parsers.
 			require("nvim-treesitter").install({
 				"lua",
 				"vim",
@@ -40,7 +40,7 @@ return {
 				"dockerfile",
 			})
 
-			-- Habilitar treesitter features automáticamente
+			-- Enable treesitter features automatically.
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = {
 					"lua",

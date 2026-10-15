@@ -1,5 +1,4 @@
 export FZF_DEFAULT_OPTS=" \
-  --tmux=82% \
   --ansi \
   --cycle \
   --no-mouse \
