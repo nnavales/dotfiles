@@ -37,6 +37,18 @@ alias pbpaste='wl-paste'
 alias rg='rg --no-ignore'
 alias vim="nvim"
 
+# yazi wrapper: quit yazi standing on the directory you left it in.
+# Usage: yy (same as yazi, cds on exit).
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	rm -f -- "$tmp"
+	if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+}
+
 precmd() {
     local exit_code=$?
     local DIR=$'%{\033[38;2;191;214;216m%}'
