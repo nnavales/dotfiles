@@ -1,7 +1,7 @@
 [global]
     width = 300
     height = 60
-    origin = top-right
+    origin = bottom-right
     offset = 22x22
     scale = 0
     notification_limit = 4
@@ -56,7 +56,7 @@
     progress_bar_corners = all
     # modern display settings
     layer = top
-    anchor = top-right
+    anchor = bottom-right
     follow = none
     sticky_history = yes
     indicate_hidden = yes

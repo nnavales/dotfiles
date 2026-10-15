@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+# file: ~/.local/scripts/herdr-sessionizer
+# Fuzzy workspace switcher for herdr. Mirrors tmux-sessionizer behavior:
+# pick a directory from the search paths with fzf; if a herdr workspace
+# already lives there it gets focused, otherwise a new one is created.
+# Existing workspaces are marked with a leading "●" and listed first;
+# anything else creates a new workspace on select.
+#
+# Search paths, copied from tmux-sessionizer's defaults
+# (~/:1 ~/personal/:3). Set HS_SEARCH_PATHS to override
+# (same "path[:depth]" syntax).
+# HS_GIT_COLLAPSE=false lists repo subdirectories too; by default a
+# directory containing .git (file or dir: repos, worktrees, submodules)
+# is shown as the project root and not descended into.
+set -euo pipefail
+
+VERSION="0.2.0"
+
+LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/share}/herdr-sessionizer"
+mkdir -p "$LOG_DIR"
+LOG="$LOG_DIR/sessionizer.log"
+log() { printf '%s %s\n' "$(date '+%F %T')" "$*" >>"$LOG"; }
+
+# Errors are invisible when the popup closes on exit, so show them
+# and wait for a keypress. User aborts (Esc) still exit quietly.
+fail() {
+    log "ERROR: $*"
+    echo "herdr-sessionizer: $*" >&2
+    read -r -n1 -p "Press any key to close..." </dev/tty 2>/dev/null || true
+    exit 1
+}
+
+log "=== run (args: $*) ==="
+log "TERM=${TERM:-unset} COLORTERM=${COLORTERM:-unset} NO_COLOR=${NO_COLOR:-unset} FZF_DEFAULT_COMMAND=${FZF_DEFAULT_COMMAND:-unset}"
+log "HERDR_ENV=${HERDR_ENV:-unset} HERDR_SESSION=${HERDR_SESSION:-unset} HERDR_SOCKET_PATH=${HERDR_SOCKET_PATH:-unset} HERDR_CONFIG_PATH=${HERDR_CONFIG_PATH:-unset}"
+
+PRESELECT=""
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+    -h | --help)
+        echo "Usage: herdr-sessionizer [SEARCH_PATH]"
+        exit 0
+        ;;
+    -v | --version)
+        echo "herdr-sessionizer version $VERSION"
+        exit 0
+        ;;
+    *)
+        PRESELECT="$1"
+        ;;
+    esac
+    shift
+done
+
+command -v herdr &>/dev/null || { echo "herdr is not installed." >&2; exit 1; }
+command -v fzf &>/dev/null || { echo "fzf is not installed." >&2; exit 1; }
+
+# HS_SEARCH_PATHS overrides the defaults below when exported.
+[[ -n "${HS_SEARCH_PATHS[*]:-}" ]] || HS_SEARCH_PATHS=(~/:1 ~/personal/:3)
+
+if [[ -f "$HOME/.config/colors/current/fzf.sh" ]]; then
+    source "$HOME/.config/colors/current/fzf.sh"
+    log "theme sourced, FZF_DEFAULT_OPTS len=${#FZF_DEFAULT_OPTS}"
+else
+    log "theme file missing: $HOME/.config/colors/current/fzf.sh"
+fi
+export FZF_DEFAULT_OPTS
+log "fzf_bin=$(command -v fzf) fzf_ver=$(fzf --version 2>&1) opts_md5=$(printf '%s' "$FZF_DEFAULT_OPTS" | md5sum | cut -d' ' -f1) opts_len=${#FZF_DEFAULT_OPTS}"
+
+[[ -n "${HS_SEARCH_PATHS[*]:-}" ]] || HS_SEARCH_PATHS=(~/:1 ~/personal/:3)
+
+find_dirs() {
+    local entry path depth
+    for entry in "${HS_SEARCH_PATHS[@]}"; do
+        if [[ "$entry" =~ ^([^:]+):([0-9]+)$ ]]; then
+            path="${BASH_REMATCH[1]}"
+            depth="${BASH_REMATCH[2]}"
+        else
+            path="$entry"
+            depth=1
+        fi
+        # expand a leading ~ (word splitting is intended here)
+        # shellcheck disable=SC2086
+        if [[ -d $path ]]; then
+            if [[ "${HS_GIT_COLLAPSE:-true}" == true ]]; then
+                find $path -mindepth 1 -maxdepth "$depth" -name '.*' -prune -o -type d \
+                    \( -exec test -e '{}/.git' \; -print -prune -o -print \)
+            else
+                find $path -mindepth 1 -maxdepth "$depth" -name '.*' -prune -o -type d -print
+            fi
+        fi
+    done
+}
+
+# cwd -> workspace_id for every live workspace, taken from its panes.
+declare -A WS_BY_CWD=()
+# A [[keys.command]] popup is not a Herdr pane: it gets no HERDR_PANE_ID
+# and often no socket context, so the CLI may fall back to a dead default
+# socket. Probe every candidate (preset first, then all running sessions)
+# and use the first one that answers.
+candidates=()
+[[ -n "${HERDR_SOCKET_PATH:-}" ]] && candidates+=("$HERDR_SOCKET_PATH")
+sessions_json="$(herdr session list --json 2>/dev/null)" || fail "could not list herdr sessions"
+log "sessions_json=$sessions_json"
+while IFS=$'\t' read -r sname spath; do
+    [[ "$sname" == "${HERDR_SESSION:-}" || -z "${HERDR_SESSION:-}" ]] && candidates+=("$spath")
+done < <(printf '%s' "$sessions_json" | jq -r '.sessions[] | select(.running == true) | "\(.name)\t\(.socket_path)"')
+snapshot_out=""
+for sock in "${candidates[@]}"; do
+    [[ -S "$sock" ]] || continue
+    export HERDR_SOCKET_PATH="$sock"
+    if snapshot_out="$(herdr api snapshot 2>>"$LOG")"; then
+        break
+    else
+        snapshot_out=""
+    fi
+done
+[[ -n "$snapshot_out" ]] || {
+    multi="$(printf '%s' "$sessions_json" | jq -r '[.sessions[] | select(.running == true) | .name] | join(" ")')"
+    if [[ -n "${HERDR_SESSION:-}" ]]; then
+        fail "herdr session '${HERDR_SESSION}' is not running (running: ${multi:-none})"
+    elif [[ "$multi" == *" "* ]]; then
+        fail "multiple sessions running ($multi): set HERDR_SESSION to pick one"
+    fi
+    fail "no herdr server is running"
+}
+log "socket=$HERDR_SOCKET_PATH"
+pane_count="$(printf '%s' "$snapshot_out" | jq '.result.snapshot.panes | length' 2>>"$LOG")" || fail "snapshot parse failed"
+log "snapshot ok, panes=$pane_count"
+while IFS=$'\t' read -r wid cwd; do
+    [[ -n "$cwd" && -z "${WS_BY_CWD[$cwd]:-}" ]] && WS_BY_CWD["$cwd"]="$wid"
+done < <(printf '%s' "$snapshot_out" | jq -r '.result.snapshot.panes[] | "\(.workspace_id)\t\(.foreground_cwd // .cwd)"')
+log "live workspaces=${#WS_BY_CWD[@]}"
+
+if [[ -n "$PRESELECT" ]]; then
+    selected="$PRESELECT"
+else
+    candidates="$(find_dirs | LC_ALL=C sort -u)"
+    [[ -n "$candidates" ]] || fail "no directories found in search paths"
+    log "candidates=$(printf '%s' "$candidates" | wc -l)"
+    # Active workspaces first with a left marker; the rest below unmarked.
+    active_listing=""
+    rest_listing=""
+    while IFS= read -r dir; do
+        if [[ -n "${WS_BY_CWD[$dir]:-}" ]]; then
+            active_listing+="● $dir"$'\n'
+        else
+            rest_listing+="$dir"$'\n'
+        fi
+    done <<< "$candidates"
+    listing="${active_listing}${rest_listing}"
+    selected="$(printf '%s' "$listing" | fzf --prompt='workspace › ')" || exit 0
+fi
+
+[[ -z "${selected:-}" ]] && exit 0
+selected="${selected#● }"
+log "selected=$selected"
+
+if [[ -n "${WS_BY_CWD[$selected]:-}" ]]; then
+    log "focus ${WS_BY_CWD[$selected]}"
+    out="$(herdr workspace focus "${WS_BY_CWD[$selected]}" 2>&1)" || fail "focus failed: $out"
+    log "focus ok"
+else
+    [[ -d "$selected" ]] || fail "not a directory: $selected"
+    log "create --cwd $selected"
+    out="$(herdr workspace create --cwd "$selected" --focus 2>&1)" || fail "create failed: $out"
+    log "create ok: $out"
+fi

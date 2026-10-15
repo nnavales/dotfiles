@@ -22,7 +22,7 @@ else
 fi
 
 bindkey -e
-bindkey -s '^f' "tmux-sessionizer\n"
+# bindkey -s '^f' "tmux-sessionizer\n" # superseded by herdr-sessionizer (ctrl+f in herdr)
 bindkey '^[b' backward-word
 bindkey '^[w' forward-word
 

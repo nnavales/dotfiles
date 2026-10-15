@@ -48,9 +48,33 @@ update_files() {
             log "    replacing: $directory"
 
             if [[ $dry_run == "0" ]]; then
-                # Swap atómico: el destino siempre existe (versión vieja o
-                # nueva, nunca faltante), así los watchers (hyprland) jamás
-                # ven el archivo ausente y no muestran "cannot open".
+                # Atomic swap: the target always exists (old version or
+                # new version, never missing), so watchers (hyprland) never
+                # see a missing file and never show "cannot open".
+                # Only top-level entries are held (sockets, plugin
+                # state and session state always live at the target
+                # root), so holding and restoring are a few renames,
+                # never a full tree walk.
+                # The hold dir MUST live next to the target (same
+                # filesystem): mv across filesystems "copies" a socket
+                # into a dead file instead of moving the live inode.
+                mkdir -p "$parent"
+                sockhold=""
+                preserve=""
+                if [ -d "$directory" ]; then
+                    for p in plugins plugins.json session.json session-snapshots; do
+                        [ -e "$directory/$p" ] && preserve="$preserve $p"
+                    done
+                    while IFS= read -r s; do
+                        preserve="$preserve $s"
+                    done < <(find "$directory" -maxdepth 1 -type s -printf '%f\n' 2>/dev/null)
+                    if [ -n "$preserve" ]; then
+                        sockhold=$(mktemp -d "$parent/.deploy-hold-XXXXXX")
+                        for name in $preserve; do
+                            mv "$directory/$name" "$sockhold/$name"
+                        done
+                    fi
+                fi
                 tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/deploy.XXXXXX")
                 cp -r "./$rel/." "$tmpdir/"
                 mkdir -p "$parent"
@@ -59,6 +83,15 @@ update_files() {
                 [ -e "$directory" ] && mv "$directory" "$bak"
                 mv "$tmpdir" "$directory"
                 rm -rf "$bak"
+                if [ -n "$sockhold" ]; then
+                    for held in "$sockhold"/*; do
+                        [ -e "$held" ] || continue
+                        name=${held##*/}
+                        rm -rf "$directory/$name"
+                        mv "$held" "$directory/$name"
+                    done
+                    rm -rf "$sockhold"
+                fi
             fi
 
             log "    copying: $rel -> $parent/"
@@ -79,9 +112,9 @@ copy() {
     fi
 }
 
-# Hyprland recarga la config al detectar cambios; pausar el autoreload
-# evita que intente leer el árbol a mitad del deploy (rm -rf + copia)
-# y muestre el popup de "cannot open hyprland.lua".
+# Hyprland reloads the config when it detects changes. Disable autoreload
+# to stop it from reading the tree in the middle of the deploy (rm -rf + copy)
+# and showing the "cannot open hyprland.lua" popup.
 prev_autoreload="false"
 if [[ $dry_run == "0" ]]; then
     prev_autoreload=$(hyprctl getoption misc:disable_autoreload 2>/dev/null | awk '/^bool:/{print $2}')

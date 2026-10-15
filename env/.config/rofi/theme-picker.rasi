@@ -1,4 +1,4 @@
-/* Theme picker: mismo estilo que menu.rasi, con su propio placeholder. */
+/* Theme picker: same style as menu.rasi, with its own placeholder. */
 @import "~/.config/rofi/menu.rasi"
 
 entry {

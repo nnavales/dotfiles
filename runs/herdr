@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# herdr binary (per-user install script).
+if ! command -v herdr &>/dev/null; then
+    curl -fsSL https://herdr.dev/install.sh | sh
+fi
+
+# Pinned plugins as "id|repo" (idempotent: installed ones are skipped).
+# Go toolchain needed for some builds (runs/install runs first).
+HERDR_PLUGINS=(
+    "herdr.auto-title|kryptamine/herdr-auto-title"
+)
+
+for entry in "${HERDR_PLUGINS[@]}"; do
+    id="${entry%%|*}"
+    repo="${entry#*|}"
+    if herdr plugin list 2>/dev/null | grep -q "^- $id[ (]"; then
+        echo "herdr plugin $id already installed, skipping"
+    else
+        herdr plugin install --yes "$repo"
+    fi
+done
