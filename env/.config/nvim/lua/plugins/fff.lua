@@ -73,14 +73,14 @@ return {
 			desc = "FFFind files",
 		},
 		{
-			"<leader>/",
+			"<leader>fg",
 			function()
 				require("fff").live_grep()
 			end,
 			desc = "LiFFFe grep",
 		},
 		{
-			"<leader>w",
+			"<leader>fw",
 			function()
 				require("fff").live_grep({ query = vim.fn.expand("<cword>") })
 			end,

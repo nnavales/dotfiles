@@ -101,7 +101,27 @@ return {
 							padding = { left = 0, right = 1 },
 						},
 					},
-					lualine_y = { { "filetype", padding = 0 } },
+					lualine_y = {
+						{
+							"tabs",
+							mode = 2,
+							padding = { left = 1, right = 1 },
+							cond = function()
+								return #vim.api.nvim_list_tabpages() > 1
+							end,
+							tabs_color = {
+								active = { fg = colors.cyan, gui = "bold" },
+								inactive = { fg = colors.dim },
+							},
+						},
+						{
+							"filetype",
+							padding = 0,
+							cond = function()
+								return #vim.api.nvim_list_tabpages() == 1
+							end,
+						},
+					},
 					lualine_z = {},
 				},
 				inactive_sections = {
