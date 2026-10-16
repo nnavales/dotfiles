@@ -103,16 +103,13 @@ hl.bind(mainMod .. " + GRAVE", function()
 end)
 
 hl.bind(mainMod .. " + A", hl.dsp.workspace.toggle_special("chat"))
-hl.bind(mainMod .. " + D", hl.dsp.workspace.toggle_special("music"))
+hl.bind(mainMod .. " + M", hl.dsp.workspace.toggle_special("music"))
 
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 
-hl.bind(
-	mainMod .. " + SHIFT + R",
-	hl.dsp.exec_cmd("DEV_ENV=~/personal/dev ~/personal/dev/dev-env")
-)
+hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("DEV_ENV=~/personal/dev ~/personal/dev/dev-env"))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exit())
 

@@ -44,16 +44,10 @@ return {
 		local ts_move = require("nvim-treesitter-textobjects.move")
 		for _, mode in ipairs({ "n", "x", "o" }) do
 			vim.keymap.set(mode, "]f", function()
-				ts_move.goto_next_start("@function.outer", "textobjects")
+				ts_move.goto_next_start({ "@function.outer", "@class.outer" }, "textobjects")
 			end)
 			vim.keymap.set(mode, "[f", function()
-				ts_move.goto_previous_start("@function.outer", "textobjects")
-			end)
-			vim.keymap.set(mode, "]c", function()
-				ts_move.goto_next_start("@class.outer", "textobjects")
-			end)
-			vim.keymap.set(mode, "[c", function()
-				ts_move.goto_previous_start("@class.outer", "textobjects")
+				ts_move.goto_previous_start({ "@function.outer", "@class.outer" }, "textobjects")
 			end)
 		end
 	end,

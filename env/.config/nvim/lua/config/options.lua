@@ -44,3 +44,6 @@ opt.wrap = true
 opt.linebreak = true
 opt.breakindent = true
 opt.colorcolumn = ""
+
+-- Vim tabs live in the statusline; never show the default tabline.
+opt.showtabline = 0
