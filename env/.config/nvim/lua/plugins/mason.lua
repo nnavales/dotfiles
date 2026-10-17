@@ -58,12 +58,11 @@ return {
 							"goimports",
 							"shfmt",
 							"eslint_d",
-							"eslint",
 							"ruff",
 							"golangci-lint",
 							"gofumpt",
 						},
-						run_on_start = false,
+						run_on_start = true,
 					})
 				end, 100)
 			end, 50)

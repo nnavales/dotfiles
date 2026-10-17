@@ -2,3 +2,4 @@
 
 sudo pacman -S --noconfirm nodejs npm
 sudo npm install -g bun
+bun add --global eslint

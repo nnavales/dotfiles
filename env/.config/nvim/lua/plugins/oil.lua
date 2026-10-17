@@ -31,7 +31,7 @@ return {
 				enabled = false,
 			},
 			constrain_cursor = "editable",
-			watch_for_changes = false,
+			watch_for_changes = true,
 			keymaps = {
 				["g?"] = "actions.show_help",
 				["<CR>"] = "actions.select",
@@ -66,18 +66,19 @@ return {
 					{ "name", "asc" },
 				},
 				highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
-					local hl_group = nil
-					local ok, stat = pcall(vim.uv.fs_stat, entry.path)
-					if ok and stat and stat.type == "directory" then
-						hl_group = "Directory"
-					end
-					if is_hidden and not hl_group then
-						hl_group = "Comment"
+					if entry.name == ".." then
+						return "NonText"
 					end
 					if is_link_orphan then
-						hl_group = "ErrorMsg"
+						return "ErrorMsg"
 					end
-					return hl_group
+					local ok, stat = pcall(vim.uv.fs_stat, entry.path)
+					if ok and stat and stat.type == "directory" then
+						return "Directory"
+					end
+					if is_hidden then
+						return "Comment"
+					end
 				end,
 			},
 			extra_scp_args = {},

@@ -161,7 +161,6 @@ return {
 			end
 
 			vim.diagnostic.config({
-				-- update_in_insert = true,
 				signs = {
 					text = {
 						[vim.diagnostic.severity.ERROR] = "•",

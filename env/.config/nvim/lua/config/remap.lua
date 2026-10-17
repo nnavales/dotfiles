@@ -19,7 +19,7 @@ set("n", "n", "nzzzv")
 set("n", "N", "Nzzzv")
 
 -- Default diagnostic movement.
-set("n", "<leader>xd", vim.diagnostic.open_float, { desc = "Show diagnostic" })
+set("n", "<leader>dd", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 set("n", "]d", function()
 	vim.diagnostic.jump({ count = 1, float = true })
 end)

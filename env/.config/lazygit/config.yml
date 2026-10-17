@@ -1,0 +1,51 @@
+gui:
+    nerdFontsVersion: "3"
+    theme:
+        activeBorderColor:
+            - "#B8D3D5" # accent
+
+        inactiveBorderColor:
+            - "#5C6870" # subtext0
+
+        searchingActiveBorderColor:
+            - "#ECA25C" # yellow
+
+        selectedLineBgColor:
+            - "#33383D" # selection_bg
+
+        defaultFgColor:
+            - "#DCE5E5" # text
+
+        optionsTextColor:
+            - "#B8D3D5" # accent
+
+        inactiveViewSelectedLineBgColor:
+            - "#1E2124" # surface0
+
+        unstagedChangesColor:
+            - "#E66B80" # red
+
+        cherryPickedCommitFgColor:
+            - "#B895DE" # violet (paradise)
+
+        cherryPickedCommitBgColor:
+            - "#1E2124" # surface0
+
+        markedBaseCommitFgColor:
+            - "#E4C56B" # peach
+
+        markedBaseCommitBgColor:
+            - "#1E2124" # surface0
+
+    showNumstatInFilesView: true
+    showBottomLine: false
+
+os:
+    editPreset: "nvim"
+
+update:
+    method: background
+
+git:
+    paging:
+        pager: "delta --dark --paging=never"

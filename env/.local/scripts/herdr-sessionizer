@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
-# file: ~/.local/scripts/herdr-sessionizer
-# Fuzzy workspace switcher for herdr. Mirrors tmux-sessionizer behavior:
-# pick a directory from the search paths with fzf; if a herdr workspace
-# already lives there it gets focused, otherwise a new one is created.
-# Existing workspaces are marked with a leading "●" and listed first;
-# anything else creates a new workspace on select.
-#
-# Search paths, copied from tmux-sessionizer's defaults
-# (~/:1 ~/personal/:3). Set HS_SEARCH_PATHS to override
-# (same "path[:depth]" syntax).
-# HS_GIT_COLLAPSE=false lists repo subdirectories too; by default a
-# directory containing .git (file or dir: repos, worktrees, submodules)
-# is shown as the project root and not descended into.
+# Fuzzy workspace switcher for herdr (mirrors tmux-sessionizer): pick a dir with
+# fzf; an existing workspace there is focused, else created. Active workspaces
+# are marked "●" and listed first.
+# Search paths default to ~/:1 ~/personal/:3; override with HS_SEARCH_PATHS
+# ("path[:depth]"). HS_GIT_COLLAPSE=false also lists repo subdirs (a dir with
+# .git — repos/worktrees/submodules — is otherwise shown as the project root).
 set -euo pipefail
 
 VERSION="0.2.0"
@@ -94,10 +87,9 @@ find_dirs() {
 
 # cwd -> workspace_id for every live workspace, taken from its panes.
 declare -A WS_BY_CWD=()
-# A [[keys.command]] popup is not a Herdr pane: it gets no HERDR_PANE_ID
-# and often no socket context, so the CLI may fall back to a dead default
-# socket. Probe every candidate (preset first, then all running sessions)
-# and use the first one that answers.
+# A [[keys.command]] popup is not a Herdr pane (no HERDR_PANE_ID, often no
+# socket context), so the CLI may hit a dead default socket. Probe each
+# candidate (preset first, then running sessions) and use the first that answers.
 candidates=()
 [[ -n "${HERDR_SOCKET_PATH:-}" ]] && candidates+=("$HERDR_SOCKET_PATH")
 sessions_json="$(herdr session list --json 2>/dev/null)" || fail "could not list herdr sessions"

@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
-# System menu for waybar + rofi, using rofi script mode.
-#
-# With empty input only the 8 top-level rows are listed. Typing filters
-# across everything, including submenu leaves, which stay hidden until
-# you search. Selecting a › row drills into its submenu in place.
+# System menu for waybar + rofi (rofi script mode).
+# With empty input only the 8 top-level rows show; typing filters across
+# everything including submenu leaves. Selecting a › row drills in place.
 set -euo pipefail
 
 THEME="${ROFI_MENU_THEME:-$HOME/.config/rofi/menu.rasi}"
 DRUN_THEME="$HOME/.config/rofi/drun.rasi"
 
 # ── launched directly (waybar click / keybind): open rofi on ourselves ──
-# Rofi always sets ROFI_RETV when invoking us as a mode script, so its
-# absence unambiguously means a direct launch (rofi 2.x calls the script
-# with zero args on empty input, $# can't be used to tell them apart).
+# Direct launch: rofi sets ROFI_RETV only when it invokes us as a mode
+# script, so its absence means a direct launch.
 if [ -z "${ROFI_RETV:-}" ]; then
     # shellcheck disable=SC2093
     exec rofi -show menu -modi "menu:$0" -theme "$THEME" -i -no-custom -markup-rows -p "󰍉 "
@@ -46,10 +43,8 @@ header() {
     printf '\0prompt\x1f\U000F0349 \n'
 }
 
-# NOTE: rofi 2.x runs a mode script once with empty input and filters
-# its output locally as you type, never re-invoking it with the query.
-# So the main list always carries every row (top-level + submenu leaves):
-# leaves sit below the fold until a search surfaces them.
+# rofi 2.x runs the script once (empty input) and filters locally, so the
+# main list carries every row; leaves sit below the fold until searched.
 show_main() {
     header
     row "$apps" "nav:apps"
@@ -89,13 +84,13 @@ show_custom() {
 # Launcher: it receives ONE full string. Example: launch_app "kitty -e yazi".
 launch_app() {
     local cmd="$1"
-    # 1. Native Hyprland (without "--", it breaks some versions).
+    # 1. Hyprland native ("--" breaks some versions).
     if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && command -v hyprctl >/dev/null 2>&1; then
         if hyprctl dispatch exec "$cmd" >/dev/null 2>&1; then
             return 0
         fi
     fi
-    # 2. Fallback: direct detached exec (it works inside and outside Hyprland).
+    # 2. Fallback: detached exec (works inside and outside Hyprland).
     # shellcheck disable=SC2086
     if command -v setsid >/dev/null 2>&1; then
         setsid -f bash -c "$cmd" >/dev/null 2>&1 </dev/null &

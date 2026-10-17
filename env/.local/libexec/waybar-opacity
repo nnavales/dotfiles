@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Toggle the top bar between translucent and fully opaque.
 #
-# The alpha lives in the `window#waybar` block of style.css. Rather than
-# hardcoding a line number (which breaks the moment the file is reordered),
-# this rewrites the `background:` declaration only inside that block, so the
-# identically-shaped `tooltip` rule further down is left alone.
+# Rewrites the `background:` inside the `window#waybar` block of style.css
+# (not by line number, which breaks on reorder), so the similarly-shaped
+# `tooltip` rule below is left alone.
 set -euo pipefail
 
 CSS="${WAYBAR_CSS:-$HOME/.config/waybar/style.css}"

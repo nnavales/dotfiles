@@ -15,7 +15,6 @@ opt.number = true
 opt.signcolumn = "yes"
 opt.splitbelow = true
 opt.splitright = true
--- opt.cursorline = true.
 
 opt.clipboard = "unnamedplus"
 

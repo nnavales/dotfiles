@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# nowplaying - MPRIS metadata with a seamless marquee, click-to-collapse toggle
+# nowplaying - MPRIS metadata with a seamless marquee; click to collapse.
 # Icons: 󰅁 expand f0141, 󰅂 collapse f0142
 #
-# Ported from a CSS/JS marquee: the window slides over a repeating loop so text
-# leaving on the left re-enters on the right (no jump back to the start), with
-# a dwell at the start of each lap, a gap between repetitions, and a soft fade
-# on both edges. Waybar polls this once a second, so motion is discrete.
+# Ported from a CSS/JS marquee: the window slides over a repeating loop so
+# text leaving left re-enters right (no jump), with a dwell per lap, a gap
+# between repetitions, and a soft fade on both edges. Waybar polls once a second.
 
 STATE_FILE="/tmp/nowplaying-visible"
 OFFSET_FILE="/tmp/nowplaying-offset"
@@ -58,9 +57,8 @@ primary_artist() {
     printf '%s' "$a"
 }
 
-# One styled run of characters. Every run gets an explicit foreground: the
-# artist is DIM, everything else is FG. Setting the colour here instead of
-# relying on the CSS inheritance guarantees the title never renders dimmed.
+# One styled run: foreground set explicitly (artist DIM, rest FG) so the title
+# never renders dimmed by CSS inheritance.
 render_run() {
     local text=$1 kind=$2 alpha=$3
     local color="$FG"
@@ -70,9 +68,8 @@ render_run() {
     printf '<span%s>%s</span>' "$attrs" "$text"
 }
 
-# Build the visible window: dim the artist wherever it appears, and fade the
-# chars at both edges. Character-wise so the two effects compose without the
-# spans colliding. Pass fade=0 to skip the edge fade (non-overflowing text).
+# Build the visible window: dim the artist and fade both edges, char-wise so
+# the effects compose. fade=0 skips the edge fade (non-overflowing text).
 build_body() {
     local buf=$1 start=$2 winlen=$3 period=$4 artist_len=$5 fade=$6
     local out="" i=0 cur_text="" cur_kind="" cur_alpha=""
@@ -165,9 +162,8 @@ if [ "$collapsed" = 1 ]; then
     exit 0
 fi
 
-# "artist - title" scrolls as one single string, never truncated.
-# Some players already prefix the title with the artist ("Sia - Cheap
-# Thrills"), which would render the artist twice, so detect that first.
+# "artist - title" scrolls as one string, never truncated. Some players prefix
+# the title with the artist (rendering it twice), so strip that first.
 SEP_TEXT=" - "
 if [ -n "$artist" ] && [ "${title#"$artist$SEP_TEXT"}" != "$title" ]; then
     title="${title#"$artist$SEP_TEXT"}"
@@ -179,12 +175,9 @@ artist_len=${#artist}
 winlen=$WIDTH
 
 if [ "${#label}" -le "$winlen" ]; then
-    # Fits on screen: no scroll and no fade, like the JS reference does when the
-    # content doesn't overflow. build_body still dims just the artist.
-    # The window is the exact text length (no padding to WIDTH), otherwise the
-    # module reserves the full width and shows dead space before the icon.
-    # period=winlen keeps the modulo from wrapping, so nothing after the artist
-    # is mistaken for a second one.
+    # Fits on screen: no scroll/fade (as the JS ref). Window = exact text
+    # length (padding to WIDTH would leave dead space). period=winlen stops the
+    # modulo wrapping into a second artist.
     rm -f "$OFFSET_FILE" "$PAUSE_FILE"
     winlen=${#label}
     body="$(build_body "$label" 0 "$winlen" "$winlen" "$artist_len" 0)"
@@ -209,8 +202,7 @@ else
     fi
     pos="$(cat "$OFFSET_FILE" 2>/dev/null || echo 0)"
 
-    # Repeat the loop long enough that slicing $winlen chars at any offset
-    # inside one period never runs off the end.
+    # Repeat the loop so slicing $winlen chars at any offset never runs off.
     buf="$loop"
     while [ "${#buf}" -lt $(( period + winlen )) ]; do
         buf="$buf$loop"

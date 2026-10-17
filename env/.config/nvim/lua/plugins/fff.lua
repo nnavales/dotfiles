@@ -11,6 +11,7 @@ return {
 		prompt = "> ",
 		title = "Files",
 		layout = {
+			height = 0.6,
 			prompt_position = "top",
 			preview_position = "right",
 			show_scrollbar = false,
@@ -73,14 +74,14 @@ return {
 			desc = "FFFind files",
 		},
 		{
-			"<leader>fg",
+			"<leader>/",
 			function()
 				require("fff").live_grep()
 			end,
-			desc = "LiFFFe grep",
+			desc = "Live grep",
 		},
 		{
-			"<leader>fw",
+			"<leader>w",
 			function()
 				require("fff").live_grep({ query = vim.fn.expand("<cword>") })
 			end,
