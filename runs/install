@@ -8,7 +8,7 @@ sudo pacman -S --needed --noconfirm \
 # Dev tools.
 sudo pacman -S --needed --noconfirm \
     tmux neovim ripgrep jq tldr fzf bat eza zoxide fd \
-    git-delta wl-clipboard playerctl rsync
+    git-delta wl-clipboard playerctl rsync sshfs openssh qrencode
 
 # Languages.
 sudo pacman -S --needed --noconfirm \

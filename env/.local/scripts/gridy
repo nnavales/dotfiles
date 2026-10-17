@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-uv run --project "$HOME/personal/tools/gridy" "$HOME/personal/tools/gridy/main.py" "$@"
