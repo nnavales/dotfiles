@@ -71,7 +71,7 @@ return {
 				diff = { builtin = false },
 				git = { builtin = false },
 			},
-			layout = { preset = "default", layout = { height = 0.6 } },
+			layout = { preset = "default", layout = { height = 0.6, backdrop = false } },
 			formatters = {
 				file = { filename_first = true },
 			},
