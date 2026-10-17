@@ -8,11 +8,11 @@ sudo pacman -S --needed --noconfirm \
 # Dev tools.
 sudo pacman -S --needed --noconfirm \
     tmux neovim ripgrep jq tldr fzf bat eza zoxide fd \
-    git-delta wl-clipboard playerctl
+    git-delta wl-clipboard playerctl rsync
 
 # Languages.
 sudo pacman -S --needed --noconfirm \
-    go jdk-openjdk uv zig nodejs npm
+    go jdk-openjdk uv zig nodejs npm python python-pip
 
 # GUI apps.
 sudo pacman -S --needed --noconfirm \

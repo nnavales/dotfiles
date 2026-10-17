@@ -1,5 +1,4 @@
-# herdr configuration
-# Place this file at ~/.config/herdr/config.toml
+# herdr configuration (~/.config/herdr/config.toml)
 
 # Show first-run notification setup on startup.
 onboarding = false
@@ -95,6 +94,13 @@ command = "herdr-sessionizer"
 width = "80%"
 height = "60%"
 description = "sessionizer: open or focus workspace"
+[[keys.command]]
+key = "ctrl+g"
+type = "popup"
+command = "lazygit"
+width = "100%"
+height = "100%"
+description = "lazygit: git UI"
 
 [ui]
 sidebar_collapsed_mode = "hidden"

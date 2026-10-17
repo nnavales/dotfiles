@@ -32,6 +32,9 @@ if [ ! -d "$THEME_DIR" ]; then
 fi
 
 echo "Switching to theme: $THEME"
+if [ ! -L "$CURRENT_LINK" ]; then
+    rm -rf "$CURRENT_LINK"
+fi
 ln -sfn "$THEME_DIR" "$CURRENT_LINK"
 
 # Symlinks (apps without include support).

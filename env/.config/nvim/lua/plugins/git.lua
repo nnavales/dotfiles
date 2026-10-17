@@ -1,5 +1,5 @@
 return {
-	-- Gitsigns: ver cambios del working tree mientras editás.
+	-- Gitsigns: see working tree changes while you edit.
 	{
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPre", "BufNewFile" },
@@ -32,7 +32,7 @@ return {
 					)
 				end
 
-				map("n", "]c", function()
+				map("n", "]g", function()
 					if vim.wo.diff then
 						return "]c"
 					end
@@ -41,7 +41,7 @@ return {
 					end)
 					return "<Ignore>"
 				end, "Git: next hunk", { expr = true })
-				map("n", "[c", function()
+				map("n", "[g", function()
 					if vim.wo.diff then
 						return "[c"
 					end
@@ -50,8 +50,7 @@ return {
 					end)
 					return "<Ignore>"
 				end, "Git: prev hunk", { expr = true })
-				map("n", "<leader>cd", gs.preview_hunk_inline, "Git: preview change inline")
-				map("n", "<leader>cv", function()
+				map("n", "<leader>gg", function()
 					local function close_diff(from_buf)
 						for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 							local ok, buf = pcall(vim.api.nvim_win_get_buf, win)
@@ -61,12 +60,12 @@ return {
 								end
 							end
 						end
-						-- Auto-limpieza del q temporal.
+						-- Auto-cleanup of the temporary q mapping.
 						if from_buf and vim.api.nvim_buf_is_valid(from_buf) then
 							pcall(vim.keymap.del, "n", "q", { buffer = from_buf })
 						end
 					end
-					-- Toggle: si ya hay splits de diff, cerrarlos.
+					-- Toggle: if diff splits are already open, close them.
 					local found = false
 					for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 						local ok, buf = pcall(vim.api.nvim_win_get_buf, win)
@@ -80,7 +79,7 @@ return {
 						return
 					end
 					gs.diffthis()
-					-- q (solo q) cierra desde cualquier ventana del tab.
+					-- q (just q) closes from any window in the tab.
 					vim.schedule(function()
 						for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 							if vim.api.nvim_win_is_valid(win) then
@@ -121,15 +120,15 @@ return {
 		end,
 	},
 
-	-- Diffview: recorrer versiones (historial por archivo y por repo).
+	-- Diffview: browse versions (per-file and per-repo history).
 	{
 		"sindrets/diffview.nvim",
 		lazy = true,
 		dependencies = { "nvim-lua/plenary.nvim" },
 		cmd = { "DiffviewClose", "DiffviewFileHistory" },
 		keys = {
-			{ "<leader>ch", "<cmd>DiffviewFileHistory %<cr>", desc = "Git: file history" },
-			{ "<leader>cH", "<cmd>DiffviewFileHistory<cr>", desc = "Git: repo history" },
+			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "Git: file history" },
+			{ "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "Git: repo history" },
 		},
 		opts = {
 			enhanced_diff_hl = true,

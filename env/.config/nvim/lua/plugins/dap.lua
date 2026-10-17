@@ -2,6 +2,8 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		lazy = true,
+		keys = { "<F4>", "<F5>", "<F6>", "<F7>", "<F8>", "<F9>", "<F10>", "<F11>", "<F12>" },
+		cmd = { "DebugTest", "DebugConditional", "DebugHelp" },
 		dependencies = {
 			"leoluz/nvim-dap-go",
 			"rcarriga/nvim-dap-ui",
@@ -93,17 +95,26 @@ return {
 			end, { desc = "Stop Debug" })
 
 			vim.keymap.set("n", "<F4>", dapui.toggle, { desc = "Toggle DAP UI" })
-			vim.keymap.set("n", "<leader>?", function()
+			vim.keymap.set("n", "<F7>", function()
 				dapui.eval(nil, { enter = true })
 			end, { desc = "Inspect Variable" })
 
-			vim.keymap.set("n", "<leader>dt", function()
-				require("dap-go").debug_test()
-			end, { desc = "Debug Go Test" })
+			vim.keymap.set("n", "<F8>", dap.restart, { desc = "Restart Debug" })
 
-			vim.keymap.set("n", "<leader>dp", function()
-				require("dap-python").test_method()
-			end, { desc = "Debug Python Test" })
+			vim.api.nvim_create_user_command("DebugTest", function()
+				local ft = vim.bo.filetype
+				if ft == "go" then
+					require("dap-go").debug_test()
+				elseif ft == "python" then
+					require("dap-python").test_method()
+				else
+					print("DebugTest: no runner for filetype " .. ft)
+				end
+			end, { desc = "Debug test under cursor (go/python)" })
+
+			vim.api.nvim_create_user_command("DebugConditional", function()
+				dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+			end, { desc = "Conditional Breakpoint" })
 
 			dap.listeners.after.event_initialized["dapui_config"] = function()
 				dapui.open()
@@ -120,6 +131,10 @@ return {
 				print("Debug exited.")
 			end
 
+			dap.listeners.before.disconnect["dapui_config"] = function()
+				dapui.close()
+			end
+
 			vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError" })
 			vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticSignInfo" })
 			vim.fn.sign_define("DapBreakpointRejected", { text = "x", texthl = "DiagnosticSignHint" })
@@ -128,7 +143,6 @@ return {
 				local help = {
 					"DEBUG CHEAT SHEET",
 					"",
-					"F2     Toggle breakpoint",
 					"F5     Start / Continue",
 					"F6     Stop",
 					"F9     Toggle breakpoint",
@@ -136,9 +150,10 @@ return {
 					"F11    Step into",
 					"F12    Step out",
 					"<F4>   Toggle DAP UI",
-					"<leader>?  Inspect variable",
-					"<leader>dt Debug Go test",
-					"<leader>dp Debug Python test",
+					"<F7>   Inspect variable",
+					"<F8>   Restart debug",
+					":DebugTest       Debug test (go/python)",
+					":DebugConditional Conditional breakpoint",
 				}
 
 				local buf = vim.api.nvim_create_buf(false, true)

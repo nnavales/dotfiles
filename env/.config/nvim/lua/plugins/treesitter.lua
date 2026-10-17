@@ -16,6 +16,8 @@ return {
 				"vim",
 				"vimdoc",
 				"query",
+				"regex",
+				"markdown_inline",
 				"svelte",
 				"python",
 				"javascript",

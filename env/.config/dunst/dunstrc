@@ -1,11 +1,11 @@
 [global]
-    width = 300
-    height = 60
+    width = 270
+    height = (60, 60)
     origin = bottom-right
-    offset = 22x22
+    offset = (0, 0)
     scale = 0
-    notification_limit = 4
-    corner_radius = 12
+    notification_limit = 5
+    corner_radius = 0
     frame_width = 1
     frame_color = "#2a2a2a"
     separator_color = "#2a2a2a"
@@ -13,16 +13,16 @@
     padding = 8
     horizontal_padding = 10
     text_icon_padding = 8
-    icon_path = "/usr/share/icons/Papirus/:/usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/:/usr/share/icons/gnome/16x16/apps/"
-    min_icon_size = 24
+    icon_path = "/usr/share/icons/Adwaita/:/usr/share/icons/hicolor/:/usr/share/icons/breeze/:/usr/share/pixmaps/"
+    min_icon_size = 36
     max_icon_size = 36
     icon_position = left
-    icon_corner_radius = 8
-    gap_size = 8
+    icon_corner_radius = 0
+    gap_size = 2
     font = GeistMono Nerd Font 9
     line_height = 0
     markup = full
-    format = "<span foreground='#626262'>%a</span>\n<b>%s</b>\n%b"
+    format = "<span foreground='#626262'>%a</span>\n<b>%s</b>"
     alignment = left
     vertical_alignment = center
     show_age_threshold = 60
@@ -31,10 +31,10 @@
     ignore_newline = no
     stack_duplicates = true
     hide_duplicate_count = false
-    show_indicators = yes
+    show_indicators = no
     # 0 = don't pause timeouts when idle (fixes "stuck" notifications after AFK)
     idle_threshold = 0
-    history_length = 20
+    history_length = 30
     dmenu = /usr/bin/rofi -dmenu -p dunst: -theme ~/.config/rofi/drun.rasi
     browser = /usr/bin/xdg-open
     always_run_script = true
@@ -46,13 +46,14 @@
     highlight = "#a1deea"
     foreground = "#dce5e5"
     background = "#1b1b1b"
+    transparency = 0
     # progress bar (volume/brightness) matches theme
     progress_bar = true
     progress_bar_height = 6
     progress_bar_frame_width = 0
-    progress_bar_min_width = 120
-    progress_bar_max_width = 220
-    progress_bar_corner_radius = 3
+    progress_bar_min_width = 100
+    progress_bar_max_width = 180
+    progress_bar_corner_radius = 0
     progress_bar_corners = all
     # modern display settings
     layer = top
@@ -60,29 +61,29 @@
     follow = none
     sticky_history = yes
     indicate_hidden = yes
-    shrink = yes
+    shrink = no
     # actions / urls
     show_actions = yes
     enable_recursive_icon_lookup = true
 
 [urgency_low]
-    background = "#161616"
-    foreground = "#626262"
+    background = "#1b1b1b"
+    foreground = "#dce5e5"
     frame_color = "#2a2a2a"
-    highlight = "#626262"
-    timeout = 4
+    highlight = "#a1deea"
+    timeout = 2
 
 [urgency_normal]
     background = "#1b1b1b"
     foreground = "#dce5e5"
     frame_color = "#2a2a2a"
     highlight = "#a1deea"
-    timeout = 6
+    timeout = 3
 
 [urgency_critical]
-    background = "#2a2a2a"
+    background = "#1b1b1b"
     foreground = "#dce5e5"
-    frame_color = "#e66b80"
-    highlight = "#e66b80"
+    frame_color = "#2a2a2a"
+    highlight = "#a1deea"
     # was 0 (never expired) -> the stuck-notification bug
-    timeout = 8
+    timeout = 4.5

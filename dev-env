@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 dry_run="0"
 
-if [ -z "$XDG_CONFIG_HOME" ]; then
+if [ -z "${XDG_CONFIG_HOME:-}" ]; then
     echo "no xdg config home"
     echo "using ~/.config"
-    XDG_CONFIG_HOME=$HOME/.config
+    XDG_CONFIG_HOME="$HOME/.config"
 fi
 
-if [ -z "$DEV_ENV" ]; then
+if [ -z "${DEV_ENV:-}" ]; then
     echo "env var DEV_ENV needs to be present"
     exit 1
 fi
 
-if [[ $1 == "--dry" ]]; then
+if ! command -v rsync >/dev/null 2>&1; then
+    echo "rsync is required"
+    exit 1
+fi
+
+if [[ ${1:-} == "--dry" ]]; then
     dry_run="1"
 fi
 
@@ -32,89 +37,111 @@ if [ -L "$XDG_CONFIG_HOME/colors/current" ]; then
     log "active theme to preserve: $current_theme"
 fi
 
-update_files() {
-    log "syncing tree: $1 -> $2"
-    pushd "$1" &>/dev/null
-    (
-        configs=$(find . -type f -printf '%h\n' | sort -u | awk '
-            { keep = 1
-              for (p in seen) if (index($0, p "/") == 1) { keep = 0; break }
-              if (keep) { print; seen[$0] = 1 } }')
+changed_hypr="0"
+changed_waybar="0"
+changed_colors="0"
 
-        for c in $configs; do
-            rel=${c#./}
-            directory=${2%/}/$rel
-            parent=$(dirname "$directory")
-            log "    replacing: $directory"
+sync_entry() {
+    local src="$1"
+    local dst="$2"
+    local mode="${3:-additive}"
+    shift 3 || true
+    local out line path sock meaningful
+    local -a rsync_args=("$@")
 
-            if [[ $dry_run == "0" ]]; then
-                # Atomic swap: the target always exists (old version or
-                # new version, never missing), so watchers (hyprland) never
-                # see a missing file and never show "cannot open".
-                # Only top-level entries are held (sockets, plugin
-                # state and session state always live at the target
-                # root), so holding and restoring are a few renames,
-                # never a full tree walk.
-                # The hold dir MUST live next to the target (same
-                # filesystem): mv across filesystems "copies" a socket
-                # into a dead file instead of moving the live inode.
-                mkdir -p "$parent"
-                sockhold=""
-                preserve=""
-                if [ -d "$directory" ]; then
-                    for p in plugins plugins.json session.json session-snapshots; do
-                        [ -e "$directory/$p" ] && preserve="$preserve $p"
-                    done
-                    while IFS= read -r s; do
-                        preserve="$preserve $s"
-                    done < <(find "$directory" -maxdepth 1 -type s -printf '%f\n' 2>/dev/null)
-                    if [ -n "$preserve" ]; then
-                        sockhold=$(mktemp -d "$parent/.deploy-hold-XXXXXX")
-                        for name in $preserve; do
-                            mv "$directory/$name" "$sockhold/$name"
-                        done
-                    fi
-                fi
-                tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/deploy.XXXXXX")
-                cp -r "./$rel/." "$tmpdir/"
-                mkdir -p "$parent"
-                bak="$directory.deploy-bak-$$"
-                rm -rf "$bak"
-                [ -e "$directory" ] && mv "$directory" "$bak"
-                mv "$tmpdir" "$directory"
-                rm -rf "$bak"
-                if [ -n "$sockhold" ]; then
-                    for held in "$sockhold"/*; do
-                        [ -e "$held" ] || continue
-                        name=${held##*/}
-                        rm -rf "$directory/$name"
-                        mv "$held" "$directory/$name"
-                    done
-                    rm -rf "$sockhold"
-                fi
-            fi
+    log "syncing: $src -> $dst ($mode)"
+    if [ ! -e "$src" ]; then
+        return
+    fi
 
-            log "    copying: $rel -> $parent/"
-        done
+    rsync_args+=(-a -i --exclude='/plugins' --exclude='/plugins.json'
+        --exclude='/session.json' --exclude='/session-snapshots')
+    if [[ $mode == "delete" ]]; then
+        rsync_args+=(--delete)
+    fi
+    if [[ $dry_run == "1" ]]; then
+        rsync_args+=(--dry-run)
+    fi
 
-    )
-    popd &>/dev/null
+    if [ -d "$dst" ]; then
+        while IFS= read -r sock; do
+            [ -n "$sock" ] || continue
+            rsync_args+=(--exclude="/$sock")
+        done < <(find "$dst" -maxdepth 1 -type s -printf '%f\n' 2>/dev/null)
+    fi
+
+    if [ -d "$src" ]; then
+        if [[ $dry_run == "0" ]]; then
+            mkdir -p "$dst"
+        fi
+        out=$(rsync "${rsync_args[@]}" "$src/" "$dst/" 2>&1)
+    elif [[ $dry_run == "1" ]]; then
+        out=$(rsync -a -i --dry-run "$src" "$dst" 2>&1)
+    else
+        mkdir -p "$(dirname "$dst")"
+        out=$(rsync -a -i "$src" "$dst" 2>&1)
+    fi
+
+    if [ -z "$out" ]; then
+        return
+    fi
+    if [[ $dry_run == "1" ]]; then
+        log "$out"
+        return
+    fi
+    meaningful=""
+    while IFS= read -r line; do
+        path="${line:12}"
+        [[ $path == "./" ]] && continue
+        meaningful=1
+        case "$dst/$path" in
+            "$XDG_CONFIG_HOME/hypr"*) changed_hypr="1" ;;
+            "$XDG_CONFIG_HOME/waybar"*) changed_waybar="1" ;;
+            "$XDG_CONFIG_HOME/colors"*) changed_colors="1" ;;
+        esac
+    done <<< "$out"
+    if [ -z "$meaningful" ]; then
+        return
+    fi
+    log "    updated: $src"
+    log "$(echo "$out" | head -20)"
 }
 
-copy() {
+sync_tree() {
+    local src="$1"
+    local dst="$2"
+    local mode="${3:-additive}"
+    local entry name
+    local -a entry_extra
+
+    if [ ! -e "$src" ]; then
+        return
+    fi
+    shopt -s nullglob
+    for entry in "$src"/*; do
+        name="${entry##*/}"
+        entry_extra=()
+        if [[ $name == "colors" && $dst == "$XDG_CONFIG_HOME" && -L "$dst/$name/current" ]]; then
+            entry_extra=(--exclude='/current')
+        fi
+        sync_entry "$entry" "${dst%/}/$name" "$mode" "${entry_extra[@]}"
+    done
+    shopt -u nullglob
+}
+
+sync_file() {
     log "replacing file: $2"
-    if [[ $dry_run == "0" ]]; then
-        rm "$2"
+    if [[ $dry_run == "1" ]]; then
+        log "    copying: $1 -> $2"
+        return
+    fi
+    if [ -e "$2" ] && cmp -s "$1" "$2"; then
+        return
     fi
     log "    copying: $1 -> $2"
-    if [[ $dry_run == "0" ]]; then
-        cp "$1" "$2"
-    fi
+    cp "$1" "$2"
 }
 
-# Hyprland reloads the config when it detects changes. Disable autoreload
-# to stop it from reading the tree in the middle of the deploy (rm -rf + copy)
-# and showing the "cannot open hyprland.lua" popup.
 prev_autoreload="false"
 if [[ $dry_run == "0" ]]; then
     prev_autoreload=$(hyprctl getoption misc:disable_autoreload 2>/dev/null | awk '/^bool:/{print $2}')
@@ -123,14 +150,26 @@ if [[ $dry_run == "0" ]]; then
     trap 'hyprctl keyword misc:disable_autoreload "$prev_autoreload" >/dev/null 2>&1 || true' EXIT
 fi
 
-update_files "$DEV_ENV/env/.config" "$XDG_CONFIG_HOME"
-update_files "$DEV_ENV/env/.local" "$HOME/.local"
-copy "$DEV_ENV/env/.zsh_profile" "$HOME/.zsh_profile"
-cp -r "$DEV_ENV/env/.vim/" "$HOME/"
-copy "$DEV_ENV/env/.zshrc" "$HOME/.zshrc"
-copy "$DEV_ENV/dev-env" "$HOME/.local/scripts/dev-env"
+sync_tree "$DEV_ENV/env/.config" "$XDG_CONFIG_HOME" delete
+shopt -s nullglob
+for local_entry in "$DEV_ENV/env/.local"/*; do
+    entry_name="${local_entry##*/}"
+    if [[ $entry_name == "share" ]]; then
+        sync_tree "$local_entry" "$HOME/.local/share" additive
+        sync_entry "$local_entry/wallpapers" "$HOME/.local/share/wallpapers" delete
+    elif [[ $entry_name == "scripts" ]]; then
+        sync_entry "$local_entry" "$HOME/.local/$entry_name" delete --exclude='/dev-env'
+    else
+        sync_entry "$local_entry" "$HOME/.local/$entry_name" delete
+    fi
+done
+shopt -u nullglob
+sync_file "$DEV_ENV/env/.zsh_profile" "$HOME/.zsh_profile"
+sync_tree "$DEV_ENV/env/.vim" "$HOME/.vim" additive
+sync_file "$DEV_ENV/env/.zshrc" "$HOME/.zshrc"
+sync_file "$DEV_ENV/dev-env" "$HOME/.local/scripts/dev-env"
 
-if [ -n "$current_theme" ]; then
+if [ -n "$current_theme" ] && [[ $changed_colors == "1" || $dry_run == "1" ]]; then
     log "restoring theme: $current_theme"
     if [[ $dry_run == "0" ]]; then
         "$HOME/.local/libexec/theme-switch" "$current_theme"
@@ -138,8 +177,15 @@ if [ -n "$current_theme" ]; then
 fi
 
 if [[ $dry_run == "0" ]]; then
-    hyprctl reload
-    pkill -x waybar >/dev/null 2>&1 || true
-    nohup waybar -c "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1 & disown
-    hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl
+    if [[ $changed_hypr == "1" ]]; then
+        hyprctl reload
+        hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl
+    fi
+    if [[ $changed_waybar == "1" ]]; then
+        pkill -x waybar >/dev/null 2>&1 || true
+        nohup waybar -c "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1 & disown
+    fi
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send -a "dev-env" -u normal "dev-env" "Dotfiles deployed successfully"
+    fi
 fi

@@ -21,7 +21,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 hl.env("HYPRSHOT_DIR", os.getenv("HOME") .. "/Pictures/screenshots")
 
--- Default programs I use.
+-- Default programs i use.
 local terminal = "kitty"
 local menu = "~/.local/libexec/menu"
 local browser = "zen-browser"
@@ -37,7 +37,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl")
 	hl.exec_cmd(terminal, { workspace = "1 silent" })
 	hl.exec_cmd(browser, { workspace = "2 silent" })
-	hl.exec_cmd("gtk-launch zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b.desktop")
+	hl.exec_cmd("gtk-launch zen.webapp-3d2d2c3a-3d12-4ef6-af79-4cfa14017caa.desktop")
 	hl.exec_cmd("gtk-launch zen.webapp-3d0e37d8-2840-4b3a-8b49-02fdf12e2ac0.desktop")
 end)
 
@@ -52,13 +52,12 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 -- Opacity overrides.
 hl.window_rule({ match = { class = "zen" }, opacity = "1.0 override" })
 
--- Scratchpad windows rules: force each app into its special workspace.
--- NOTE: exec `workspace = "..."` does NOT work for gtk-launch/zen webapps
--- because gtk-launch exits immediately and zen-bin reuses the existing
--- Zen PID (see `hyprctl clients`: webapps share pid with main `zen` window),
--- so the exec workspace token never sticks. windowrule by class does.
+-- Scratchpad rules: force each app into its special workspace.
+-- NOTE: exec `workspace = "..."` does NOT work here: gtk-launch exits
+-- immediately and zen-bin reuses the main Zen PID (see `hyprctl clients`),
+-- so the token never sticks. windowrule by class does.
 hl.window_rule({
-	match = { class = "zen.webapp-2cc9546f-aba6-43f8-b62d-12ba92541c8b" },
+	match = { class = "zen.webapp-3d2d2c3a-3d12-4ef6-af79-4cfa14017caa" },
 	workspace = "special:chat silent",
 	border_size = 2,
 	border_color = "rgba(9aa0a6ee)",

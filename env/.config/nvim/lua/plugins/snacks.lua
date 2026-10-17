@@ -6,7 +6,6 @@ return {
 		dashboard = {
 			row = nil,
 			col = nil,
-			--
 			width = 50,
 			pane_gap = 0,
 			preset = {
@@ -25,7 +24,7 @@ return {
 					},
 					{
 						icon = "󰈭 ",
-						key = "SPC f g",
+						key = "SPC /",
 						desc = "Find Text",
 						action = "",
 					},
@@ -72,14 +71,14 @@ return {
 				diff = { builtin = false },
 				git = { builtin = false },
 			},
-			layout = { preset = "default" },
+			layout = { preset = "default", layout = { height = 0.6 } },
 			formatters = {
 				file = { filename_first = true },
 			},
 			win = {
 				input = {
 					keys = {
-						-- Un solo Esc cierra el picker (en vez de ir a normal).
+						-- A single Esc closes the picker (instead of going to normal mode).
 						["<Esc>"] = { "close", mode = { "n", "i" } },
 					},
 				},
@@ -109,11 +108,10 @@ return {
 
 	keys = {
 		{
-			"<leader>cc",
+			"<leader>fg",
 			function()
-				-- Changed files, newest first: stock git_status sorts
-				-- alphabetically and carries no mtime, so the item
-				-- list (with mtimes) is built here instead.
+				-- Changed files, newest first: git_status sorts
+				-- alphabetically with no mtime, so we build the list.
 				local fmt = require("snacks.picker.format")
 				local function reltime(mtime)
 					if mtime == 0 then
@@ -223,7 +221,7 @@ return {
 			desc = "Changed files (newest first)",
 		},
 		{
-			"<leader>xx",
+			"<leader>fd",
 			function()
 				Snacks.picker.diagnostics({
 					layout = {
@@ -264,7 +262,7 @@ return {
 						},
 					},
 					transform = function(item)
-						-- Solo top-level: descarta hijos (muestra padres).
+						-- Top-level only: drop children (keep parents).
 						if item.parent and not item.parent.root then
 							return false
 						end
@@ -287,6 +285,13 @@ return {
 				})
 			end,
 			desc = "Document symbols",
+		},
+		{
+			"<leader>.",
+			function()
+				Snacks.picker.files({ hidden = true, ignored = true, title = "Files (all)" })
+			end,
+			desc = "Files incl hidden+ignored",
 		},
 	},
 }

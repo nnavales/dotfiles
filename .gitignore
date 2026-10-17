@@ -32,3 +32,8 @@ tools.md
 *.bak
 *.old
 *.orig
+
+# Phone: this repo is public, so secrets/binaries never get committed.
+phone/termux/home/.ssh/
+phone/termux/home/.termux_authinfo
+phone/termux/home/**/*.ttf

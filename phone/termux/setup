@@ -1,0 +1,90 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# phone/termux/setup — deploy the Termux config onto the phone.
+#
+# Local usage (from a repo checkout):
+#   ./setup
+# Remote usage (bootstrap):
+#   curl -fsSL https://raw.githubusercontent.com/nnavales/dotfiles/main/phone/termux/setup | bash
+#
+# Idempotent. Requires neither root nor git.
+set -euo pipefail
+
+REPO="nnavales/dotfiles"
+BRANCH="main"
+RAW_BASE="https://raw.githubusercontent.com/${REPO}/${BRANCH}/phone/termux"
+
+# Config files to deploy, relative to $HOME
+FILES=(
+  ".bashrc"
+  ".bash_profile"
+  ".termux/colors.properties"
+  ".termux/termux.properties"
+  "bin/srv"
+)
+
+log()  { printf '  \033[32m>\033[0m %s\n' "$1"; }
+warn() { printf '  \033[33m!\033[0m %s\n' "$1"; }
+
+# --- locate source: local checkout if the script runs as a file ---
+LOCAL_HOME=""
+if [ -n "${BASH_SOURCE[0]:-}" ] && [ -f "${BASH_SOURCE[0]:-}" ]; then
+  d="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  [ -d "$d/home" ] && LOCAL_HOME="$d/home"
+fi
+
+log "user: $(whoami)"
+log "deploying Termux config"
+
+mkdir -p "$HOME/.termux" "$HOME/bin"
+
+for f in "${FILES[@]}"; do
+  mkdir -p "$HOME/$(dirname "$f")"
+  if [ -n "$LOCAL_HOME" ]; then
+    cp "$LOCAL_HOME/$f" "$HOME/$f"
+  else
+    curl -fsSL "$RAW_BASE/home/$f" -o "$HOME/$f"
+  fi
+  log "  $f"
+done
+
+chmod 600 "$HOME/.bashrc" "$HOME/.bash_profile" \
+          "$HOME/.termux/colors.properties" "$HOME/.termux/termux.properties" 2>/dev/null || true
+chmod 755 "$HOME/bin/srv" 2>/dev/null || true
+
+# --- sshd hardening (drop-in) ---
+mkdir -p "$PREFIX/etc/ssh/sshd_config.d"
+HARDEN_DST="$PREFIX/etc/ssh/sshd_config.d/99-hardening.conf"
+if [ -n "$LOCAL_HOME" ] && [ -f "$(dirname "$LOCAL_HOME")/system/99-hardening.conf" ]; then
+  cp "$(dirname "$LOCAL_HOME")/system/99-hardening.conf" "$HARDEN_DST"
+  log "sshd hardening applied"
+else
+  if curl -fsSL "$RAW_BASE/system/99-hardening.conf" -o "$HARDEN_DST"; then
+    log "sshd hardening applied"
+  else
+    warn "could not download the hardening file"
+  fi
+fi
+chmod 600 "$HARDEN_DST" 2>/dev/null || true
+
+# --- required packages ---
+PKGS=(openssh net-tools ripgrep rsync)
+log "installing packages: ${PKGS[*]}"
+DEBIAN_FRONTEND=noninteractive pkg install -y \
+  -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold \
+  "${PKGS[@]}" || warn "could not install/update packages"
+
+# --- start sshd (+ wake lock) ---
+termux-wake-lock 2>/dev/null || true
+if pgrep -x sshd >/dev/null 2>&1; then
+  pkill -x sshd 2>/dev/null || true   # restart the listener to pick up hardening
+  sleep 1
+fi
+setsid sshd </dev/null >/dev/null 2>&1 || sshd
+sleep 1
+log "sshd pid: $(pgrep -x sshd | head -1 || echo 'not running')"
+
+termux-reload-settings 2>/dev/null || true
+
+echo
+log "done. Termux config deployed."
+echo "  IP: $(ifconfig 2>/dev/null | awk '/^wlan0:/{f=1;next} f&&/inet /{print $2; exit}')  port 8022"

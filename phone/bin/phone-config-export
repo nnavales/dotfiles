@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# phone/bin/phone-config-export — export the phone's SAFE config into the repo.
+# Runs on the PC. Requires the "phone" ssh host and the repo at $PHONE_REPO_DIR.
+set -euo pipefail
+
+REPO_DIR="${PHONE_REPO_DIR:-$HOME/personal/dev}"
+DEST="$REPO_DIR/phone/termux"
+HOME_DST="$DEST/home"
+SYS_DST="$DEST/system"
+
+FILES=(
+  ".bashrc"
+  ".bash_profile"
+  ".termux/colors.properties"
+  ".termux/termux.properties"
+  "bin/srv"
+)
+
+echo "→ Exporting phone config → $HOME_DST"
+mkdir -p "$HOME_DST/.termux" "$HOME_DST/bin" "$SYS_DST"
+
+for f in "${FILES[@]}"; do
+  mkdir -p "$HOME_DST/$(dirname "$f")"
+  scp -q phone:"$f" "$HOME_DST/$f"
+  echo "  home/$f"
+done
+
+if ssh phone 'cat $PREFIX/etc/ssh/sshd_config.d/99-hardening.conf' > "$SYS_DST/99-hardening.conf" 2>/dev/null; then
+  echo "  system/99-hardening.conf"
+else
+  rm -f "$SYS_DST/99-hardening.conf"
+  echo "  (no hardening on the phone)"
+fi
+
+echo "✓ Done. Review with 'git diff' and commit whenever you want."

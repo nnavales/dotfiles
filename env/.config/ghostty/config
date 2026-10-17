@@ -1,9 +1,9 @@
 command = "tmux new-session -A -s master"
 
-font-family = CommitMono20
-font-family-bold = CommitMono20
-font-family-italic = CommitMono20 Italic
-font-family-bold-italic = CommitMono20 Italic
+font-family = CommitMono
+font-family-bold = CommitMono
+font-family-italic = CommitMono Italic
+font-family-bold-italic = CommitMono Italic
 font-size = 12
 
 # kitty renders slightly heavier; ghostty needs artificial thickening to match

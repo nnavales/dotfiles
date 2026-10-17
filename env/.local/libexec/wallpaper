@@ -30,7 +30,6 @@ if ! pgrep -x hyprpaper >/dev/null; then
     sleep 0.5
 fi
 
-# Build the config contents once.
 MONITORS="$(hyprctl monitors | awk '/^Monitor/ {print $2}')"
 gen_conf() {
     echo "splash = false"
@@ -43,19 +42,18 @@ gen_conf() {
     done
 }
 
-# Persist FIRST, before touching the live daemon. hyprpaper reads this file to
-# decide which wallpaper to load on startup, so writing it is what makes the
-# choice survive a reboot. It must not be skipped just because the IPC call
-# below fails (with `set -e` a failing hyprctl would abort the script before
-# persistence ran -- the bug that made wallpapers reset on reboot).
+# Persist FIRST: hyprpaper reads this file on startup, so writing it is what
+# survives a reboot. Must not be skipped if the IPC call below fails (with
+# `set -e` a failing hyprctl used to abort before persistence -- the bug that
+# made wallpapers reset on reboot).
 gen_conf >"$CONF"
 
 if [ -d "$(dirname "$REPO_CONF")" ]; then
     gen_conf >"$REPO_CONF" 2>/dev/null || true
 fi
 
-# Apply live. `|| true` so a transient IPC failure doesn't abort the script
-# (persistence already happened above, so the next reboot is still correct).
+# Apply live; `|| true` so a transient IPC failure doesn't abort (persistence
+# already happened above, so the next reboot is still correct).
 for m in $MONITORS; do
     hyprctl hyprpaper wallpaper "$m,$WALL" >/dev/null 2>&1 || true
 done

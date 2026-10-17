@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# phone-backup — package the phone's (Termux) ~ and pull it to the PC.
+# Usage: phone-backup        (uses the ssh host "phone")
+# Requires: a working "phone" ssh config.
+set -euo pipefail
+
+DEST="${PHONE_BACKUP_DIR:-$HOME/termux-backup/phone-home}"
+KEEP="${PHONE_BACKUP_KEEP:-10}"
+mkdir -p "$DEST"
+STAMP="$(date +%F_%H%M%S)"
+FILE="$DEST/phone-home-$STAMP.tar.gz"
+
+echo "→ Packaging ~ on the phone (excludes .cache and storage)..."
+# -C ~ and exclude the heavy/regenerable stuff
+ssh phone 'tar -czf - -C "$HOME" \
+      --exclude=./.cache \
+      --exclude=./storage \
+      --exclude=./tmp \
+      .' > "$FILE"
+
+echo "✓ Saved: $FILE ($(du -h "$FILE" | cut -f1))"
+
+# Rotation: keep the last $KEEP
+if ls -1 "$DEST"/phone-home-*.tar.gz >/dev/null 2>&1; then
+  ls -1t "$DEST"/phone-home-*.tar.gz | tail -n +$((KEEP+1)) | xargs -r rm -f
+  echo "  backups kept: $(ls -1 "$DEST"/phone-home-*.tar.gz | wc -l)/$KEEP"
+fi
