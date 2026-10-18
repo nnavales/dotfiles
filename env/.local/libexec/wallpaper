@@ -10,6 +10,7 @@ REPO_CONF="${DEV_ENV:-$HOME/personal/dev}/env/.config/hypr/hyprpaper.conf"
 # Pick a wallpaper with rofi (grid + thumbnails).
 choice="$(
     for f in "$WALL_DIR"/*; do
+        case "${f##*.}" in png|jpg|jpeg|webp) ;; *) continue ;; esac
         [ -f "$f" ] || continue
         printf '%s\x00icon\x1f%s\n' "$(basename "$f")" "$f"
     done | rofi -dmenu -i -p "󰍉 " -show-icons -theme "$THEME" \

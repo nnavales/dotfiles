@@ -95,11 +95,11 @@ sync_entry() {
         [[ $path == "./" ]] && continue
         meaningful=1
         case "$dst/$path" in
-            "$XDG_CONFIG_HOME/hypr"*) changed_hypr="1" ;;
-            "$XDG_CONFIG_HOME/waybar"*) changed_waybar="1" ;;
-            "$XDG_CONFIG_HOME/colors"*) changed_colors="1" ;;
+        "$XDG_CONFIG_HOME/hypr"*) changed_hypr="1" ;;
+        "$XDG_CONFIG_HOME/waybar"*) changed_waybar="1" ;;
+        "$XDG_CONFIG_HOME/colors"*) changed_colors="1" ;;
         esac
-    done <<< "$out"
+    done <<<"$out"
     if [ -z "$meaningful" ]; then
         return
     fi
@@ -156,7 +156,6 @@ for local_entry in "$DEV_ENV/env/.local"/*; do
     entry_name="${local_entry##*/}"
     if [[ $entry_name == "share" ]]; then
         sync_tree "$local_entry" "$HOME/.local/share" additive
-        sync_entry "$local_entry/wallpapers" "$HOME/.local/share/wallpapers" delete
     elif [[ $entry_name == "scripts" ]]; then
         sync_entry "$local_entry" "$HOME/.local/$entry_name" delete --exclude='/dev-env'
     else
@@ -179,11 +178,11 @@ fi
 if [[ $dry_run == "0" ]]; then
     if [[ $changed_hypr == "1" ]]; then
         hyprctl reload
-        hyprshade on ~/.config/hypr/shaders/digital-vibrance.glsl
     fi
     if [[ $changed_waybar == "1" ]]; then
         pkill -x waybar >/dev/null 2>&1 || true
-        nohup waybar -c "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1 & disown
+        nohup waybar -c "$XDG_CONFIG_HOME/waybar/config.jsonc" >/dev/null 2>&1 &
+        disown
     fi
     if command -v notify-send >/dev/null 2>&1; then
         notify-send -a "dev-env" -u normal "dev-env" "Dotfiles deployed successfully"

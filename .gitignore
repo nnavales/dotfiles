@@ -37,3 +37,7 @@ tools.md
 phone/termux/home/.ssh/
 phone/termux/home/.termux_authinfo
 phone/termux/home/**/*.ttf
+
+# Wallpapers: live in their own repo (nnavales/wallpapers), cloned to
+# ~/.local/share/wallpapers.
+env/.local/share/wallpapers/
