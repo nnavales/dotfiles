@@ -1,8 +1,28 @@
 function ColorMyPencils()
-	vim.cmd.colorscheme("paradise")
+	vim.cmd.colorscheme("pria")
 end
 
 return {
+	{
+		dir = vim.fn.expand("~/personal/projects/pria"),
+		name = "pria",
+		lazy = false,
+		priority = 999,
+		opts = {
+			borders = true,
+			styles = {
+				comments = { italic = true },
+				builtins = { italic = false },
+			},
+		},
+		config = function(_, opts)
+			require("pria").setup(opts)
+			require("pria").load()
+			require("pria").dev()
+			vim.keymap.set("n", "<leader>r", ":PriaReload<CR>", { desc = "Reload theme" })
+			vim.keymap.set("n", "<leader>t", ":PriaInspect<CR>", { desc = "Inspect highlight" })
+		end,
+	},
 	{
 		"nnavales/rozefine",
 		name = "rozefine",

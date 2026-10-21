@@ -20,6 +20,7 @@ opt.clipboard = "unnamedplus"
 
 opt.formatoptions:remove("o")
 opt.guicursor = ""
+opt.cursorline = true
 
 opt.tabstop = 4
 opt.softtabstop = 4
@@ -43,6 +44,7 @@ opt.wrap = true
 opt.linebreak = true
 opt.breakindent = true
 opt.colorcolumn = ""
+opt.diffopt = "internal,filler,closeoff,indent-heuristic,linematch:40,inline:none"
 
 -- Vim tabs live in the statusline; never show the default tabline.
 opt.showtabline = 0

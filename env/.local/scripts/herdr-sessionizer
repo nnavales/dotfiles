@@ -50,6 +50,9 @@ command -v fzf &>/dev/null || { echo "fzf is not installed." >&2; exit 1; }
 
 # HS_SEARCH_PATHS overrides the defaults below when exported.
 [[ -n "${HS_SEARCH_PATHS[*]:-}" ]] || HS_SEARCH_PATHS=(~/:1 ~/personal/:3)
+# HS_USE_ZOXIDE=false disables adding zoxide's frecent dirs (and the important
+# dotdirs it tracks) as extra candidates.
+[[ -n "${HS_USE_ZOXIDE:-}" ]] || HS_USE_ZOXIDE=true
 
 if [[ -f "$HOME/.config/colors/current/fzf.sh" ]]; then
     source "$HOME/.config/colors/current/fzf.sh"
@@ -59,8 +62,6 @@ else
 fi
 export FZF_DEFAULT_OPTS
 log "fzf_bin=$(command -v fzf) fzf_ver=$(fzf --version 2>&1) opts_md5=$(printf '%s' "$FZF_DEFAULT_OPTS" | md5sum | cut -d' ' -f1) opts_len=${#FZF_DEFAULT_OPTS}"
-
-[[ -n "${HS_SEARCH_PATHS[*]:-}" ]] || HS_SEARCH_PATHS=(~/:1 ~/personal/:3)
 
 find_dirs() {
     local entry path depth
@@ -72,17 +73,31 @@ find_dirs() {
             path="$entry"
             depth=1
         fi
-        # expand a leading ~ (word splitting is intended here)
-        # shellcheck disable=SC2086
-        if [[ -d $path ]]; then
-            if [[ "${HS_GIT_COLLAPSE:-true}" == true ]]; then
-                find $path -mindepth 1 -maxdepth "$depth" -name '.*' -prune -o -type d \
-                    \( -exec test -e '{}/.git' \; -print -prune -o -print \)
-            else
-                find $path -mindepth 1 -maxdepth "$depth" -name '.*' -prune -o -type d -print
-            fi
+        # expand a leading ~ even when the path came through the environment
+        path="${path/#\~/$HOME}"
+        [[ -d $path ]] || continue
+        # Include the search root itself, not only its children (e.g. ~ and
+        # ~/personal show up as selectable entries).
+        printf '%s\n' "${path%/}"
+        if [[ "${HS_GIT_COLLAPSE:-true}" == true ]]; then
+            find "$path" -mindepth 1 -maxdepth "$depth" -name '.*' -prune -o -type d \
+                \( -exec test -e '{}/.git' \; -print -prune -o -print \)
+        else
+            find "$path" -mindepth 1 -maxdepth "$depth" -name '.*' -prune -o -type d -print
         fi
     done
+}
+
+# Frecent directories tracked by zoxide. This brings in the important dotdirs
+# reached with cd (.config/nvim, .local/share/fonts, ...) without hardcoding
+# whole trees. Missing/stale entries are skipped, so old history is harmless.
+zoxide_dirs() {
+    [[ "${HS_USE_ZOXIDE:-true}" == true ]] || return 0
+    command -v zoxide &>/dev/null || return 0
+    local d
+    while IFS= read -r d; do
+        [[ -n $d && -d $d ]] && printf '%s\n' "${d%/}"
+    done < <(zoxide query -l 2>/dev/null)
 }
 
 # cwd -> workspace_id for every live workspace, taken from its panes.
@@ -127,7 +142,7 @@ log "live workspaces=${#WS_BY_CWD[@]}"
 if [[ -n "$PRESELECT" ]]; then
     selected="$PRESELECT"
 else
-    candidates="$(find_dirs | LC_ALL=C sort -u)"
+    candidates="$( { find_dirs; zoxide_dirs; } | LC_ALL=C sort -u)"
     [[ -n "$candidates" ]] || fail "no directories found in search paths"
     log "candidates=$(printf '%s' "$candidates" | wc -l)"
     # Active workspaces first with a left marker; the rest below unmarked.

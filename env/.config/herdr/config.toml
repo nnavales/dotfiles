@@ -36,6 +36,7 @@ prefix = "alt+a"
 help = "prefix+?"
 detach = "prefix+q"
 edit_scrollback = "prefix+e"
+copy_mode = ["alt+v", "prefix+["]
 reload_config = "prefix+r"
 goto = "prefix+g"
 
