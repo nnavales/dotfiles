@@ -36,7 +36,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar -c ~/.config/waybar/config.jsonc")
 	hl.exec_cmd("nvibrant 0 0 0 818")
 	hl.exec_cmd(terminal, { workspace = "1 silent" })
-	hl.exec_cmd(browser, { workspace = "2 silent" })
+	hl.exec_cmd(browser)
 	hl.exec_cmd("gtk-launch zen.webapp-3d2d2c3a-3d12-4ef6-af79-4cfa14017caa.desktop")
 	hl.exec_cmd("gtk-launch zen.webapp-3d0e37d8-2840-4b3a-8b49-02fdf12e2ac0.desktop")
 end)
@@ -51,6 +51,11 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
 
 -- Opacity overrides.
 hl.window_rule({ match = { class = "zen" }, opacity = "1.0 override" })
+
+-- Main Zen window goes to workspace 2. This must be a persistent window rule,
+-- not an exec rule: exec rules are applied after window rules, override them and
+-- are consumed by the first window of the process (all Zen windows share one PID).
+hl.window_rule({ match = { class = "zen" }, workspace = "2 silent" })
 
 -- Scratchpad rules: force each app into its special workspace.
 -- NOTE: exec `workspace = "..."` does NOT work here: gtk-launch exits
@@ -167,7 +172,7 @@ hl.config({
 
 	decoration = {
 		rounding = 10,
-		active_opacity = 0.98, -- transparency
+		active_opacity = 1, -- transparency 0.98 when active
 		inactive_opacity = 0.95,
 
 		shadow = {
