@@ -45,6 +45,9 @@ mkdir -p "$HOME/.config/opencode/themes"
 cp "$THEME_DIR/theme-opencode.json" "$HOME/.config/opencode/themes/$THEME.json"
 mkdir -p "$HOME/.config/bat/themes"
 cp "$THEME_DIR/bat.tmTheme" "$HOME/.config/bat/themes/current-theme.tmTheme"
+if command -v bat >/dev/null 2>&1; then
+    bat cache --build >/dev/null
+fi
 
 # Live reload of running apps (waybar reloads itself via reload_style_on_change).
 pkill -SIGUSR1 kitty 2>/dev/null || true # kitty hot-reloads its config

@@ -1,0 +1,119 @@
+colourful: true
+
+filekinds:
+    normal: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    directory: { foreground: "#ACEAFE", is_bold: false, is_dimmed: false, is_underline: false }
+    symlink: { foreground: "#34DACA", is_bold: false, is_dimmed: false, is_underline: false }
+    pipe: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+    block_device: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    char_device: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    socket: { foreground: "#F7ABD1", is_bold: false, is_dimmed: false, is_underline: false }
+    special: { foreground: "#BFBAFA", is_bold: false, is_dimmed: false, is_underline: false }
+    executable: { foreground: "#89E28D", is_bold: false, is_dimmed: false, is_underline: false }
+    mount_point: { foreground: "#79BCF6", is_bold: false, is_dimmed: false, is_underline: false }
+
+perms:
+    user_read: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    user_write: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    user_execute_file:
+        { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    user_execute_other:
+        { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    group_read: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    group_write: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    group_execute: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    other_read: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    other_write: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    other_execute: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    special_user_file:
+        { foreground: "#E3B341", is_bold: false, is_dimmed: false, is_underline: false }
+    special_other: { foreground: "#E3B341", is_bold: false, is_dimmed: false, is_underline: false }
+    attribute: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+
+size:
+    major: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    minor: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    number_byte: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    number_kilo: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    number_mega: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    number_giga: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    number_huge: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    unit_byte: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    unit_kilo: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    unit_mega: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    unit_giga: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    unit_huge: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+
+users:
+    user_you: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    user_root: { foreground: "#E3B341", is_bold: false, is_dimmed: false, is_underline: false }
+    user_other: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    group_yours: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    group_other: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+    group_root: { foreground: "#E3B341", is_bold: false, is_dimmed: false, is_underline: false }
+
+links:
+    normal: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+    multi_link_file:
+        { foreground: "#BFBAFA", is_bold: false, is_dimmed: false, is_underline: false }
+
+git:
+    new: { foreground: "#89E28D", is_bold: false, is_dimmed: false, is_underline: false }
+    modified: { foreground: "#ACEAFE", is_bold: false, is_dimmed: false, is_underline: false }
+    deleted: { foreground: "#FF7A7A", is_bold: false, is_dimmed: false, is_underline: false }
+    renamed: { foreground: "#79BCF6", is_bold: false, is_dimmed: false, is_underline: false }
+    typechange: { foreground: "#E3B341", is_bold: false, is_dimmed: false, is_underline: false }
+    ignored: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+    conflicted: { foreground: "#FF7A7A", is_bold: true, is_dimmed: false, is_underline: false }
+
+git_repo:
+    branch_main: { foreground: "#89E28D", is_bold: false, is_dimmed: false, is_underline: false }
+    branch_other: { foreground: "#ACEAFE", is_bold: false, is_dimmed: false, is_underline: false }
+    git_clean: { foreground: "#89E28D", is_bold: false, is_dimmed: false, is_underline: false }
+    git_dirty: { foreground: "#E3B341", is_bold: false, is_dimmed: false, is_underline: false }
+
+security_context:
+    selinux:
+        colon: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+        user: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+        role: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+        typ: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+        range: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+
+file_type:
+    image: { foreground: "#BFBAFA", is_bold: false, is_dimmed: false, is_underline: false }
+    video: { foreground: "#F7ABD1", is_bold: false, is_dimmed: false, is_underline: false }
+    music: { foreground: "#34DACA", is_bold: false, is_dimmed: false, is_underline: false }
+    lossless: { foreground: "#ACEAFE", is_bold: false, is_dimmed: false, is_underline: false }
+    crypto: { foreground: "#89E28D", is_bold: false, is_dimmed: false, is_underline: false }
+    document: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    compressed: { foreground: "#A8BEC2", is_bold: false, is_dimmed: false, is_underline: false }
+    temp: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+    compiled: { foreground: "#97ADB1", is_bold: false, is_dimmed: false, is_underline: false }
+    build: { foreground: "#79BCF6", is_bold: false, is_dimmed: false, is_underline: false }
+    source: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+
+punctuation: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+date: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+inode: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+blocks: { foreground: "#464D4F", is_bold: false, is_dimmed: false, is_underline: false }
+header: { foreground: "#ACEAFE", is_bold: false, is_dimmed: false, is_underline: false }
+octal: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+flags: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+
+symlink_path: { foreground: "#8A9698", is_bold: false, is_dimmed: false, is_underline: false }
+control_char: { foreground: "#FF7A7A", is_bold: false, is_dimmed: false, is_underline: false }
+broken_symlink: { foreground: "#FF7A7A", is_bold: false, is_dimmed: false, is_underline: false }
+broken_path_overlay:
+    { foreground: "#FF7A7A", is_bold: false, is_dimmed: false, is_underline: false }
+
+filenames:
+    README:
+        filename: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    README.md:
+        filename: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    README.rst:
+        filename: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+    README.txt:
+        filename: { foreground: "#D3D9DA", is_bold: false, is_dimmed: false, is_underline: false }
+extensions:

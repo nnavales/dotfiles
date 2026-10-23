@@ -35,4 +35,4 @@ set formatoptions-=o
 
 syntax on
 set background=dark
-colorscheme paragon
+colorscheme pria

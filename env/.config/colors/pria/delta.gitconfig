@@ -1,0 +1,23 @@
+[delta]
+  syntax-theme                 = pria
+
+  plus-style                   = "syntax #313F37"
+  plus-emph-style              = "#89E28D #313F37 bold"
+  plus-non-emph-style          = "syntax #313F37"
+
+  minus-style                  = "syntax #413334"
+  minus-emph-style             = "#FF7A7A #413334 bold"
+  minus-non-emph-style         = "syntax #413334"
+
+  line-numbers-minus-style     = "#FF7A7A"
+  line-numbers-plus-style      = "#89E28D"
+  line-numbers-zero-style      = "#8A9698"
+  line-numbers-left-style      = "#464D4F"
+  line-numbers-right-style     = "#464D4F"
+
+  file-style                   = "#ACEAFE"
+  file-decoration-style        = "omit"
+  commit-style                 = "#79BCF6"
+  hunk-header-style            = "line-number syntax"
+  hunk-header-line-number-style = "#79BCF6"
+  hunk-header-decoration-style = "#2A2F32"

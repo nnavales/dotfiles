@@ -124,6 +124,10 @@ sync_tree() {
         if [[ $name == "colors" && $dst == "$XDG_CONFIG_HOME" && -L "$dst/$name/current" ]]; then
             entry_extra=(--exclude='/current')
         fi
+        # bat/themes is generated at runtime by theme-switch, not tracked in the repo.
+        if [[ $name == "bat" && $dst == "$XDG_CONFIG_HOME" ]]; then
+            entry_extra+=(--exclude='/themes')
+        fi
         sync_entry "$entry" "${dst%/}/$name" "$mode" "${entry_extra[@]}"
     done
     shopt -u nullglob

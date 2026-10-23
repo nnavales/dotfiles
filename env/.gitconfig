@@ -16,7 +16,7 @@
 [delta]
     navigate = true  
     dark = true      
-    syntax-theme = paradise
+    syntax-theme = current-theme
     hunk-header-style = omit
     tabs = 4
 
