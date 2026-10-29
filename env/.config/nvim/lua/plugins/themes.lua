@@ -6,7 +6,9 @@ return {
 	{
 		"nnavales/pria",
 		lazy = false,
-		priority = 1000,
+		-- Load after every other start plugin (default priority is 50), so no
+		-- plugin can overwrite pria's groups with its own hardcoded colors.
+		priority = 10,
 		opts = {
 			dim = false,
 			borders = true,

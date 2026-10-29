@@ -25,9 +25,15 @@ return {
 			new_notes_location = "notes_subdir",
 
 			templates = {
-				folder = "templates",
+				folder = "collections/templates",
 				date_format = "YYYY-MM-DD",
 				time_format = "HH:mm",
+			},
+			daily_notes = {
+				enabled = true,
+				folder = "journal",
+				template = "daily_template.md",
+				default_tags = { "daily" },
 			},
 		})
 
