@@ -2,7 +2,7 @@ return {
 	{
 		"mfussenegger/nvim-lint",
 		opts = {
-			events = { "BufWritePost", "InsertLeave" },
+			events = { "BufWritePost", "BufReadPost", "InsertLeave" },
 			linters_by_ft = {
 				javascript = { "eslint" },
 				typescript = { "eslint" },

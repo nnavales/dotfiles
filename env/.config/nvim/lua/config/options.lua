@@ -33,7 +33,6 @@ opt.backup = false
 opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
 opt.isfname:append("@-@")
-opt.autoread = true
 
 opt.smoothscroll = true
 opt.updatetime = 50

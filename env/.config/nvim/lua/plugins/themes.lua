@@ -6,9 +6,7 @@ return {
 	{
 		"nnavales/pria",
 		lazy = false,
-		-- Load after every other start plugin (default priority is 50), so no
-		-- plugin can overwrite pria's groups with its own hardcoded colors.
-		priority = 10,
+		priority = 1000,
 		opts = {
 			dim = false,
 			borders = true,
@@ -21,7 +19,7 @@ return {
 		"nnavales/rozefine",
 		name = "rozefine",
 		lazy = false,
-		priority = 2000,
+		priority = 1001,
 		config = function()
 			require("rozefine").setup({
 				dim_inactive_windows = true,
@@ -37,7 +35,7 @@ return {
 	{
 		"nnavales/paradise",
 		lazy = false,
-		priority = 1000,
+		priority = 1001,
 		opts = {
 			borders = true,
 			styles = {
@@ -50,7 +48,7 @@ return {
 	{
 		"nnavales/paragon",
 		lazy = false,
-		priority = 3000,
+		priority = 1001,
 		opts = {
 			borders = true,
 			styles = {
@@ -64,7 +62,7 @@ return {
 	{
 		"sainnhe/everforest",
 		lazy = false,
-		priority = 4000,
+		priority = 1001,
 		config = function()
 			vim.g.everforest_enable_italic = false
 		end,
@@ -73,7 +71,7 @@ return {
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
-		priority = 5000,
+		priority = 1001,
 		config = function()
 			require("catppuccin").setup({
 				flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -83,14 +81,14 @@ return {
 	{
 		"folke/tokyonight.nvim",
 		lazy = false,
-		priority = 6000,
+		priority = 1001,
 		opts = {},
 	},
 
 	{
 		"rebelot/kanagawa.nvim",
 		name = "kanagawa",
-		priority = 7000,
+		priority = 1001,
 		config = function()
 			require("kanagawa").setup({
 				theme = "wave", -- Load "wave" theme
@@ -108,12 +106,11 @@ return {
 	},
 	{
 		"navarasu/onedark.nvim",
-		priority = 9000,
+		priority = 1001,
 		config = function()
 			require("onedark").setup({
 				style = "dark",
 			})
-			ColorMyPencils()
 		end,
 	},
 }
@@ -122,7 +119,7 @@ return {
 -- 	dir = vim.fn.expand("~/personal/projects/pria"),
 -- 	name = "pria",
 -- 	lazy = false,
--- 	priority = 999,
+-- 	priority = 1001,
 -- 	opts = {
 -- 		borders = true,
 -- 		styles = {
