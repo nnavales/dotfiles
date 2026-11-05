@@ -33,19 +33,6 @@ return {
 		end,
 	},
 	{
-		"nnavales/paradise",
-		lazy = false,
-		priority = 1001,
-		opts = {
-			borders = true,
-			styles = {
-				comments = { italic = false },
-				builtins = { italic = false },
-			},
-		},
-		config = function() end,
-	},
-	{
 		"nnavales/paragon",
 		lazy = false,
 		priority = 1001,

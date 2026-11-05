@@ -38,6 +38,7 @@ return {
 				"sql",
 				"toml",
 				"markdown",
+				"latex",
 				"bash",
 				"dockerfile",
 			})
