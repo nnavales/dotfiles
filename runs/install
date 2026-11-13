@@ -23,4 +23,4 @@ sudo pacman -S --needed --noconfirm \
 # AUR packages.
 yay -S --needed --noconfirm \
     hyprshot yazi mpv localsend-bin zen-browser-bin cursor-bin \
-    hyprshade obsidian stremio protonvpn-cli-ng
+    hyprshade obsidian stremio protonvpn-cli-ng overskride-bin

@@ -13,7 +13,10 @@ opt.termguicolors = true
 opt.number = true
 opt.signcolumn = "yes"
 
-opt.statuscolumn = "%s%C%#CursorLineNr#%{v:lua.StatusColumnNumber(1)}%#LineNr#%{v:lua.StatusColumnNumber(0)}"
+opt.numberwidth = 4
+-- Signs, folds, then a left-aligned 4-wide number field.
+-- CursorLineNr/LineNr highlighting and relative numbers are handled by %l.
+opt.statuscolumn = "%s%C%-4l"
 opt.splitbelow = true
 opt.splitright = true
 
@@ -47,23 +50,4 @@ opt.colorcolumn = "100"
 opt.diffopt = "internal,filler,closeoff,indent-heuristic,linematch:40,inline:none"
 opt.showtabline = 0
 
--- Center line numbers so the number column has balanced left/right padding.
-function _G.StatusColumnNumber(is_current)
-	if vim.v.virtnum ~= 0 or not (vim.wo.number or vim.wo.relativenumber) then
-		return ""
-	end
 
-	local relative = vim.wo.relativenumber
-	local current = relative and vim.v.relnum == 0 or vim.v.lnum == vim.fn.line(".")
-	if current ~= (is_current == 1) then
-		return ""
-	end
-
-	local number = relative and not current and vim.v.relnum or vim.v.lnum
-	local text = tostring(number)
-	local width = math.max(vim.opt.numberwidth:get() + 1, #tostring(vim.fn.line("$")))
-	local padding = width - #text
-	local left = math.floor(padding / 2)
-
-	return (" "):rep(left) .. text .. (" "):rep(padding - left)
-end

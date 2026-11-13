@@ -110,7 +110,7 @@
         "format-connected": "󰂱",
         "format-on": "󰂯",
         "format-off": "󰂲",
-        "on-click": "blueman-manager",
+        "on-click": "overskride",
         "tooltip": true,
         "tooltip-format": "{status}",
         "interval": 5
