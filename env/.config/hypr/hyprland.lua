@@ -45,9 +45,9 @@ end)
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 12, gaps_in = 6 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 12, gaps_in = 6 })
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 10 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 8 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
+hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 8 })
 
 -- Opacity overrides.
 hl.window_rule({ match = { class = "zen" }, opacity = "1.0 override" })
@@ -64,15 +64,15 @@ hl.window_rule({ match = { class = "zen" }, workspace = "2 silent" })
 hl.window_rule({
 	match = { class = "zen.webapp-3d2d2c3a-3d12-4ef6-af79-4cfa14017caa" },
 	workspace = "special:chat silent",
-	border_size = 2,
-	border_color = "rgba(9aa0a6ee)",
+	border_size = 1,
+	border_color = "rgba(a1deeaff)",
 	opacity = "1.0 override",
 })
 hl.window_rule({
 	match = { class = "zen.webapp-3d0e37d8-2840-4b3a-8b49-02fdf12e2ac0" },
 	workspace = "special:music silent",
-	border_size = 2,
-	border_color = "rgba(9aa0a6ee)",
+	border_size = 1,
+	border_color = "rgba(a1deeaff)",
 	opacity = "1.0 override",
 })
 
@@ -92,9 +92,9 @@ hl.bind(mainMod .. " + GRAVE", function()
 		hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 12, gaps_in = 6 })
 		hl.workspace_rule({ workspace = "f[1]", gaps_out = 12, gaps_in = 6 })
 		hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
-		hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 10 })
+		hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 8 })
 		hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
-		hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 10 })
+		hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 8 })
 	else
 		-- Waybar hidden: use no gaps, border, or rounding.
 		hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
@@ -160,10 +160,10 @@ hl.config({
 	general = {
 		gaps_in = 6,
 		gaps_out = 12,
-		border_size = 2,
+		border_size = 1,
 		col = {
-			active_border = "rgba(a1deea54)",
-			inactive_border = "rgba(59595900)",
+			active_border = "rgba(a1deeaff)",
+			inactive_border = "rgba(a1deea00)",
 		},
 		resize_on_border = false,
 		allow_tearing = false,
@@ -171,9 +171,9 @@ hl.config({
 	},
 
 	decoration = {
-		rounding = 10,
-		active_opacity = 0.98, -- transparency 0.98 when active
-		inactive_opacity = 0.95,
+		rounding = 8,
+		active_opacity = 0.97, -- transparency 0.98 when active
+		inactive_opacity = 0.97,
 
 		shadow = {
 			enabled = false,
@@ -195,30 +195,31 @@ hl.config({
 	},
 })
 
-hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
-hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
+hl.curve("out", { type = "bezier", points = { { 0.22, 0.8 }, { 0.2, 1 } } })
 hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
-hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1 } } })
-hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
-hl.curve("easy", { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
 
-hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
-hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windows", enabled = true, speed = 4.79, spring = "easy" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 4.1, spring = "easy", style = "popin 87%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
-hl.animation({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
-hl.animation({ leaf = "layers", enabled = true, speed = 3.81, bezier = "easeOutQuint" })
-hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "fade" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
-hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces", enabled = false, speed = 1.94, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesIn", enabled = false, speed = 1.21, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesOut", enabled = false, speed = 1.94, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" })
+hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "out" })
+
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3.5, bezier = "out", style = "popin 96%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "out", style = "popin 96%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 3.5, bezier = "out" })
+
+hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "out", style = "slidefade 20%" })
+hl.animation({ leaf = "workspacesIn", enabled = true, speed = 3, bezier = "out", style = "slidefade 20%" })
+hl.animation({ leaf = "workspacesOut", enabled = true, speed = 3, bezier = "out", style = "slidefade 20%" })
+
+hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "out" })
+hl.animation({ leaf = "fadeIn", enabled = true, speed = 3, bezier = "out" })
+hl.animation({ leaf = "fadeOut", enabled = true, speed = 2.5, bezier = "out" })
+
+hl.animation({ leaf = "layers", enabled = true, speed = 3, bezier = "out", style = "fade" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = 3, bezier = "out", style = "fade" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = 2.5, bezier = "linear", style = "fade" })
+hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 3, bezier = "out" })
+hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 2.5, bezier = "out" })
+
+hl.animation({ leaf = "border", enabled = true, speed = 4, bezier = "out" })
+hl.animation({ leaf = "zoomFactor", enabled = true, speed = 4, bezier = "out" })
 
 -- Misc.
 hl.config({

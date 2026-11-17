@@ -21,7 +21,7 @@ element {
   spacing: 4px;
   border: 1px solid;
   border-color: transparent;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: @bg;
   text-color: @fg;
 }

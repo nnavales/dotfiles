@@ -41,5 +41,5 @@ message {
   border: 1px solid;
   border-color: @border;
   margin: 0;
-  border-radius: 10px;
+  border-radius: 8px;
 }
